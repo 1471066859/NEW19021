@@ -177,26 +177,7 @@ export default {
         })
         .catch(err => {
           console.log(err)
-        })
-      // const data = [
-      //   {
-      //     name: '瓜子',
-      //     stuffUuid: 'cffd8c04aac443bcb40c224321cc12df'
-      //   },
-      //   {
-      //     name: '花生',
-      //     stuffUuid: 'fc28fc5da3a448eca4a4d534d62b0d93'
-      //   },
-      //   {
-      //     name: '大豆',
-      //     stuffUuid: '73e37510a3b24de499e81608fd72b19a'
-      //   },
-      //   {
-      //     name: '商品4',
-      //     stuffUuid: '未知商品ID'
-      //   }
-      // ];
-
+        });
     },
     // 请求规格信息
     getShopPackFn(key) {
@@ -255,21 +236,12 @@ export default {
       }
     },
     PostDataFn(cart_list) {
-      // let data = {
-      //   stuffs: cart_list
-      // }
-      // let newData = JSON.stringify(data);
-      // let newData = qs.stringify(data);
-      // let newData = qs.stringify(cart_list);
-      let data = JSON.stringify(this.cart_list)
+      let data = JSON.stringify(cart_list);
+      let stuffsData = qs.stringify({
+        'stuffs': data
+      });
       console.log(data, 'data!!!');
-      this.axios.post('api/webapi/orders/addOrder', { 'stuffs': data }, {
-        // headers: {
-        //   'content-type': 'application/x-www-form-urlencoded'
-        // }
-      })
-        // console.log(cart_list,'cart_list')
-        // this.axios.post('api/webapi/orders/addOrder', { 'stuffs': newData })
+      this.axios.post('api/webapi/orders/addOrder', stuffsData)
         .then(res => {
           const { success, msg } = res.data;
           if (success) {
@@ -282,23 +254,7 @@ export default {
         .catch(err => {
           console.log(err);
           MessageBox('下单未成功', '请检查你的网络状态', false);
-        })
-
-      // this.axios({
-      //   url: 'api/webapi/orders/addOrder',
-      //   methods: 'post',
-      //   data: newdata
-      // })
-      //   .then((response) => {
-      //     // 因为层级比较深，匿名函数会导致this指向发生改变
-      //     // 这个时候使用箭头函数解决
-      //     console.log(response)
-      //     // alert(this);
-      //     // this.dataList = response.data.data.forecast;
-      //   })
-      //   .catch(function () {
-      //     alert('网络超时, 请重新加载!')
-      //   });
+        });
 
     },
     // 增加商品数量

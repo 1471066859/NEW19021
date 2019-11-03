@@ -50,7 +50,6 @@ export default {
   },
   methods: {
     toOrderDetalFn(id) {
-      // console.log(id);
       this.$router.push({
         path: '/works/OrderDetal',
         query: {

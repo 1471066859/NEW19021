@@ -10,3 +10,14 @@ export const scaleNum = list => {
   const intScaleNum = Math.floor(scaleNum * 100)
   return intScaleNum;
 }
+
+// 存取session
+export const setSession = (key, data) => {
+  sessionStorage.setItem(key, data)
+};
+
+// 获取session
+export const getSession = key => {
+  const data = sessionStorage.getItem(key);
+  return data;
+}

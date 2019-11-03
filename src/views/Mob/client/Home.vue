@@ -26,13 +26,13 @@ export default {
     hd_msg() {
       const { path } = this.$route;
       let msg = null
-      path == '/m/home/order_detal' ? msg = '订单详情' : msg = 'WELCOME'
+      path == '/client/order_detal' ? msg = '订单详情' : msg = 'WELCOME'
       return msg;
     },
     left_btn() {
       const { path } = this.$route;
       let is_show = null;
-      path == '/m/home/add_order' ? is_show = false : is_show = true;
+      path == '/client/add_order' ? is_show = false : is_show = true;
       return is_show;
     }
   },
@@ -47,7 +47,7 @@ export default {
       next();
     } else {
       next(vm => {
-        vm.$router.push('/m/login')
+        vm.$router.push('/mlogin')
       })
     }
   }

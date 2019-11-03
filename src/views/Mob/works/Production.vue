@@ -41,6 +41,7 @@ export default {
   },
   created() {
     this.$store.dispatch("setTabState", 0);
+    this.$store.dispatch('setMobHdMsg', "产线1");
   },
   methods: {
     handleChange(index) {

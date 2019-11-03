@@ -24,9 +24,7 @@ export default {
   },
   computed: {
     hdMsg() {
-      console.log(this.$store.getters.getMobHdMsg)
       return this.$store.getters.getMobHdMsg;
-      // return this.$store.mobHdMsg
     },
     right_btn() {
       return false
@@ -43,16 +41,16 @@ export default {
   methods: {
 
   },
-  // beforeRouteEnter(to, from, next) {
-  //   let userInfo = sessionStorage.getItem("userInfo");
-  //   if (userInfo) {
-  //     next();
-  //   } else {
-  //     next(vm => {
-  //       vm.$router.push('/m/login')
-  //     })
-  //   }
-  // }
+  beforeRouteEnter(to, from, next) {
+    let userInfo = sessionStorage.getItem("userInfo");
+    if (userInfo) {
+      next();
+    } else {
+      next(vm => {
+        vm.$router.push('/m/login')
+      })
+    }
+  }
 }
 </script>
 

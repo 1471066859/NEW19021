@@ -62,6 +62,7 @@
 
 <script>
 import '@/hotcss/hotcss'
+import { setSession, getSession } from '@/Tools/intScaleNum'
 import { MessageBox } from 'mint-ui';
 import qs from 'qs'
 export default {
@@ -86,29 +87,18 @@ export default {
     sessionStorage.removeItem('userUuid');
     next();
   },
-  // mounted() {
-  //   const data = qs.stringify({
-  //     userUuid: 'ee6e00ccd4844699a5a33737a0bf503a',
-  //     sutffs: [
-  //       {
-  //         stuffName: '商品1',
-  //         packName: '大',
-  //         packNum: '1'
-  //       }
-  //     ]
-  //   });
-  //   console.log(data);
-  //   this.axios.post('api/webapi/orders/addOrder', data)
-  //     .then(res => {
-  //       console.log(res)
-  //     })
-  //     .catch(err => {
-  //       console.log(err)
-  //     })
-  // },
   methods: {
     // 登录
     loginFn() {
+
+      // 上线删除！！！！！！！！！
+      if (this.user_number == 1 && this.user_pwd == 1) {
+        setSession('userInfo', 1)
+        this.$router.push('/client');
+        return;
+      };
+
+
       const { user_number, user_pwd } = this;
       if (user_number == '') {
         MessageBox('登录失败', '请填写登录学号', false);
@@ -117,17 +107,15 @@ export default {
       if (user_pwd == '') {
         MessageBox('登录失败', '请填写登录密码', false);
         return;
-      }
+      };
       const data = qs.stringify({
         userId: user_number,
         userPwd: user_pwd
       })
       this.axios.post('api/webapi/login', data)
         .then(res => {
-      console.log(res)
           const { success, msg } = res.data;
           if (success) {
-            // console.log(res)
             sessionStorage.setItem('userInfo', res.data.data)
             const { userUuid } = res.data.data
             sessionStorage.setItem('userUuid', userUuid)
@@ -158,7 +146,7 @@ export default {
     // 注册
     registerFn() {
       this.initFromFn();
-      this.$router.push('/m/register')
+      this.$router.push('/mregister')
     },
     // 修改密码提交
     setPwdFn(i) {

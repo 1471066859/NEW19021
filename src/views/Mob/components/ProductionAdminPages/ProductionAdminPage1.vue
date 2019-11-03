@@ -71,13 +71,13 @@ $designWidth: 375;
 .productionAdminPage3,
 .productionAdminPage3 {
   height: 100%;
+  overflow: scroll;
   .contentImg {
     background: #fff;
     text-align: center;
     border-radius: px(4);
     padding-top: px(70);
     padding-bottom: px(10);
-    overflow: hidden;
     img {
       width: px(337);
       height: px(236);
@@ -87,8 +87,7 @@ $designWidth: 375;
     width: 100%;
     margin-top: px(10);
     background: #fff;
-    height: calc(100% - 14rem);
-    overflow: scroll;
+    padding-bottom: px(10);
     h1 {
       font-size: px(12);
       font-weight: 700;

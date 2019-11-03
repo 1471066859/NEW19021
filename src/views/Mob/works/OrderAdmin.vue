@@ -11,6 +11,7 @@
       :showSearchLoad="showSearchLoad"
       ref="OrderAdminSerBoxRef"
       @closeSearchLoad="closeSearchLoad"
+      @getSelData="getSelData"
     />
     <!-- <div class="searchWrap">
       订单号
@@ -20,12 +21,22 @@
       <span>/</span>订单状态
     </div>-->
     <!-- 数据容器 可滚动-->
-    <div class="orderListWrap" @click="closeSearchLoad">
+    <div
+      class="orderListWrap"
+      v-infinite-scroll="loadMore"
+      infinite-scroll-disabled="loading"
+      infinite-scroll-distance="10"
+      @click="closeSearchLoad"
+    >
       <OrderAdminTable
         v-for="OrderItem in OrderAdminTableList"
         :key="OrderItem.orderId"
         :OrderAdminTable="OrderItem"
       />
+      <p class="loadText">
+        <i v-if="loadText == '数据加载中...'" class="el-icon-loading"></i>
+        {{loadText}}
+      </p>
     </div>
   </div>
 </template>
@@ -44,6 +55,10 @@ export default {
     return {
       // 筛选弹窗
       showSearchLoad: false,
+      loadText: '数据加载中...',
+      loading: false,
+      // 筛选数据
+      selData: {},
       OrderAdminTableList: [
         {
           orderId: 'D2043',
@@ -102,24 +117,52 @@ export default {
           proId: "001"
         },
       ],
+      getNum: 1
 
     }
   },
   created() {
     this.$store.dispatch("setTabState", 1);
+    this.$store.dispatch('setMobHdMsg', "WELCOME")
   },
   methods: {
+    // 显示弹窗
     showSearchLoadFn() {
       this.showSearchLoad = !this.showSearchLoad;
       if (this.showSearchLoad == false) {
-
         this.closeSearchLoad();
       }
     },
-    closeSearchLoad(data) {
+    // 加载更多
+    loadMore() {
+      if (this.getNum == 5) {
+        this.loading = false;
+        this.loadText = "暂无更多数据";
+        return;
+      }
+      this.loading = true;
+      setTimeout(() => {
+        this.OrderAdminTableList.push({
+          orderId: this.getNum++,
+          orderUser: 'mqlmqlmql',
+          orderStatus: '未生产',
+          orderTime: "2018-12-30 20:18:30",
+          proId: "001"
+        });
+        this.loading = false;
+      }, 1000);
+    },
+    // 关闭弹窗清空数据
+    closeSearchLoad() {
       this.showSearchLoad = false;
       this.$refs.OrderAdminSerBoxRef.clearSearchData();
-      console.log(data)
+    },
+    // 获取筛选数据
+    getSelData(data) {
+      this.showSearchLoad = false;
+      this.$refs.OrderAdminSerBoxRef.clearSearchData();
+      this.selData = data;
+      console.log(this.selData);
     }
   }
 }
@@ -128,10 +171,6 @@ export default {
 <style lang="scss" scope>
 @import "@/hotcss/px2rem";
 $designWidth: 375;
-.divv {
-  height: 70%;
-  overflow: scroll;
-}
 .OrderAdmin {
   width: 100%;
   border-radius: px(5);
@@ -148,6 +187,16 @@ $designWidth: 375;
   .orderListWrap {
     flex: 1;
     overflow: scroll;
+    .loadText {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: px(16);
+      .el-icon-loading {
+        font-size: px(16);
+      }
+    }
   }
   .orderTitle {
     text-align: center;

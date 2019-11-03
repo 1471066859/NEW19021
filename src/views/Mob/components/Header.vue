@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     myOrderFn() {
-      this.$router.push('/m/home/my_order')
+      this.$router.push('/client/my_order')
     },
     backFn() {
       this.$router.go(-1);

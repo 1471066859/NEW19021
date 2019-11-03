@@ -120,35 +120,7 @@ export default {
             return;
           }
         }
-      }
-      // console.log(arrItem);
-      // errArr.forEach(item => {
-      //   if (item == 'user_number') {
-      //     MessageBox('注册失败', `请填写学号`, false);
-      //     throw new Error(`表单参数${item}为空抛出异常`)
-      //   };
-      //   if (item == 'user_name') {
-      //     MessageBox('注册失败', `请填写姓名`, false);
-      //     throw new Error(`表单参数${item}为空抛出异常`)
-      //   };
-      //   if (item == 'user_pwd') {
-      //     MessageBox('注册失败', `请填写密码`, false);
-      //     throw new Error(`表单参数${item}为空抛出异常`)
-      //   };
-      //   if (item == 'new_user_pwd') {
-      //     MessageBox('注册失败', `请填写确认密码`, false);
-      //     throw new Error(`表单参数${item}为空抛出异常`)
-      //   }
-      //   if (item == 'class_id') {
-      //     MessageBox('注册失败', `请填写班级号码`, false);
-      //     throw new Error(`表单参数${item}为空抛出异常`)
-      //   }
-      //   if (item == 'teacher_name') {
-      //     MessageBox('注册失败', `请填写代课教师姓名`, false);
-      //     throw new Error(`表单参数${item}为空抛出异常`)
-      //   }
-      // });
-      // };
+      };
       if (user_pwd != new_user_pwd) {
         MessageBox('注册失败', `两次密码不一致`, false);
         return;
@@ -165,7 +137,7 @@ export default {
             // 注册成功
             MessageBox('注册成功', `注册成功`, false);
             this.initFormFn();
-            this.$router.push('/m/login');
+            this.$router.push('/mlogin');
           } else {
             if (msg == '学号已存在') MessageBox('注册失败', '学号已存在', false);
             if (msg == '参数已存在') MessageBox('注册失败', '请填写正确信息', false);

@@ -46,6 +46,7 @@ export default {
   },
   created() {
     this.$store.dispatch("setTabState", 3);
+    this.$store.dispatch('setMobHdMsg', "WELCOME")
   },
   computed: {
     userId() {

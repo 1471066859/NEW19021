@@ -80,12 +80,6 @@ export default {
     scaleNum() {
       return scaleNum(this.stateList);
     }
-    // scaleNum() {
-    //   const { stateList } = this;
-    //   const scaleNum = 1 / (stateList.length - 1);
-    //   const intScaleNum = Math.floor(scaleNum * 100)
-    //   return intScaleNum;
-    // },
   },
   data() {
     return {
@@ -156,7 +150,7 @@ export default {
     orderDetal(id) {
       console.log(id)
       this.$router.push({
-        path: '/m/home/order_detal',
+        path: '/client/order_detal',
         query: {
           id
         }
@@ -302,7 +296,7 @@ $designWidth: 375;
     width: 100%;
     height: px(190);
     // background: deepskyblue;
-    background: url(../../assets/img/u219.png) center no-repeat;
+    background: url(../../../assets/img/u219.png) center no-repeat;
     background-size: 100% 100%;
     border-radius: px(5);
     display: flex;

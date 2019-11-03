@@ -30,13 +30,12 @@ import page6_1 from './views/PC/data6/data6-1'
 import page7_0 from './views/PC/data7/data7-0'
 
 // 移动端
-import m_home from '@/views/Mob/Home'
+import client from '@/views/Mob/client/Home'
 import m_login from '@/views/Mob/Login'
-import add_order from '@/views/Mob/AddOrder'
-import register from '@/views/Mob/Register'
-import my_order from '@/views/Mob/MyOrder'
-import order_detal from '@/views/Mob/OrderDetal'
-import test from '@/views/Mob/test'
+import add_order from '@/views/Mob/client/AddOrder'
+import m_register from '@/views/Mob/Register'
+import my_order from '@/views/Mob/client/MyOrder'
+import order_detal from '@/views/Mob/client/OrderDetal'
 
 Vue.use(Router)
 const router = new Router({
@@ -50,17 +49,14 @@ const router = new Router({
       component: Login
     },
     {
-      path: '/m/register',
-      component: register
+      path: '/mregister',
+      component: m_register
     },
     {
-      path: "/m/login",
+      path: "/mlogin",
       component: m_login
     },
-    {
-      path: '/m',
-      redirect: '/m/home'
-    },
+
     {
       path: '/works',
       redirect: '/works/production',
@@ -88,24 +84,20 @@ const router = new Router({
       ]
     },
     {
-      path: "/m/home",
-      component: m_home,
-      redirect: '/m/home/add_order',
+      path: '/client',
+      redirect: '/client/add_order',
+      component: client,
       children: [{
-          path: "/m/home/add_order",
+          path: "/client/add_order",
           component: add_order
         },
         {
-          path: '/m/home/my_order',
+          path: '/client/my_order',
           component: my_order
         },
         {
-          path: '/m/home/order_detal',
+          path: '/client/order_detal',
           component: order_detal
-        },
-        {
-          path: '/m/home/test',
-          component: test
         }
       ]
     },

@@ -143,16 +143,8 @@ export default {
     },
     // 进度比例
     scaleNum() {
-      // const { rate_list } = this;
-      // // console.log(rate_list)
-      // const scaleNum = 1 / (rate_list.length - 1);
-      // // console.log(scaleNum * 100)
-      // const intScaleNum = Math.floor(scaleNum * 100)
-      // console.log(intScaleNum, 'scaleNum');
-      // return intScaleNum;
       return scaleNum(this.rate_list);
     },
-
   },
   methods: {
     getOrderDetal() {
@@ -160,8 +152,8 @@ export default {
       const orderUuid = this.orderId;
       const data = qs.stringify({
         orderUuid,
-      })
-      this.axios.post('api/webapi/orders/getOrdersByUserUuid', data)
+      });
+      this.axios.post('api/webapi/orders/getOrdersByOrderUuid', data)
         .then(res => {
           const { success, msg } = res;
           console.log(res)
@@ -173,7 +165,7 @@ export default {
         })
         .catch(err => {
           MessageBox('获取数据失败', '请检查你的网络状态', false);
-        })
+        });
     }
   },
 

@@ -10,6 +10,7 @@ export default {
   name: 'UnitAdmin',
   created() {
     this.$store.dispatch("setTabState", 2);
+    this.$store.dispatch('setMobHdMsg', "WELCOME")
   }
 }
 </script>
