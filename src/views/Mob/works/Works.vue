@@ -47,7 +47,7 @@ export default {
       next();
     } else {
       next(vm => {
-        vm.$router.push('/m/login')
+        vm.$router.push('/mlogin')
       })
     }
   }

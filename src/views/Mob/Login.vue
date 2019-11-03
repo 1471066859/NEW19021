@@ -36,6 +36,7 @@
         </div>
       </mt-popup>
 
+      <!-- 身份验证 -->
       <mt-popup v-model="popupVisible" position="right">
         <div class="from_wrap" name="slot">
           <div class="title">账号验证</div>
@@ -93,12 +94,10 @@ export default {
 
       // 上线删除！！！！！！！！！
       if (this.user_number == 1 && this.user_pwd == 1) {
-        setSession('userInfo', 1)
+        setSession('userInfo', 1);
         this.$router.push('/client');
         return;
       };
-
-
       const { user_number, user_pwd } = this;
       if (user_number == '') {
         MessageBox('登录失败', '请填写登录学号', false);

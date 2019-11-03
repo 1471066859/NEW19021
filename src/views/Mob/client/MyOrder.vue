@@ -128,8 +128,6 @@ export default {
           console.log(res);
           const { success, msg, data } = res.data;
           if (success) {
-            // this.my_order_list = res.data.data;
-            // console.log(data)
             data.forEach(item => {
               item.productionState = 1 * this.scaleNum;
             });
