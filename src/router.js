@@ -29,7 +29,7 @@ import page6_1 from './views/PC/data6/data6-1'
 // page7
 import page7_0 from './views/PC/data7/data7-0'
 
-// 移动端
+// 移动客户端
 import client from '@/views/Mob/client/Home'
 import m_login from '@/views/Mob/Login'
 import add_order from '@/views/Mob/client/AddOrder'
@@ -67,7 +67,7 @@ const router = new Router({
         },
         {
           path: '/works/OrderAdmin',
-          component: () => import('@/views/Mob/works/OrderAdmin')
+          component: () => import('@/views/Mob/works/OrderAdmin'),
         },
         {
           path: '/works/UnitAdmin',

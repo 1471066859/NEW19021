@@ -68,23 +68,23 @@ export default {
           children: [
             {
               value: 'xs1',
-              label: '学生1',
+              label: '1学生1',
             },
             {
               value: 'xs2',
-              label: '学生2',
+              label: '1学生2',
             },
             {
               value: 'xs3',
-              label: '学生3',
+              label: '1学生3',
             },
             {
               value: 'xs4',
-              label: '学生4',
+              label: '1学生4',
             },
             {
               value: 'xs5',
-              label: '学生5',
+              label: '1学生5',
             },
           ]
         },
@@ -94,23 +94,23 @@ export default {
           children: [
             {
               value: "xs1",
-              label: "学生1"
+              label: "2学生1"
             },
             {
               value: "xs2",
-              label: "学生2"
+              label: "2学生2"
             },
             {
               value: "xs3",
-              label: "学生3"
+              label: "2学生3"
             },
             {
               value: "xs4",
-              label: "学生4"
+              label: "2学生4"
             },
             {
               value: "xs5",
-              label: "学生5"
+              label: "2学生5"
             },
           ]
         }

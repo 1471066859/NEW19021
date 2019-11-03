@@ -63,18 +63,27 @@ export default {
 
   watch: {
     selected(val, oldVal) {
+      let { path } = this.$route;
+      let production = '/works/production';
+      let OrderAdmin = '/works/OrderAdmin';
+      let UnitAdmin = '/works/UnitAdmin';
+      let About = '/works/About';
       switch (val) {
         case 0:
-          this.$router.push('/works/production')
+          if (path == production) break;
+          else this.$router.push(production)
           break;
         case 1:
-          this.$router.push('/works/OrderAdmin')
+          if (path == OrderAdmin) break;
+          this.$router.push(OrderAdmin)
           break;
         case 2:
-          this.$router.push('/works/UnitAdmin')
+          if (path == UnitAdmin) break;
+          this.$router.push(UnitAdmin)
           break;
         case 3:
-          this.$router.push('/works/About')
+          if (path == About) break;
+          this.$router.push(About)
           break;
 
         default:

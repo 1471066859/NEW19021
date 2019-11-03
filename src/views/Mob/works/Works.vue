@@ -2,7 +2,7 @@
   <div class="works">
     <app-hd :left_btn="left_btn" :right_btn="right_btn" :hd_msg="hdMsg" />
     <div class="content">
-      <router-view></router-view>
+        <router-view></router-view>
     </div>
     <Tabbar />
   </div>
