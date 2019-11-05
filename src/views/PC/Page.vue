@@ -21,6 +21,7 @@
 <script>
 
 import l_menu from '@/components/L_menu'
+import { setSession, getSession } from '@/Tools/intScaleNum'
 
 export default {
   components: {
@@ -28,8 +29,7 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     let userInfo = sessionStorage.getItem("userInfo");
-    console.log(from)
-    if (userInfo) {
+    if (userInfo > 1) {
       next();
     } else {
       next(vm => {

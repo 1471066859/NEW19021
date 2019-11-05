@@ -23,6 +23,7 @@ $designWidth: 375;
   border-radius: px(5);
   font-size: px(16);
   height: 100%;
+  background: #fff;
   box-sizing: border-box;
   h1 {
     text-align: center;

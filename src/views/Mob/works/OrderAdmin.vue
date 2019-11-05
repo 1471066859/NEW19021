@@ -26,7 +26,7 @@
       v-infinite-scroll="loadMore"
       infinite-scroll-disabled="loading"
       infinite-scroll-distance="10"
-      @click="closeSearchLoad"
+      @click.capture="closeSearchLoad"
     >
       <OrderAdminTable
         v-for="OrderItem in OrderAdminTableList"
@@ -123,8 +123,13 @@ export default {
   },
   created() {
     this.$store.dispatch("setTabState", 1);
-    this.$store.dispatch('setMobHdMsg', "WELCOME")
+    this.$store.dispatch('setMobHdMsg', "WELCOME");
   },
+  // beforeRouteEnter(to, from, next) {
+  //   next(vm => {
+  //   vm.$store.dispatch('setMobHdMsg', "WELCOME");
+  //   })
+  // },
   methods: {
     // 显示弹窗
     showSearchLoadFn() {

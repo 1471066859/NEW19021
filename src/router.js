@@ -63,19 +63,32 @@ const router = new Router({
       component: () => import('@/views/Mob/works/Works'),
       children: [{
           path: '/works/production',
-          component: () => import('@/views/Mob/works/Production')
+          component: () => import('@/views/Mob/works/Production'),
+          // 保存订单管理页面状态
+          // meta: {
+          //   keepAlive: false
+          // }
         },
         {
           path: '/works/OrderAdmin',
           component: () => import('@/views/Mob/works/OrderAdmin'),
+          // meta: {
+          //   keepAlive: true
+          // }
         },
         {
           path: '/works/UnitAdmin',
-          component: () => import('@/views/Mob/works/UnitAdmin')
+          component: () => import('@/views/Mob/works/UnitAdmin'),
+          // meta: {
+          //   keepAlive: false
+          // }
         },
         {
           path: '/works/About',
-          component: () => import('@/views/Mob/works/About')
+          component: () => import('@/views/Mob/works/About'),
+          // meta: {
+          //   keepAlive: false
+          // }
         },
         {
           path: '/works/OrderDetal',

@@ -74,7 +74,7 @@ $designWidth: 375;
     justify-content: space-between;
     align-items: center;
     padding: 0 px(10);
-    border: 1px solid rgba(204, 204, 204, 1);
+    border-bottom: 1px solid rgba(204, 204, 204, 1);
     p {
       font-size: px(12);
       font-weight: 700;

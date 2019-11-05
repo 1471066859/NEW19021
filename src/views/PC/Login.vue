@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import { userInfo } from 'os';
+import { setSession, getSession, isMobile } from '@/Tools/intScaleNum'
 export default {
   data() {
     return {
@@ -26,6 +26,15 @@ export default {
       }
     };
   },
+  created() {
+    sessionStorage.removeItem('userInfo')
+  },
+  // 判断设备信息跳转不同设备登录页
+  beforeRouteEnter(to, from, next) {
+    let isMob = isMobile();
+    if (isMob) next('/mlogin');
+    else next()
+  },
   methods: {
     loginFuc() {
       let { user_name, password } = this.formLabelAlign;
@@ -33,12 +42,11 @@ export default {
     },
     trueLogin() {
       this.$message.success('登录成功');
-      // this.$store.dispatch("setIsLogin", true);
-      sessionStorage.setItem("userInfo", this.formLabelAlign.user_name)
+      setSession('userInfo', 2);
       this.$router.push({
-        path:'/page',
+        path: '/page',
         query: {
-          title:'全部订单'
+          title: '全部订单'
         }
       });
       // console.log(this.$store.state.is_login)

@@ -2,7 +2,12 @@
   <div class="works">
     <app-hd :left_btn="left_btn" :right_btn="right_btn" :hd_msg="hdMsg" />
     <div class="content">
-        <router-view></router-view>
+      <router-view></router-view>
+      <!-- 保存订单管理页面状态 -->
+      <!-- <keep-alive>
+        <router-view v-if="this.$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view v-if="!this.$route.meta.keepAlive"></router-view>-->
     </div>
     <Tabbar />
   </div>
@@ -43,7 +48,7 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     let userInfo = sessionStorage.getItem("userInfo");
-    if (userInfo) {
+    if (userInfo > 1) {
       next();
     } else {
       next(vm => {
