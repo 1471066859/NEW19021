@@ -27,5 +27,8 @@ html,
 body,
 #app {
   background: #f2f2f2;
+  width: 100%;
+  height: 100%;
+  background: #f2f2f2;
 }
 </style>

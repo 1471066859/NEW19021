@@ -1,0 +1,29 @@
+{
+  "navBar": [{
+      "title": "仓储管理系统",
+      "icon": "el-icon-box",
+      "childen": [{
+          "title": "料盒出入库管理",
+          "path": "/page/BoxAdmin"
+        },
+        {
+          "title": "物料出入库管理",
+          "path": "/page/Materials"
+        }
+      ]
+    },
+    {
+      "title": "人员管理",
+      "icon": "el-icon-goblet-square-full",
+      "childen": [{
+          "title": "人员管理1",
+          "path": "/BoxAdmin"
+        },
+        {
+          "title": "人员管理2",
+          "path": "/BoxAdmin"
+        }
+      ]
+    }
+  ]
+}

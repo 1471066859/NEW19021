@@ -1,18 +1,22 @@
 <template>
   <div class="page">
-    <!-- 左侧导航 -->
-    <l-menu @listSelect="listSelect" :l_menu="l_menu"></l-menu>
-    <div class="right_body">
-      <!-- 头部 -->
-      <div class="header">
-        <div class="user_menu" @click="logoutFuc" style="font-size:16px">退出登录</div>
-        <div class="user_pic"></div>
+    <!-- 左侧导航部分 -->
+    <div class="pageNav">
+      <h1>智能仿真产线系统</h1>
+      <NavBar></NavBar>
+    </div>
+    <!-- 右侧内容 -->
+    <div class="pageContent">
+      <!-- 头部信息 -->
+      <header></header>
+      <!-- 页面导航 -->
+      <div class="pageRouterBox">
+        {{pageHeader}}
+        <span>/</span>
+        {{pageRouterBox}}
       </div>
-      <div class="tab_wrap">
-        <el-breadcrumb separator="/">
-          <el-breadcrumb-item v-for="(item, index) in breadcrumb_list" :key="index">{{item}}</el-breadcrumb-item>
-        </el-breadcrumb>
-        <!-- 右侧展示内容 -->
+      <!-- 功能模块区域 -->
+      <div class="pageFnWrap">
         <router-view></router-view>
       </div>
     </div>
@@ -20,12 +24,49 @@
 </template>
 <script>
 
-import l_menu from '@/components/L_menu'
 import { setSession, getSession } from '@/Tools/intScaleNum'
+import NavBar from '@/views/PC/components/NavBar'
 
 export default {
+  data() {
+    return {
+    }
+  },
+  methods: {
+  },
+  computed: {
+    pageHeader() {
+      const { path } = this.$route;
+      switch (path) {
+        case '/page/BoxAdmin':
+          return '仓储管理系统'
+          break;
+
+        case '/page/Materials':
+          return '仓储管理系统'
+          break;
+        default:
+          break;
+      }
+    },
+    pageRouterBox() {
+      const { path } = this.$route;
+      switch (path) {
+        case '/page/BoxAdmin':
+          return '料盒出入库管理'
+          break;
+        case '/page/Materials':
+          return '物料出入库管理'
+          break;
+
+        default:
+          break;
+      }
+    }
+  },
   components: {
-    'l-menu': l_menu,
+    NavBar,
+
   },
   beforeRouteEnter(to, from, next) {
     let userInfo = sessionStorage.getItem("userInfo");
@@ -38,187 +79,65 @@ export default {
     }
   },
   created() {
-  },
-  data() {
-    return {
-      data: {
-        title: '全部订单列表',
-      },
-      l_menu: [
-        {
-          title: '订单管理系统',
-          child: [
-            '全部订单',
-            '正在生产订单类别',
-            '已经完成订单列表',
-            "异常处理订单列表"
-          ]
-        },
-        {
-          title: '生产管理系统',
-          child: [
-            '产线管理',
-          ]
-        },
-        {
-          title: '仓储管理系统',
-          child: [
-            '原材料出入库管理',
-            "成品出入库管理"
-          ]
-        },
-        {
-          title: '设备管理系统',
-          child: [
-            '设备列表',
-            '设备故障列表',
-            '设备维修列表'
-          ]
-        },
-        {
-          title: '质量管理系统',
-          child: [
-            '原材料质量管理',
-            '异常处理订单列表'
-          ]
-        },
-        {
-          title: '人员管理系统',
-          child: [
-            '工厂人员列表',
-            '排班表'
-          ]
-        },
-        {
-          title: '报表系统',
-          child: [
-            '生产报表',
-            '原料报表'
-          ]
-        },
-        {
-          title: '后台管理',
-          child: [
-            '账户信息'
-          ]
-        }
-      ],
-      breadcrumb_list: [
-        "订单管理系统",
-        "全部订单列表"
-      ],
-    }
-  },
-  computed: {
-
-  },
-  methods: {
-    logoutFuc() {
-      console.log(1)
-      // this.$store.dispatch("setIsLogin", false);
-      sessionStorage.removeItem("userInfo")
-      // console.log(this.$store.getters.getIsLogin)
-      this.$router.push('/login')
-      this.$message.success('退出成功');
-
-    },
-
-    listSelect(i) {
-      if (this.$route.path == '/page/data' + i) return;
-      // console.log(this.nav_title)
-      let arr = i.split('-');
-      let newArr = []
-      arr.forEach(item => {
-        newArr.push(parseInt(item));
-      });
-      // console.log(this.breadcrumb_list)
-      this.breadcrumb_list[0] = this.l_menu[newArr[0]].title;
-      this.breadcrumb_list[1] = this.l_menu[newArr[0]].child[newArr[1]]
-      this.title = this.breadcrumb_list[1];
-      // console.log(this.title)
-      this.$router.push({
-        path: '/page/data' + i,
-        query: {
-          title: this.title
-        }
-      });
-    }
   }
 }
 </script>
 
 <style lang="scss" scope>
 .page {
+  width: 100%;
+  // width: 1900px;
+  margin: 0 auto;
+  background: #f2f2f2;
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
-  .header {
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    padding-right: 30px;
-    .user_pic {
-      width: 30px;
-      height: 30px;
-      margin-right: 20px;
-      border-radius: 50%;
-      background-color: chocolate;
-      opacity: 0.7;
-    }
-    .user_menu {
-      cursor: pointer;
-    }
-  }
-  .left_menu {
-    padding-top: 60px;
-    background: #fff;
-  }
-
-  .left_menu {
-    // flex: 1;
-    // width: 400px;
-    width: 200px;
-  }
-  .right_body {
-    // padding: 0 10px;
-    background-color: #f2f2f2;
+  box-sizing: border-box;
+  height: 100%;
+  .pageNav {
+    position: relative;
     flex: 1;
-    // border-radius: 2px solid red;
     box-sizing: border-box;
-    // height: calc(100vh - 60px);
-    height: 100vh;
-    h2 {
-      text-align: left;
-      padding-left: 20px;
-      // margin-top: 30px;
+    height: 100%;
+    padding-top: 60px;
+    background: #333;
+    h1 {
+      background: #333;
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 20px;
+      text-align: center;
+      width: 100%;
+      position: absolute;
+      top: 10px;
+      top: 20px;
+      left: -35px;
     }
-    .tab_wrap {
-      padding: 0 10px;
-      //  nav sel框样式
-      .el-input__inner {
-        height: 30px;
-        line-height: 30px;
-        // padding: 5px 10px !important;
-      }
-      .el-input__icon {
-        line-height: 30px !important;
-      }
-      .el-button {
-        line-height: 0.2;
-      }
-    }
-    .header {
+  }
+  .pageContent {
+    flex: 6;
+    box-sizing: border-box;
+    header {
       height: 60px;
-      background-color: #fff;
-      line-height: 40px;
-      font-size: 18px;
-    }
-    .el-breadcrumb {
-      box-sizing: border-box;
-      padding: 5px 20px;
-      border-radius: 3px;
-      margin-top: 10px;
       background: #fff;
-      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    .pageRouterBox {
+      width: 98%;
+      font-size: 14px;
+      background: #fff;
+      padding: 5px;
+      box-sizing: border-box;
+      margin: 10px auto;
+      span {
+        padding: 0 10px;
+      }
+    }
+    .pageFnWrap {
+      width: 98%;
+      min-height: 600px;
+      background: #fff;
+      box-sizing: border-box;
+      margin: 0 auto;
     }
   }
 }
