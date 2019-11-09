@@ -1,0 +1,378 @@
+{
+
+  "boxList": [{
+      "packid": "bigBox",
+      "packname": "大盒",
+      "amount": "89"
+    },
+    {
+      "packid": "smortBox",
+      "packname": "小盒",
+      "amount": "102"
+    }
+  ],
+  "adminList": [{
+      "userid": "zhangsan",
+      "username": "张三"
+    },
+    {
+      "userid": "lisi",
+      "username": "李四"
+    },
+    {
+      "userid": "zhawangwungsan",
+      "username": "王五"
+    },
+    {
+      "userid": "liliu",
+      "username": "李六"
+    }
+  ],
+  "stuffList": [{
+      "stuffname": "瓜子",
+      "stuffid": "guazi",
+      "amount": "120"
+    },
+    {
+      "stuffname": "花生",
+      "stuffid": "huasheng",
+      "amount": "180"
+    },
+    {
+      "stuffname": "大豆",
+      "stuffid": "dadou",
+      "amount": "160"
+    },
+    {
+      "stuffname": "辣椒",
+      "stuffid": "lajiao",
+      "amount": "105"
+    }
+  ],
+  "boxLeave": [{
+      "batch": "#0356",
+      "packname": "大盒",
+      "amount": 1,
+      "time": "2019-11-10 12:15:30",
+      "stuffname": "瓜子",
+      "state": "投料",
+      "orderid": "#6965"
+    },
+    {
+      "batch": "#0356",
+      "packname": "大盒",
+      "amount": 1,
+      "time": "2019-11-10 12:15:30",
+      "stuffname": "瓜子",
+      "state": "投料",
+      "orderid": "#6965"
+    },
+    {
+      "batch": "#0356",
+      "packname": "大盒",
+      "amount": 1,
+      "time": "2019-11-10 12:15:30",
+      "stuffname": "瓜子",
+      "state": "投料",
+      "orderid": "#6965"
+    },
+    {
+      "batch": "#0356",
+      "packname": "大盒",
+      "amount": 1,
+      "time": "2019-11-10 12:15:30",
+      "stuffname": "瓜子",
+      "state": "投料",
+      "orderid": "#6965"
+    },
+    {
+      "batch": "#0356",
+      "packname": "大盒",
+      "amount": 1,
+      "time": "2019-11-10 12:15:30",
+      "stuffname": "瓜子",
+      "state": "投料",
+      "orderid": "#6965"
+    },
+    {
+      "batch": "#0356",
+      "packname": "大盒",
+      "amount": 1,
+      "time": "2019-11-10 12:15:30",
+      "stuffname": "瓜子",
+      "state": "投料",
+      "orderid": "#6965"
+    },
+    {
+      "batch": "#0356",
+      "packname": "大盒",
+      "amount": 1,
+      "time": "2019-11-10 12:15:30",
+      "stuffname": "瓜子",
+      "state": "投料",
+      "orderid": "#6965"
+    },
+    {
+      "batch": "#0356",
+      "packname": "大盒",
+      "amount": 1,
+      "time": "2019-11-10 12:15:30",
+      "stuffname": "瓜子",
+      "state": "投料",
+      "orderid": "#6965"
+    },
+    {
+      "batch": "#0356",
+      "packname": "大盒",
+      "amount": 1,
+      "time": "2019-11-10 12:15:30",
+      "stuffname": "瓜子",
+      "state": "投料",
+      "orderid": "#6965"
+    },
+    {
+      "batch": "#0356",
+      "packname": "大盒",
+      "amount": 1,
+      "time": "2019-11-10 12:15:30",
+      "stuffname": "瓜子",
+      "state": "投料",
+      "orderid": "#6965"
+    }
+  ],
+  "boxEnter": [{
+      "batch": "#6596",
+      "packname": "大盒",
+      "time": "2019-10-9 14:30:20",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batch": "#6596",
+      "packname": "大盒",
+      "time": "2019-10-9 14:30:20",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batch": "#6596",
+      "packname": "大盒",
+      "time": "2019-10-9 14:30:20",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batch": "#6596",
+      "packname": "大盒",
+      "time": "2019-10-9 14:30:20",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batch": "#6596",
+      "packname": "大盒",
+      "time": "2019-10-9 14:30:20",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batch": "#6596",
+      "packname": "大盒",
+      "time": "2019-10-9 14:30:20",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batch": "#6596",
+      "packname": "大盒",
+      "time": "2019-10-9 14:30:20",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batch": "#6596",
+      "packname": "大盒",
+      "time": "2019-10-9 14:30:20",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batch": "#6596",
+      "packname": "大盒",
+      "time": "2019-10-9 14:30:20",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batch": "#6596",
+      "packname": "大盒",
+      "time": "2019-10-9 14:30:20",
+      "amount": 1,
+      "username": "张三"
+    }
+  ],
+  "stuffLeaveList": [
+    {
+      "batchid": "#56844",
+      "stuffname": "瓜子",
+      "time": "2019-10-9 14:30:20",
+      "orderid": "#465456",
+      "proid": "1号产线",
+      "amount": 1
+    },
+    {
+      "batchid": "#56844",
+      "stuffname": "瓜子",
+      "time": "2019-10-9 14:30:20",
+      "orderid": "#465456",
+      "proid": "1号产线",
+      "amount": 1
+    },
+    {
+      "batchid": "#56844",
+      "stuffname": "瓜子",
+      "time": "2019-10-9 14:30:20",
+      "orderid": "#465456",
+      "proid": "1号产线",
+      "amount": 1
+    },
+    {
+      "batchid": "#56844",
+      "stuffname": "瓜子",
+      "time": "2019-10-9 14:30:20",
+      "orderid": "#465456",
+      "proid": "1号产线",
+      "amount": 1
+    },
+    {
+      "batchid": "#56844",
+      "stuffname": "瓜子",
+      "time": "2019-10-9 14:30:20",
+      "orderid": "#465456",
+      "proid": "1号产线",
+      "amount": 1
+    },
+    {
+      "batchid": "#56844",
+      "stuffname": "瓜子",
+      "time": "2019-10-9 14:30:20",
+      "orderid": "#465456",
+      "proid": "1号产线",
+      "amount": 1
+    },
+    {
+      "batchid": "#56844",
+      "stuffname": "瓜子",
+      "time": "2019-10-9 14:30:20",
+      "orderid": "#465456",
+      "proid": "1号产线",
+      "amount": 1
+    },
+    {
+      "batchid": "#56844",
+      "stuffname": "瓜子",
+      "time": "2019-10-9 14:30:20",
+      "orderid": "#465456",
+      "proid": "1号产线",
+      "amount": 1
+    },
+    {
+      "batchid": "#56844",
+      "stuffname": "瓜子",
+      "time": "2019-10-9 14:30:20",
+      "orderid": "#465456",
+      "proid": "1号产线",
+      "amount": 1
+    },
+    {
+      "batchid": "#56844",
+      "stuffname": "瓜子",
+      "time": "2019-10-9 14:30:20",
+      "orderid": "#465456",
+      "proid": "1号产线",
+      "amount": 1
+    }
+  ],
+  "stuffEnterList": [
+    {
+      "batchid": "2",
+      "stuffname": "大豆",
+      "time":"2019-10-9 14:30:20",
+      "supplier": "瑞特",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batchid": "2",
+      "stuffname": "大豆",
+      "time":"2019-10-9 14:30:20",
+      "supplier": "瑞特",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batchid": "2",
+      "stuffname": "大豆",
+      "time":"2019-10-9 14:30:20",
+      "supplier": "瑞特",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batchid": "2",
+      "stuffname": "大豆",
+      "time":"2019-10-9 14:30:20",
+      "supplier": "瑞特",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batchid": "2",
+      "stuffname": "大豆",
+      "time":"2019-10-9 14:30:20",
+      "supplier": "瑞特",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batchid": "2",
+      "stuffname": "大豆",
+      "time":"2019-10-9 14:30:20",
+      "supplier": "瑞特",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batchid": "2",
+      "stuffname": "大豆",
+      "time":"2019-10-9 14:30:20",
+      "supplier": "瑞特",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batchid": "2",
+      "stuffname": "大豆",
+      "time":"2019-10-9 14:30:20",
+      "supplier": "瑞特",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batchid": "2",
+      "stuffname": "大豆",
+      "time":"2019-10-9 14:30:20",
+      "supplier": "瑞特",
+      "amount": 1,
+      "username": "张三"
+    },
+    {
+      "batchid": "2",
+      "stuffname": "大豆",
+      "time":"2019-10-9 14:30:20",
+      "supplier": "瑞特",
+      "amount": 1,
+      "username": "张三"
+    }
+  ]
+}

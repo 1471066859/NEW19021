@@ -7,26 +7,50 @@
         <h2>{{title}}</h2>
         <p>
           时间:
-          <span>2017-12-30</span>
+          <span>{{postForm.time}}</span>
         </p>
       </div>
       <el-form ref="form" :model="postForm" label-width="80px">
         <el-form-item label="物料名称" v-if="packName">
-          <el-input v-model="postForm.packName"></el-input>
+          <!-- <el-input v-model="postForm.packName"></el-input> -->
+          <el-select v-model="postForm.packName" placeholder="请选择物料名称">
+            <el-option
+              v-for="(item, index) in stuffList"
+              :label="item.stuffname"
+              :value="item.stuffid"
+              :key="index"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="供应商" v-if="supplier">
           <el-input v-model="postForm.supplier"></el-input>
+        </el-form-item>
+        <!-- 新增物料！！ -->
+        <el-form-item label="物料名" v-if="addStuff">
+          <el-input v-model="postForm.stuffname"></el-input>
         </el-form-item>
         <el-form-item label="料盒编号" v-if="boxId">
           <el-input v-model="postForm.boxId"></el-input>
         </el-form-item>
         <el-form-item label="料盒型号" v-if="boxVersion">
-          <el-input v-model="postForm.boxVersion" disabled></el-input>
+          <!-- <el-input v-model="postForm.boxVersion"></el-input> -->
+          <el-select v-model="postForm.boxVersion" placeholder="请选择料盒型号名">
+            <el-option
+              v-for="(item, index) in packList"
+              :label="item.packname"
+              :value="item.packid"
+              :key="index"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="操作人员" v-if="adminPeople">
-          <el-select v-model="postForm.adminPeople" placeholder="请选择操作人员">
-            <el-option label="张三" value="zhangsan"></el-option>
-            <el-option label="李四" value="lisi"></el-option>
+          <el-select v-model="postForm.userid" placeholder="请选择操作人员">
+            <el-option
+              v-for="(item, index) in adminList"
+              :label="item.username"
+              :value="item.userid"
+              :key="index"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="数量" v-if="count">
@@ -42,11 +66,16 @@
 </template>
 
 <script>
+import { getUserName, getBoxId, getTime } from '@/Tools/intScaleNum'
 export default {
   props: {
     title: {
       type: String,
       default: "新增入库项目"
+    },
+    addStuff: {
+      type: Boolean,
+      default: false
     },
     boxVersion: {
       type: Boolean,
@@ -72,35 +101,116 @@ export default {
       type: Boolean,
       default: false
     },
+    adminList: {
+      type: Array,
+      default: []
+    },
+    packList: {
+      type: Array,
+      // default: []
+      default: function () {
+        return []
+      }
+    },
+    stuffList: {
+      type: Array,
+      // default: []
+      default: function () {
+        return []
+      }
+    }
   },
   data() {
     return {
       addEnterBox: false,
+      timer: null,
       postForm: {
-        boxId: '',
-        boxVersion: '',
-        adminPeople: '',
+        time: null,
+        boxId: "",
+        boxVersion: "",
         count: "",
         supplier: "",
-        packName: ""
+        packName: "",
+        username: "",
+        userid: "",
+        stuffname: ""
       },
-
     }
   },
+  created() {
+
+  },
   methods: {
+    // 确定入库
     postFormFn() {
       // 传递值给父组件
+      const swh = this.verification();
+      console.log(swh);
+      // 料盒入库判断
+      if (!swh) {
+        this.$notify({
+          title: '警告',
+          message: '请输入完整信息',
+          type: 'error'
+        });
+        return;
+      }
+      // console.log(1)
+      const { adminList } = this;
+      const { userid } = this.postForm
+      let username = getUserName(adminList, userid);
+      this.postForm.username = username;
       this.$emit('postFormFn', this.postForm);
       this.hideAddEnterBox();
     },
+    // 验证弹窗
+    verification() {
+      let swh = false
+      const { boxId, boxVersion, count, supplier, packName, username, userid, stuffname } = this.postForm;
+      if (boxId != "" && boxVersion != "" && userid != "") {
+        swh = true;
+        return swh;
+      } else if (packName != "" && supplier != "" && userid != "" && count != "") {
+        swh = true;
+        return swh;
+      } else if (packName != "" && userid != "") {
+        swh = true;
+        return swh;
+      } else if (stuffname != "" && userid != "") {
+        swh = true;
+        return swh;
+      } else {
+        return swh;
+      }
+
+    },
     // 开启弹窗
     showAddEnterBox() {
+      this.getTime();
       this.addEnterBox = true;
+    },
+    getTime() {
+      // 防止初次执行延迟1s
+      this.postForm.time = getTime();
+      this.timer = setInterval(() => {
+        this.postForm.time = getTime();
+      }, 1000);
     },
     // 关闭弹窗
     hideAddEnterBox() {
       this.addEnterBox = false;
-      this.postForm = {}
+      this.postForm = {
+        time: null,
+        boxId: "",
+        boxVersion: "",
+        count: "",
+        supplier: "",
+        packName: "",
+        username: "",
+        userid: "",
+        stuffname: ""
+      };
+      clearInterval(this.timer)
     },
   },
 }

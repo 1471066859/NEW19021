@@ -2,17 +2,11 @@
   <div class="materials">
     <h1>物料出入库管理</h1>
     <div class="materWrap">
-      <!-- <div class="item" v-for="item in 4" :key="item">
-        <h2>物料A</h2>
-        <p>
-          <span>776</span>kg
-        </p>
-      </div>-->
-      <div class="item" v-for="item in 4" :key="item">
+      <div class="item" v-for="item in stuffList" :key="item.stuffid">
         <i class="el-icon-eleme"></i>
         <div class="msgWrap">
-          <p>瓜子</p>
-          <h2>75kg</h2>
+          <p>{{item.stuffname}}</p>
+          <h2>{{item.amount}}</h2>
         </div>
       </div>
       <div class="item addMater" @click="addPackFn">
@@ -25,8 +19,9 @@
       ref="AddEnterBox"
       title="新增物料"
       @postFormFn="postFormFn"
-      :packName="true"
+      :addStuff="true"
       :adminPeople="true"
+      :adminList="adminList"
     ></AddEnterBox>
 
     <!-- 筛选内容 -->
@@ -40,10 +35,10 @@
         <span>物料名称:</span>
         <el-select v-model="leaveForm.materLeaveVal" placeholder="请选择">
           <el-option
-            v-for="item in materNameList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in stuffList"
+            :key="item.stuffid"
+            :label="item.stuffname"
+            :value="item.stuffid"
           ></el-option>
         </el-select>
       </li>
@@ -52,10 +47,10 @@
         <span>物料名称:</span>
         <el-select v-model="enterForm.materEnterVal" placeholder="请选择">
           <el-option
-            v-for="item in materNameList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in stuffList"
+            :key="item.stuffid"
+            :label="item.stuffname"
+            :value="item.stuffid"
           ></el-option>
         </el-select>
       </li>
@@ -118,7 +113,7 @@
         <MaterLeaveTables></MaterLeaveTables>
       </div>
       <div v-show=" activeName == 'enter'">
-        <MaterEnterTables></MaterEnterTables>
+        <MaterEnterTables :stuffList="stuffList" :adminList="adminList"></MaterEnterTables>
       </div>
     </div>
   </div>
@@ -188,32 +183,50 @@ export default {
           label: '商家4'
         }
       ],
-      // 物料名列表
-      materNameList: [
-        {
-          value: 'gz',
-          label: '瓜子'
-        }, {
-          value: 'hs',
-          label: '花生'
-        }, {
-          value: 'dm',
-          label: '大米'
-        }, {
-          value: 'hd',
-          label: '红豆'
-        }
-      ],
+      // 物料列表
+      stuffList: [],
+      // 管理员信息
+      adminList: []
     }
   },
+  created() {
+    // 获取物料列表
+    this.getStuffList();
+    // 获取操作人员列表
+    this.getAdminList();
+  },
   methods: {
+    // 获取物料列表
+    getStuffList() {
+      this.axios.get("http://localhost:53000/stuffList")
+        .then(res => {
+          const { data } = res;
+          this.stuffList = data;
+        })
+        .catch(err => console.log(err))
+    },
+    // 获取操作人列表
+    getAdminList() {
+      this.axios.get("http://localhost:53000/adminList")
+        .then(res => {
+          const { data } = res;
+          this.adminList = data;
+        })
+        .catch(err => console.log(err));
+    },
     // 新增物料
     addPackFn() {
       this.$refs.AddEnterBox.showAddEnterBox();
     },
     // 新增物料确定
     postFormFn(data) {
-      console.log(data);
+      const obj = {
+        stuffname: data.stuffname,
+        time: data.time,
+        username: data.username,
+        userid: data.userid,
+      };
+      console.log(obj);
     },
     // 查询方法
     PostSerBtnFn() {
@@ -241,7 +254,8 @@ export default {
         return;
       }
     }
-  }
+  },
+
 }
 </script>
 

@@ -4,14 +4,14 @@
       :data="enterAdminList"
       height="520"
       style="width: 100%"
-      size= 'mini'
       :header-cell-style="{'background-color': '#fafafa'}"
     >
       <el-table-column prop="index" label="序号"></el-table-column>
-      <el-table-column prop="ID" label="料盒编号"></el-table-column>
-      <el-table-column prop="model" label="型号"></el-table-column>
-      <el-table-column prop="enterTime" label="入库时间"></el-table-column>
-      <el-table-column prop="people" label="操作人员"></el-table-column>
+      <el-table-column prop="batch" label="入库批次"></el-table-column>
+      <el-table-column prop="packname" label="料盒型号"></el-table-column>
+      <el-table-column prop="time" label="入库时间"></el-table-column>
+      <el-table-column prop="amount" label="入库数量"></el-table-column>
+      <el-table-column prop="username" label="操作人员"></el-table-column>
       <el-table-column align="right">
         <template slot="header" slot-scope="scope">
           <el-button size="mini" type="primary" @click="showAddEnterBox">
@@ -38,6 +38,8 @@
       :boxVersion="true"
       :adminPeople="true"
       :boxId="true"
+      :adminList="adminList"
+      :packList="packList"
     ></AddEnterBox>
   </div>
 </template>
@@ -48,6 +50,16 @@ export default {
   name: 'EnterTables',
   components: {
     AddEnterBox
+  },
+  props: {
+    adminList: {
+      type: Array,
+      default: []
+    },
+    packList: {
+      type: Array,
+      default: []
+    }
   },
   data() {
     return {
@@ -69,80 +81,14 @@ export default {
   methods: {
     // 初始化入库数据
     getInitBoxEnterData(page, size) {
-      console.log(page, size)
-      const data = [
-        {
-          index: 1,
-          ID: "D5696",
-          model: "大",
-          enterTime: "2018-1230 12:30:40",
-          people: "小张"
-        },
-        {
-          index: 2,
-          ID: "D5696",
-          model: "大",
-          enterTime: "2018-1230 12:30:40",
-          people: "小张"
-        },
-        {
-          index: 3,
-          ID: "D5696",
-          model: "大",
-          enterTime: "2018-1230 12:30:40",
-          people: "小张"
-        },
-        {
-          index: 4,
-          ID: "D5696",
-          model: "大",
-          enterTime: "2018-1230 12:30:40",
-          people: "小张"
-        },
-        {
-          index: 5,
-          ID: "D5696",
-          model: "大",
-          enterTime: "2018-1230 12:30:40",
-          people: "小张"
-        },
-        {
-          index: 6,
-          ID: "D5696",
-          model: "大",
-          enterTime: "2018-1230 12:30:40",
-          people: "小张"
-        },
-        {
-          index: 7,
-          ID: "D5696",
-          model: "大",
-          enterTime: "2018-1230 12:30:40",
-          people: "小张"
-        },
-        {
-          index: 8,
-          ID: "D5696",
-          model: "大",
-          enterTime: "2018-1230 12:30:40",
-          people: "小张"
-        },
-        {
-          index: 9,
-          ID: "D5696",
-          model: "大",
-          enterTime: "2018-1230 12:30:40",
-          people: "小张"
-        },
-        {
-          index: 10,
-          ID: "D5696",
-          model: "大",
-          enterTime: "2018-1230 12:30:40",
-          people: "小张"
-        }
-      ];
-      this.enterAdminList = data;
+      this.axios.get('http://localhost:53000/boxEnter')
+        .then(res => {
+          const { data } = res;
+          data.forEach((item, index) => {
+            item.index = ++index;
+          });
+          this.enterAdminList = data;
+        })
     },
     // 新增入库弹窗
     showAddEnterBox() {
@@ -150,7 +96,14 @@ export default {
     },
     // 提交入库表单
     postFormFn(data) {
-      console.log(data);
+      const obj = {
+        packid: data.boxId,
+        packname: data.boxVersion,
+        username: data.username,
+        userid: data.userid,
+        time: data.time
+      };
+      console.log(obj);
     },
     // 切换条数方法
     handleSizeChange(val) {

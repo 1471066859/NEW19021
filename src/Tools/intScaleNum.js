@@ -11,11 +11,57 @@ export const scaleNum = list => {
   return intScaleNum;
 };
 
+// 展示当前时间年月日时分秒
+export const getTime = () => {
+  const date = new Date();
+  let year = date.getFullYear();
+  let month = date.getMonth();
+  let day = date.getDate();
+  let hour = date.getHours();
+  let minute = date.getMinutes();
+  let second = date.getSeconds();
+  if (hour < 10) {
+    hour = '0' + hour;
+  }
+  if (minute < 10) {
+    minute = '0' + minute;
+  }
+  if (second < 10) {
+    second = '0' + second;
+  }
+  let x = date.getDay(); //获取星期
+  let time = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+  return time;
+}
+
 // 判断是否为移动端设备
 export const isMobile = () => {
   let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);
   return flag;
 };
+// 通过料盒id获取料盒名
+export const getBoxId = (boxList, packname) => {
+  const packid = boxList.find(item => {
+    return item.packname == packname;
+  }).packid;
+  return packid
+}
+
+// 通过物料id获取物料名
+export const getStuffName = (stuffList, stuffid) => {
+  const stuffname = stuffList.find(item => {
+    return item.stuffid == stuffid;
+  }).stuffname;
+  return stuffname
+}
+
+// 通过用户id获取用户名
+export const getUserName = (AdminList, userid) => {
+  const username = AdminList.find(item => {
+    return item.userid == userid;
+  }).username;
+  return username
+}
 
 // 存取session
 export const setSession = (key, data) => {

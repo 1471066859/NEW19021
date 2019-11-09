@@ -7,10 +7,12 @@
       :header-cell-style="{'background-color': '#fafafa'}"
     >
       <el-table-column prop="index" label="序号"></el-table-column>
-      <el-table-column prop="model" label="型号"></el-table-column>
-      <el-table-column prop="leaveTime" label="出库时间"></el-table-column>
-      <el-table-column prop="class" label="物料类型"></el-table-column>
-      <el-table-column prop="ID" label="订单编号"></el-table-column>
+      <el-table-column prop="batch" label="入库批次"></el-table-column>
+      <el-table-column prop="packname" label="料号型号"></el-table-column>
+      <el-table-column prop="time" label="出库时间"></el-table-column>
+      <el-table-column prop="stuffname" label="物料类型"></el-table-column>
+      <el-table-column prop="amount" label="出库数量"></el-table-column>
+      <el-table-column prop="orderid" label="订单编号"></el-table-column>
       <el-table-column prop="state" label="状态"></el-table-column>
     </el-table>
     <!-- 分页器 -->
@@ -35,7 +37,7 @@ export default {
     return {
       leavePage: 1,
       // 出库管理列表
-      leaveAdminList: null,
+      leaveAdminList: [],
       page: 1,
       size: 10
     }
@@ -47,7 +49,7 @@ export default {
   methods: {
     // 初始化入库数据
     getInitBoxLeaveData(page, size) {
-      console.log(page, size)
+      // console.log(page, size)
       const data = [
         {
           index: 1,
@@ -130,7 +132,14 @@ export default {
           state: "投料中"
         }
       ];
-      this.leaveAdminList = data;
+      this.axios.get("http://localhost:53000/boxLeave")
+        .then(res => {
+          const { data } = res;
+          data.forEach((item, index) => {
+            item.index = ++index
+          });
+          this.leaveAdminList = res.data;
+        });
     },
     // 切换条数方法
     handleSizeChange(val) {

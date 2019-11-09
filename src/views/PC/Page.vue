@@ -17,7 +17,9 @@
       </div>
       <!-- 功能模块区域 -->
       <div class="pageFnWrap">
-        <router-view></router-view>
+        <transition name="el-zoom-in-center">
+          <router-view></router-view>
+        </transition>
       </div>
     </div>
   </div>
@@ -32,7 +34,11 @@ export default {
     return {
     }
   },
+  created() {
+
+  },
   methods: {
+
   },
   computed: {
     pageHeader() {
@@ -77,8 +83,6 @@ export default {
         vm.$router.push('/login')
       })
     }
-  },
-  created() {
   }
 }
 </script>

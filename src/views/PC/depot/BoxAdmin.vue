@@ -3,11 +3,12 @@
     <h1>料盒出入库管理</h1>
     <!-- 头部料盒描述 -->
     <div class="packBox">
-      <!-- <div class="item" :class="{'sild': index == 0}" v-for="(item,index) in packList" :key="index">
-        <h2>{{item.packname}}</h2>
-        <p>{{item.amount}}</p>
-      </div>-->
-      <div class="item" :class="{'sild': index == 0}" v-for="(item,index) in packList" :key="index">
+      <div
+        class="item"
+        :class="{'sild': index == 0}"
+        v-for="(item,index) in packList"
+        :key="item.packid"
+      >
         <i class="el-icon-takeaway-box"></i>
         <div class="msgWrap">
           <p>{{item.packname}}</p>
@@ -29,7 +30,7 @@
         <LeaveTables></LeaveTables>
       </div>
       <div v-show=" activeName == 'enter'">
-        <EnterTables></EnterTables>
+        <EnterTables :adminList="adminList" :packList="packList"></EnterTables>
       </div>
     </div>
   </div>
@@ -49,29 +50,34 @@ export default {
       // 标签页索引
       activeName: 'leave',
       // 仓库料盒数据
-      packList: null,
+      packList: [],
+      // 管理员信息
+      adminList: []
     }
   },
   created() {
     // 初始化数据
-    this.getPackList()
+    this.getPackList();
+    // 获取管理员信息
+    this.getAdminList();
   },
   methods: {
     // 拉取料盒信息列表
     getPackList() {
-      const data = [
-        {
-          packid: '#12356',
-          packname: '大盒',
-          amount: 75,
-        },
-        {
-          packid: '#79656',
-          packname: '小盒',
-          amount: 49,
-        },
-      ];
-      this.packList = data;
+      this.axios.get('http://localhost:53000/boxList')
+        .then(res => {
+          const { data } = res;
+          this.packList = data;
+        })
+        .catch(err => console.log(err));
+    },
+    // 获取管理员信息
+    getAdminList() {
+      this.axios.get("http://localhost:53000/adminList")
+        .then(res => {
+          const { data } = res;
+          this.adminList = data;
+        })
     }
   }
 }
@@ -79,6 +85,10 @@ export default {
 
 <style lang="scss" scope>
 .boxAdmin {
+  h1 {
+    font-size: 18px;
+    padding: 10px 20px;
+  }
   .selWrap {
     width: 100%;
     padding: 15px 40px;
