@@ -1,0 +1,51 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "211390",
+      "name": "box",
+      "font_class": "box",
+      "unicode": "e6cb",
+      "unicode_decimal": 59083
+    },
+    {
+      "icon_id": "925448",
+      "name": "大豆",
+      "font_class": "dadou",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "4540547",
+      "name": "作物-大豆",
+      "font_class": "zuowu-dadou",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "7602793",
+      "name": "瓜子",
+      "font_class": "guazi",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "7661652",
+      "name": "花生",
+      "font_class": "huasheng",
+      "unicode": "e61f",
+      "unicode_decimal": 58911
+    },
+    {
+      "icon_id": "8146520",
+      "name": "辣椒",
+      "font_class": "Vegetables-",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    }
+  ]
+}

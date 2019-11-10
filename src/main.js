@@ -6,6 +6,7 @@ import './plugins/element.js'
 import '../src/assets/base.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import "@/assets/fonts/iconfont.css"
 
 
 import { InfiniteScroll } from 'mint-ui';

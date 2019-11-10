@@ -5,10 +5,12 @@
     <div class="addEnterBox">
       <div class="title">
         <h2>{{title}}</h2>
+
         <p>
           时间:
           <span>{{postForm.time}}</span>
         </p>
+        <i class="el-icon-close closeIcon" @click="hideAddEnterBox"></i>
       </div>
       <el-form ref="form" :model="postForm" label-width="80px">
         <el-form-item label="物料名称" v-if="packName">
@@ -252,6 +254,18 @@ export default {
     justify-content: space-between;
     padding-bottom: 15px;
     font-size: 16px;
+    // position: relative;
+    .closeIcon {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      display: inline-block;
+      font-size: 20px;
+      right: -44px;
+      top: -10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
     h2 {
       font-size: 18px;
     }

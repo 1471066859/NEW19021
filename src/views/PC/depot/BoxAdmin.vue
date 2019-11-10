@@ -5,11 +5,10 @@
     <div class="packBox">
       <div
         class="item"
-        :class="{'sild': index == 0}"
-        v-for="(item,index) in packList"
+        v-for="(item) in packList"
         :key="item.packid"
       >
-        <i class="el-icon-takeaway-box"></i>
+        <i class="iconfont icon-box" :class="{'smort':item.packname == '小盒'}"></i>
         <div class="msgWrap">
           <p>{{item.packname}}</p>
           <h2>{{item.amount}}</h2>
@@ -156,6 +155,9 @@ export default {
       align-items: center;
       background: #16a2fb;
       border-radius: 4px;
+      .smort {
+        font-size: 50px;
+      }
       i {
         font-size: 70px;
         color: #fff;

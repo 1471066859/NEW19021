@@ -90,6 +90,7 @@ export default {
     },
     // 提交入库表单数据
     postFormFn(data) {
+      // console.log(data)
       const stuffname = getStuffName(this.stuffList, data.packName);
       const obj = {
         stuffname,

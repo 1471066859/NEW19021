@@ -1,6 +1,6 @@
 <template>
   <el-menu
-    default-active="2"
+    default-active=""
     @open="handleOpen"
     @close="handleClose"
     background-color="#333"
@@ -40,6 +40,7 @@ export default {
   },
   methods: {
     handleOpen(key, keyPath) {
+      console.log(keyPath)
     },
     handleClose(key, keyPath) {
     }

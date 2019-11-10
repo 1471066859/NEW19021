@@ -41,7 +41,11 @@ export default {
       user_name == 'mql' && password == 'mql' ? this.trueLogin() : this.falseLogin();
     },
     trueLogin() {
-      this.$message.success('登录成功');
+      this.$notify({
+        title: '登录成功',
+        message: '欢迎您',
+        type: 'success'
+      });
       setSession('userInfo', 2);
       this.$router.push({
         path: '/page',
@@ -55,7 +59,11 @@ export default {
       // alert('用户名密码错误')
       this.formLabelAlign.user_name = '';
       this.formLabelAlign.password = '';
-      this.$message.error('用户名面错误');
+      this.$notify({
+        title: '登录失败',
+        message: '用户名或密码错误',
+        type: 'error'
+      });
 
     }
   }

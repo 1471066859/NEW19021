@@ -3,14 +3,21 @@
     <h1>物料出入库管理</h1>
     <div class="materWrap">
       <div class="item" v-for="item in stuffList" :key="item.stuffid">
-        <i class="el-icon-eleme"></i>
+        <!-- <i class="el-icon-eleme"></i> -->
+        <i class="iconfont" :class="item.icon"></i>
         <div class="msgWrap">
           <p>{{item.stuffname}}</p>
-          <h2>{{item.amount}}</h2>
+          <h2>
+            {{item.amount}}
+            <span>kg</span>
+          </h2>
         </div>
       </div>
       <div class="item addMater" @click="addPackFn">
-        <p>新增物料</p>
+        <p class="addWrap">
+          <i class="el-icon-circle-plus-outline"></i>
+          <span>新增物料</span>
+        </p>
       </div>
     </div>
 
@@ -307,18 +314,25 @@ export default {
     border-bottom: 1px solid #ccc;
     padding-bottom: 20px;
     .addMater {
+      cursor: pointer;
+      .addWrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
       p {
         text-align: center;
         width: 100%;
-        font-size: 25px !important;
+        font-size: 23px !important;
         color: #fff;
       }
     }
     .item:hover {
       transform: translateY(-10px);
+      box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.1);
     }
     .item {
-      transition: transform 0.3s;
+      transition: all 0.3s;
       display: flex;
       justify-content: space-between;
       width: 220px;
@@ -352,8 +366,12 @@ export default {
           font-size: 20px;
           color: #fff;
           text-align: center;
-          // color: #666;
           font-weight: 700;
+          span {
+            display: inline-block;
+            padding-left: 3px;
+            font-weight: 400;
+          }
         }
       }
     }

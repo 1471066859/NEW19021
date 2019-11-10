@@ -31,22 +31,26 @@
   "stuffList": [{
       "stuffname": "瓜子",
       "stuffid": "guazi",
-      "amount": "120"
+      "amount": "120",
+      "icon": "icon-guazi"
     },
     {
       "stuffname": "花生",
       "stuffid": "huasheng",
-      "amount": "180"
+      "amount": "180",
+      "icon": "icon-huasheng"
     },
     {
       "stuffname": "大豆",
       "stuffid": "dadou",
-      "amount": "160"
+      "amount": "160",
+      "icon": "icon-dadou"
     },
     {
       "stuffname": "辣椒",
       "stuffid": "lajiao",
-      "amount": "105"
+      "amount": "105",
+      "icon": "icon-Vegetables-"
     }
   ],
   "boxLeave": [{
