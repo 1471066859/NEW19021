@@ -1,7 +1,7 @@
 <template >
   <!-- 订单详情弹窗 -->
   <div class="popOverWrap">
-    <h2>订单信息</h2>
+    <!-- <h2>订单信息</h2> -->
     <ul class="orderMsg">
       <li>
         <p>订单编号:</p>
@@ -23,8 +23,8 @@
     <ul class="orderDes">
       <li v-for="item in 4" :key="item">
         <span>瓜子</span>
-        <span>X2</span>
-        <span>大盒</span>
+        <span>X1</span>
+        <span>小盒</span>
         <span>#2012</span>
         <span>投料区</span>
       </li>
@@ -57,10 +57,10 @@ export default {
 .popOverWrap {
   width: 400px;
   box-sizing: border-box;
-  border: 1px solid #ccc;
+  // border: 1px solid #DCDFE6;
   border-radius: 5px;
   margin: 0 auto;
-  position: absolute;
+  // position: absolute;
   left: calc(50% - 200px);
   top: 20px;
   .errDesWrap {
@@ -79,12 +79,12 @@ export default {
     li {
       display: flex;
       padding: 5px 50px;
-      border-top: 1px solid #ccc;
+      border-top: 1px solid #dcdfe6;
       justify-content: space-between;
       font-size: 16px;
       align-items: center;
       span {
-        color: #000;
+        color: #303133;
         font-weight: 400;
       }
     }
@@ -94,6 +94,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     box-sizing: border-box;
+    // margin-bottom: 30px;
     // border-bottom: 1px solid #ccc;
     li {
       display: flex;
@@ -102,7 +103,7 @@ export default {
       padding-bottom: 5px;
       padding-left: 50px;
       font-size: 18px;
-      color: #000;
+      color: #303133;
       p {
         width: 100px;
         overflow: hidden;
@@ -117,12 +118,12 @@ export default {
   }
   h2 {
     font-family: "Courier New", Courier, monospace;
-    color: #000;
+    color: #303133;
     width: 100%;
     text-align: center;
     font-size: 18px;
     font-weight: 400;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #dcdfe6;
   }
 }
 </style>

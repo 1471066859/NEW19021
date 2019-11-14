@@ -134,7 +134,6 @@ export default {
     orderDesFn(id) {
       this.orderId = id;
       this.desPopOver = true;
-
       console.log(id, "订单id")
     },
     // 筛选查询

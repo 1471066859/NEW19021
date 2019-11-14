@@ -1,9 +1,16 @@
 <template>
   <div class="allOrder">
     <!-- 订单详情弹窗 -->
-    <el-drawer :visible.sync="desPopOver" size="32%" direction="btt">
+    <el-dialog title="订单信息" :visible.sync="desPopOver" width="30%">
       <PopOverWrap :orderId="orderId"></PopOverWrap>
-    </el-drawer>
+      <p slot="footer" class="dialog-footer">
+        <!-- <el-button @click="dialogVisible = false">取 消</el-button> -->
+        <el-button type="primary" @click="desPopOver = false">确 定</el-button>
+      </p>
+    </el-dialog>
+    <!-- <el-drawer :visible.sync="desPopOver" size="32%" direction="btt">
+      <PopOverWrap :orderId="orderId"></PopOverWrap>
+    </el-drawer>-->
     <PageTitle pageTitle="全部订单"></PageTitle>
     <!-- 筛选区域 -->
     <div class="selContent">
