@@ -3,15 +3,11 @@
     <h1>料盒出入库管理</h1>
     <!-- 头部料盒描述 -->
     <div class="packBox">
-      <div
-        class="item"
-        v-for="(item) in packList"
-        :key="item.packid"
-      >
-        <i class="iconfont icon-box" :class="{'smort':item.packname == '小盒'}"></i>
+      <div class="item" v-for="(item, index) in packList" :key="index">
+        <i class="iconfont icon-box" :class="{'smort':item.packName == '小盒'}"></i>
         <div class="msgWrap">
-          <p>{{item.packname}}</p>
-          <h2>{{item.amount}}</h2>
+          <p>{{item.packName}}</p>
+          <h2 v-if="item.warehouse">{{item.warehouse.amount}}</h2>
         </div>
       </div>
     </div>
@@ -29,7 +25,7 @@
         <LeaveTables></LeaveTables>
       </div>
       <div v-show=" activeName == 'enter'">
-        <EnterTables :adminList="adminList" :packList="packList"></EnterTables>
+        <EnterTables @getPackList="getPackList" :adminList="adminList" :packList="packList"></EnterTables>
       </div>
     </div>
   </div>
@@ -38,6 +34,7 @@
 <script>
 import LeaveTables from '@/views/PC/components/BoxAdmin/LeaveTables'
 import EnterTables from '@/views/PC/components/BoxAdmin/EnterTables'
+import { initNavBar } from '@/Tools/intScaleNum'
 export default {
   name: 'BoxAdmin',
   components: {
@@ -55,28 +52,40 @@ export default {
     }
   },
   created() {
+    initNavBar(this);
     // 初始化数据
     this.getPackList();
     // 获取管理员信息
     this.getAdminList();
+    this.getLogin();
   },
   methods: {
     // 拉取料盒信息列表
     getPackList() {
-      this.axios.get('http://localhost:53000/boxList')
+      this.axios.get('api/webapi/warehouse/getAllPackAmount?contentid=1')
         .then(res => {
-          const { data } = res;
+          const { data } = res.data;
           this.packList = data;
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          console.log(err)
+        });
+
+    },
+    getLogin() {
+      this.axios.post("api/webapi/login?userId=1&userPwd=1")
+        .then(res => {
+          console.log(res)
+        });
     },
     // 获取管理员信息
     getAdminList() {
-      this.axios.get("http://localhost:53000/adminList")
+      this.axios.get("api/webapi/getUserNameByAccess?useruuid=7be9a8b1a6784ea590af644fa7fb930d")
         .then(res => {
-          const { data } = res;
+          const { data } = res.data;
           this.adminList = data;
-        })
+          console.log(this.adminList, 111111)
+        });
     }
   }
 }

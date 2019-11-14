@@ -8,7 +8,9 @@
     <!-- 右侧内容 -->
     <div class="pageContent">
       <!-- 头部信息 -->
-      <header></header>
+      <header>
+        <h1>产线001</h1>
+      </header>
       <!-- 页面导航 -->
       <div class="pageRouterBox">
         {{pageHeader}}
@@ -45,12 +47,42 @@ export default {
       const { path } = this.$route;
       switch (path) {
         case '/page/BoxAdmin':
-          return '仓储管理系统'
+          return '料盒管理系统'
           break;
 
         case '/page/Materials':
           return '仓储管理系统'
           break;
+
+        case '/page/ProAdmin':
+          return '产线管理系统'
+          break;
+
+        case '/page/AllOrder':
+          return '订单管理系统'
+          break;
+
+        case '/page/ErrorOrder':
+          return '订单管理系统'
+          break;
+
+        case '/page/ProingOrder':
+          return '订单管理系统'
+          break;
+
+        case '/page/CarryOrder':
+          return '订单管理系统'
+          break;
+
+        case '/page/AwatOrder':
+          return '订单管理系统'
+          break;
+
+        case '/page/UserInfo':
+          return '后台管理'
+          break;
+
+
         default:
           break;
       }
@@ -61,8 +93,36 @@ export default {
         case '/page/BoxAdmin':
           return '料盒出入库管理'
           break;
+
         case '/page/Materials':
           return '物料出入库管理'
+          break;
+
+        case '/page/ProAdmin':
+          return '产线管理'
+          break;
+
+        case '/page/AllOrder':
+          return '全部订单'
+          break;
+
+        case '/page/ErrorOrder':
+          return '异常订单'
+          break;
+
+        case '/page/ProingOrder':
+          return '正在生产订单'
+          break;
+
+        case '/page/CarryOrder':
+          return '完成生产订单'
+          break;
+
+        case '/page/AwatOrder':
+          return '等待生产订单'
+          break;
+        case '/page/UserInfo':
+          return '账号管理'
           break;
 
         default:
@@ -107,14 +167,15 @@ export default {
     background: #333;
     h1 {
       background: #333;
-      color: rgba(255, 255, 255, 0.65);
+      // color: rgba(255, 255, 255, 0.65);
+      color: #fff;
       font-size: 20px;
-      text-align: center;
       width: 100%;
       position: absolute;
-      top: 10px;
       top: 20px;
-      left: -35px;
+      font-weight: 700;
+      padding-left: 20px;
+      box-sizing: border-box;
     }
   }
   .pageContent {
@@ -124,6 +185,14 @@ export default {
       height: 60px;
       background: #fff;
       box-sizing: border-box;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      h1 {
+        font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+          "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+      }
     }
     .pageRouterBox {
       width: 98%;

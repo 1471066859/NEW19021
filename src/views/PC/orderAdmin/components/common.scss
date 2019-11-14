@@ -1,0 +1,54 @@
+.selPageWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding-bottom: 30px;
+}
+
+.stateIcon {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.icon-loading-v {
+  color: #909399;
+}
+
+.icon-yichang {
+  color: #F56C6C;
+}
+
+.icon-kaishi {
+  color: #409EFF;
+}
+
+.icon-wancheng-yuanshijituantubiao {
+  color: #67C23A;
+}
+
+.dataContent {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  box-sizing: border-box;
+}
+
+// 筛选区域
+.selContent {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  ul {
+    display: flex;
+    box-sizing: border-box;
+    justify-content: space-between;
+    align-items: center;
+
+    li {
+      margin-right: 20px;
+    }
+  }
+}

@@ -11,6 +11,31 @@ export const scaleNum = list => {
   return intScaleNum;
 };
 
+// 页面刷新初始化导航栏
+export const initNavBar = (_this) => {
+  const {
+    path
+  } = _this.$route;
+  _this.$store.dispatch("setTabState", path);
+};
+
+// 设置订单状态icon标识
+export const iconBg = key => {
+  // return 'red'
+  switch (key.rate) {
+    case 0:
+      return 'icon-loading-v'
+    case 1:
+      return 'icon-yichang'
+    case 2:
+      return 'icon-kaishi'
+    case 3:
+      return 'icon-wancheng-yuanshijituantubiao'
+    default:
+      break;
+  }
+};
+
 // 展示当前时间年月日时分秒
 export const getTime = () => {
   const date = new Date();
@@ -30,7 +55,7 @@ export const getTime = () => {
     second = '0' + second;
   }
   let x = date.getDay(); //获取星期
-  let time = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+  let time = year + '-' + ++month + '-' + day + ' ' + hour + ':' + "00" + ':' + "00";
   return time;
 }
 
@@ -50,16 +75,16 @@ export const getBoxId = (boxList, packname) => {
 // 通过物料id获取物料名
 export const getStuffName = (stuffList, stuffid) => {
   const stuffname = stuffList.find(item => {
-    return item.stuffid == stuffid;
-  }).stuffname;
+    return item.stuffId == stuffid;
+  }).stuffName;
   return stuffname
 }
 
 // 通过用户id获取用户名
 export const getUserName = (AdminList, userid) => {
   const username = AdminList.find(item => {
-    return item.userid == userid;
-  }).username;
+    return item.userId == userid;
+  }).userName;
   return username
 }
 

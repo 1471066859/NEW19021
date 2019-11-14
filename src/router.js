@@ -19,9 +19,14 @@ const router = new Router({
       redirect: '/page'
     },
     {
+      // 测试代码
+      path: "/test",
+      component: () => import('@/views/test')
+    },
+    {
       path: '/page',
       component: () => import('@/views/PC/Page'),
-      redirect: '/page/BoxAdmin',
+      redirect: '/page/AllOrder',
       children: [{
           path: '/page/BoxAdmin',
           component: () => import('@/views/PC/depot/BoxAdmin')
@@ -29,6 +34,34 @@ const router = new Router({
         {
           path: "/page/Materials",
           component: () => import('@/views/PC/depot/Materials')
+        },
+        {
+          path: "/page/ProAdmin",
+          component: () => import('@/views/PC/proAdmin/')
+        },
+        {
+          path: "/page/AllOrder",
+          component: () => import('@/views/PC/orderAdmin/AllOrder')
+        },
+        {
+          path: "/page/ProingOrder",
+          component: () => import('@/views/PC/orderAdmin/ProingOrder')
+        },
+        {
+          path: "/page/CarryOrder",
+          component: () => import('@/views/PC/orderAdmin/CarryOrder')
+        },
+        {
+          path: "/page/AwatOrder",
+          component: () => import('@/views/PC/orderAdmin/AwatOrder')
+        },
+        {
+          path: "/page/ErrorOrder",
+          component: () => import('@/views/PC/orderAdmin/ErrorOrder')
+        },
+        {
+          path: "/page/UserInfo",
+          component: () => import('@/views/PC/userInfo/Index')
         }
       ]
     },

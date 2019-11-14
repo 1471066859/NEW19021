@@ -8,7 +8,6 @@ module.exports = {
     proxy: {
       // 配置跨域
       '/api': {
-        // target: 'http://localhost:6001',
         target: 'http://192.168.4.155:8888',
         ws: true,
         changOrigin: true,

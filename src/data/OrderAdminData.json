@@ -1,0 +1,467 @@
+{
+  "allOrderList": [{
+      "orderId": "#02201",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "已完成",
+      "rate": 3
+    },
+    {
+      "orderId": "#00331",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "订单异常",
+      "rate": 1
+    },
+    {
+      "orderId": "#002311",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "待生产",
+      "rate": 0
+    },
+    {
+      "orderId": "#0013jhy4",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "已完成",
+      "rate": 3
+    },
+    {
+      "orderId": "#001ffhh34",
+      "time": "2019-12-20 20:30:12",
+      "userName": "李四",
+      "proId": "001",
+      "orderState": "已完成",
+      "rate": 3
+    },
+    {
+      "orderId": "#002",
+      "time": "2019-12-20 20:30:12",
+      "userName": "李四",
+      "proId": "002",
+      "orderState": "待生产",
+      "rate": 0
+    },
+    {
+      "orderId": "#003",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "003",
+      "orderState": "订单异常",
+      "rate": 1
+    },
+    {
+      "orderId": "#0444",
+      "time": "2019-12-20 20:30:12",
+      "userName": "王五",
+      "proId": "003",
+      "orderState": "正在生产",
+      "rate": 2
+    },
+    {
+      "orderId": "#098",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "正在生产",
+      "rate": 2
+    },
+    {
+      "orderId": "#231",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "004",
+      "orderState": "待生产",
+      "rate": 0
+    },
+    {
+      "orderId": "#0232",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "003",
+      "orderState": "待生产",
+      "rate": 0
+    },
+    {
+      "orderId": "#001kjhf34",
+      "time": "2019-12-20 20:30:12",
+      "userName": "李四",
+      "proId": "001",
+      "orderState": "已完成",
+      "rate": 3
+    },
+    {
+      "orderId": "#0013jhk4",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "已完成",
+      "rate": 3
+    },
+    {
+      "orderId": "#0013dsq4",
+      "time": "2019-12-20 20:30:12",
+      "userName": "王五",
+      "proId": "001",
+      "orderState": "已完成",
+      "rate": 3
+    },
+    {
+      "orderId": "#0ddss0134",
+      "time": "2019-12-20 20:30:12",
+      "userName": "王五",
+      "proId": "001",
+      "orderState": "已完成",
+      "rate": 3
+    },
+    {
+      "orderId": "#001qwd34",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "已完成",
+      "rate": 3
+    },
+    {
+      "orderId": "#00fs134",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "已完成",
+      "rate": 3
+    },
+    {
+      "orderId": "#0013da4",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "已完成",
+      "rate": 3
+    },
+    {
+      "orderId": "#dasd4",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "003",
+      "orderState": "订单异常",
+      "rate": 1
+    },
+    {
+      "orderId": "#04asd244",
+      "time": "2019-12-20 20:30:12",
+      "userName": "王五",
+      "proId": "003",
+      "orderState": "正在生产",
+      "rate": 2
+    },
+    {
+      "orderId": "#09ada18",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "正在生产",
+      "rate": 2
+    },
+    {
+      "orderId": "#123123ad",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "004",
+      "orderState": "待生产",
+      "rate": 0
+    },
+    {
+      "orderId": "#123fg123ad",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "004",
+      "orderState": "待生产",
+      "rate": 0
+    },
+    {
+      "orderId": "#12312as3ad",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "004",
+      "orderState": "待生产",
+      "rate": 0
+    },
+    {
+      "orderId": "#adad",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "003",
+      "orderState": "待生产",
+      "rate": 0
+    },
+    {
+      "orderId": "#3dsa",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "003",
+      "orderState": "订单异常",
+      "rate": 1
+    },
+    {
+      "orderId": "#das2",
+      "time": "2019-12-20 20:30:12",
+      "userName": "王五",
+      "proId": "003",
+      "orderState": "正在生产",
+      "rate": 2
+    },
+    {
+      "orderId": "#d34f",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "正在生产",
+      "rate": 2
+    },
+    {
+      "orderId": "#d34adf",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "正在生产",
+      "rate": 2
+    },
+    {
+      "orderId": "#d3ddf4f",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "正在生产",
+      "rate": 2
+    },
+    {
+      "orderId": "#d34fs12",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "正在生产",
+      "rate": 2
+    },
+    {
+      "orderId": "#d3dsa4f",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "001",
+      "orderState": "正在生产",
+      "rate": 2
+    },
+    {
+      "orderId": "#ads23",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "004",
+      "orderState": "待生产",
+      "rate": 0
+    },
+    {
+      "orderId": "#das44",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "003",
+      "orderState": "待生产",
+      "rate": 0
+    },
+    {
+      "orderId": "#adaaa2d",
+      "time": "2019-12-20 20:30:12",
+      "userName": "李四",
+      "proId": "002",
+      "orderState": "待生产",
+      "rate": 0
+    },
+    {
+      "orderId": "#asjhd78",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "003",
+      "orderState": "订单异常",
+      "rate": 1
+    },
+
+    {
+      "orderId": "#asg4d78",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "003",
+      "orderState": "订单异常",
+      "rate": 1
+    },
+    {
+      "orderId": "#asdwef78",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "003",
+      "orderState": "订单异常",
+      "rate": 1
+    },
+    {
+      "orderId": "#asdg578",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "003",
+      "orderState": "订单异常",
+      "rate": 1
+    },
+    {
+      "orderId": "#as5gd78",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "003",
+      "orderState": "订单异常",
+      "rate": 1
+    },
+    {
+      "orderId": "#asdfd78",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "003",
+      "orderState": "订单异常",
+      "rate": 1
+    },
+    {
+      "orderId": "#asd76j8",
+      "time": "2019-12-20 20:30:12",
+      "userName": "张三",
+      "proId": "003",
+      "orderState": "订单异常",
+      "rate": 1
+    },
+    {
+      "orderId": "#123dfg",
+      "time": "2019-12-20 20:30:12",
+      "userName": "王五",
+      "proId": "003",
+      "orderState": "正在生产",
+      "rate": 2
+    }
+
+  ],
+
+  "orderStateList": [{
+      "stateId": "zzsc",
+      "stateName": "正在生产订单"
+    },
+    {
+      "stateId": "ywc",
+      "stateName": "已完成订单"
+    },
+    {
+      "stateId": "yc",
+      "stateName": "异常订单"
+    },
+    {
+      "stateId": "dsc",
+      "stateName": "待生产订单"
+    }
+  ],
+
+  "userList": [{
+      "userName": "张三",
+      "userId": "zhangsan"
+    },
+    {
+      "userName": "李四",
+      "userId": "lisi"
+    },
+    {
+      "userName": "王五",
+      "userId": "wangwu"
+    }
+  ],
+
+
+
+
+  "proAdminList": [{
+      "unitName": "备料区",
+      "unitState": "工作中",
+      "boxList": [{
+          "boxId": "0asd01"
+        },
+        {
+          "boxId": "0sdf01"
+        },
+        {
+          "boxId": "00fas1"
+        },
+        {
+          "boxId": "00asd1"
+        },
+        {
+          "boxId": "0da01"
+        }
+      ]
+    },
+    {
+      "unitName": "投料区",
+      "unitState": "工作中",
+      "boxList": [{
+          "boxId": "0asd01"
+        },
+        {
+          "boxId": "0sdf01"
+        },
+        {
+          "boxId": "00fas1"
+        }
+      ]
+    },
+    {
+      "unitName": "视觉检测",
+      "unitState": "工作中",
+      "boxList": [{
+          "boxId": "0asd01"
+        },
+        {
+          "boxId": "0sdf01"
+        },
+        {
+          "boxId": "00fas1"
+        },
+        {
+          "boxId": "00asd1"
+        },
+        {
+          "boxId": "0da01"
+        }
+      ]
+    },
+
+    {
+      "unitName": "执行单元",
+      "unitState": "异常",
+      "boxList": [{
+        "boxId": "0asd01"
+      }]
+    },
+    {
+      "unitName": "异常处理",
+      "unitState": "空闲",
+      "boxList": []
+    },
+    {
+      "unitName": "分类码垛",
+      "unitState": "工作中",
+      "boxList": [{
+          "boxId": "#dad1"
+        },
+        {
+          "boxId": "#sad"
+        },
+        {
+          "boxId": "#dadfa1"
+        } 
+      ]
+    }
+  ]
+}

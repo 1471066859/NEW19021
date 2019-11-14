@@ -13,6 +13,34 @@
       "unicode_decimal": 59083
     },
     {
+      "icon_id": "604653",
+      "name": "异常",
+      "font_class": "yichang",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
+      "icon_id": "689250",
+      "name": "减去 减号 无边框",
+      "font_class": "jianqujianhaowubiankuang",
+      "unicode": "e7ee",
+      "unicode_decimal": 59374
+    },
+    {
+      "icon_id": "730799",
+      "name": "用户",
+      "font_class": "icon-user",
+      "unicode": "e677",
+      "unicode_decimal": 58999
+    },
+    {
+      "icon_id": "845834",
+      "name": "完成",
+      "font_class": "wancheng",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
       "icon_id": "925448",
       "name": "大豆",
       "font_class": "dadou",
@@ -20,11 +48,67 @@
       "unicode_decimal": 58928
     },
     {
+      "icon_id": "1128772",
+      "name": "仓库",
+      "font_class": "cangku",
+      "unicode": "e7b9",
+      "unicode_decimal": 59321
+    },
+    {
+      "icon_id": "2305773",
+      "name": "正在进行",
+      "font_class": "zhengzaijinhang",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "3695791",
+      "name": "完成",
+      "font_class": "wancheng-yuanshijituantubiao",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "4195141",
+      "name": "订单",
+      "font_class": "dingdan",
+      "unicode": "e67c",
+      "unicode_decimal": 59004
+    },
+    {
       "icon_id": "4540547",
       "name": "作物-大豆",
       "font_class": "zuowu-dadou",
       "unicode": "e639",
       "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "5175751",
+      "name": "玉米",
+      "font_class": "yumi",
+      "unicode": "e6a9",
+      "unicode_decimal": 59049
+    },
+    {
+      "icon_id": "5322343",
+      "name": "等待",
+      "font_class": "loading-v",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
+      "icon_id": "5708857",
+      "name": "仓库",
+      "font_class": "cangku1",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "6240469",
+      "name": "开始",
+      "font_class": "kaishi",
+      "unicode": "e612",
+      "unicode_decimal": 58898
     },
     {
       "icon_id": "7602793",
@@ -46,6 +130,13 @@
       "font_class": "Vegetables-",
       "unicode": "e640",
       "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "9712601",
+      "name": "产线",
+      "font_class": "chanxian",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
     }
   ]
 }

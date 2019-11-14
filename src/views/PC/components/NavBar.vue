@@ -1,6 +1,6 @@
 <template>
   <el-menu
-    default-active=""
+    :default-active="NavBarState"
     @open="handleOpen"
     @close="handleClose"
     background-color="#333"
@@ -9,7 +9,12 @@
     router
     unique-opened
   >
-    <el-submenu popper-class="submenuBackColor" :index="item.title" v-for="(item, index) in navBar" :key="index">
+    <el-submenu
+      popper-class="submenuBackColor"
+      :index="item.title"
+      v-for="(item, index) in navBar"
+      :key="index"
+    >
       <template slot="title">
         <i :class="item.icon"></i>
         <span>{{item.title}}</span>
@@ -32,11 +37,19 @@ export default {
   data() {
     return {
       // 导航栏数据
-      navBar: []
+      navBar: [],
+      // NavBarState: "/page/ProAdmin"
     }
   },
   created() {
+    // this.NavBarState = this.$store.getters.getTabState;
+    // console.log(this.NavBarState)
     this.navBar = navBarJson.navBar;
+  },
+  computed: {
+    NavBarState() {
+      return this.$store.getters.getTabState;
+    }
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -53,6 +66,10 @@ export default {
 .el-menu {
   height: 100%;
   width: 100%;
+  .iconfont {
+    font-size: 20px;
+    padding-right: 10px;
+  }
 }
 .actSubmenu {
   background: #fff;
@@ -65,6 +82,6 @@ export default {
   background: #fff;
 }
 .el-submenu .el-menu-item {
-  background: red ;
+  background: red;
 }
 </style>

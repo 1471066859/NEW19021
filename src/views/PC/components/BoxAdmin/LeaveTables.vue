@@ -3,15 +3,16 @@
     <el-table
       :data="leaveAdminList"
       height="520"
+      v-loading="tableLoad"
       style="width: 100%"
       :header-cell-style="{'background-color': '#fafafa'}"
     >
-      <el-table-column prop="index" label="序号"></el-table-column>
-      <el-table-column prop="batch" label="入库批次"></el-table-column>
-      <el-table-column prop="packname" label="料号型号"></el-table-column>
-      <el-table-column prop="time" label="出库时间"></el-table-column>
+      <el-table-column type="index" label="序号" width="50"></el-table-column>
+      <el-table-column prop="batchId" label="入库批次"></el-table-column>
+      <el-table-column prop="pack.packName" label="料号型号"></el-table-column>
+      <el-table-column prop="outInTime" label="出库时间"></el-table-column>
       <el-table-column prop="stuffname" label="物料类型"></el-table-column>
-      <el-table-column prop="amount" label="出库数量"></el-table-column>
+      <el-table-column prop="outinAmount" label="出库数量"></el-table-column>
       <el-table-column prop="orderid" label="订单编号"></el-table-column>
       <el-table-column prop="state" label="状态"></el-table-column>
     </el-table>
@@ -24,13 +25,14 @@
         :current-page="leavePage"
         :page-sizes="[10, 15, 20, 25]"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="sizeCount"
       ></el-pagination>
     </div>
   </div>
 </template>
 
 <script>
+import qs from 'qs'
 export default {
   name: "LeaveTables",
   data() {
@@ -39,7 +41,9 @@ export default {
       // 出库管理列表
       leaveAdminList: [],
       page: 1,
-      size: 10
+      size: 10,
+      sizeCount: 100,
+      tableLoad: false,
     }
   },
   created() {
@@ -49,97 +53,25 @@ export default {
   methods: {
     // 初始化入库数据
     getInitBoxLeaveData(page, size) {
-      // console.log(page, size)
-      const data = [
-        {
-          index: 1,
-          model: '大',
-          leaveTime: '2018-12-30 12:20:30',
-          class: 'A',
-          ID: "D3659",
-          state: "投料中"
-        },
-        {
-          index: 2,
-          model: '大',
-          leaveTime: '2018-12-30 12:20:30',
-          class: 'A',
-          ID: "D3659",
-          state: "投料中"
-        },
-        {
-          index: 3,
-          model: '大',
-          leaveTime: '2018-12-30 12:20:30',
-          class: 'A',
-          ID: "D3659",
-          state: "投料中"
-        },
-        {
-          index: 4,
-          model: '大',
-          leaveTime: '2018-12-30 12:20:30',
-          class: 'A',
-          ID: "D3659",
-          state: "投料中"
-        },
-        {
-          index: 5,
-          model: '大',
-          leaveTime: '2018-12-30 12:20:30',
-          class: 'A',
-          ID: "D3659",
-          state: "投料中"
-        },
-        {
-          index: 6,
-          model: '大',
-          leaveTime: '2018-12-30 12:20:30',
-          class: 'A',
-          ID: "D3659",
-          state: "投料中"
-        },
-        {
-          index: 7,
-          model: '大',
-          leaveTime: '2018-12-30 12:20:30',
-          class: 'A',
-          ID: "D3659",
-          state: "投料中"
-        },
-        {
-          index: 8,
-          model: '大',
-          leaveTime: '2018-12-30 12:20:30',
-          class: 'A',
-          ID: "D3659",
-          state: "投料中"
-        },
-        {
-          index: 9,
-          model: '大',
-          leaveTime: '2018-12-30 12:20:30',
-          class: 'A',
-          ID: "D3659",
-          state: "投料中"
-        },
-        {
-          index: 10,
-          model: '大',
-          leaveTime: '2018-12-30 12:20:30',
-          class: 'A',
-          ID: "D3659",
-          state: "投料中"
-        }
-      ];
-      this.axios.get("http://localhost:53000/boxLeave")
+      this.tableLoad = true;
+      // 拉取料盒信息列表
+      const data = qs.stringify({
+        contentType: 2,
+        outInType: 2,
+        pageNum: page,
+        pageSize: size,
+      });
+      this.axios.post('api/webapi/warehouse/getOutinWarehouseInfo', data)
         .then(res => {
-          const { data } = res;
-          data.forEach((item, index) => {
-            item.index = ++index
-          });
-          this.leaveAdminList = res.data;
-        });
+          const { data } = res.data;
+          this.leaveAdminList = data;
+          this.sizeCount = res.data.count;
+          this.tableLoad = false;
+        })
+        .catch(err => {
+          console.log(err);
+        })
+
     },
     // 切换条数方法
     handleSizeChange(val) {

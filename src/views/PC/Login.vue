@@ -49,11 +49,7 @@ export default {
       setSession('userInfo', 2);
       this.$router.push({
         path: '/page',
-        query: {
-          title: '全部订单'
-        }
       });
-      // console.log(this.$store.state.is_login)
     },
     falseLogin() {
       // alert('用户名密码错误')

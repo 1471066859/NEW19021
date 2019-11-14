@@ -1,41 +1,88 @@
 <template>
   <div class="materials">
+    <div class="backBg" @click="closeAddStuff('addStuffForm')" v-show="addMaterBox"></div>
     <h1>物料出入库管理</h1>
     <div class="materWrap">
-      <div class="item" v-for="item in stuffList" :key="item.stuffid">
-        <!-- <i class="el-icon-eleme"></i> -->
+      <div class="item" v-for="(item,index) in stuffList" :key="index">
         <i class="iconfont" :class="item.icon"></i>
         <div class="msgWrap">
-          <p>{{item.stuffname}}</p>
-          <h2>
-            {{item.amount}}
+          <p>{{item.stuffName}}</p>
+          <h2 v-if="item.warehouse">
+            {{item.warehouse.amount}}
             <span>kg</span>
           </h2>
         </div>
       </div>
-      <div class="item addMater" @click="addPackFn">
+      <!-- <div class="item addMater" @click="addPackFn">
         <p class="addWrap">
           <i class="el-icon-circle-plus-outline"></i>
           <span>新增物料</span>
         </p>
-      </div>
+      </div>-->
     </div>
 
-    <!-- 新增物料弹窗 -->
-    <AddEnterBox
-      ref="AddEnterBox"
-      title="新增物料"
-      @postFormFn="postFormFn"
-      :addStuff="true"
-      :adminPeople="true"
-      :adminList="adminList"
-    ></AddEnterBox>
+    <!-- 废弃 新增物料弹窗 -->
+
+    <div class="addMaterBox" v-show="addMaterBox" v-loading="addMaterBoxLoad">
+      <i class="el-icon-close closeIcon" @click="closeAddStuff('addStuffForm')"></i>
+      <div class="hd">
+        <h2>新增物料</h2>
+        <p>
+          时间:
+          <span>{{addStuffForm.time}}</span>
+        </p>
+      </div>
+      <el-form
+        :model="addStuffForm"
+        :rules="stuffrules"
+        ref="addStuffForm"
+        label-width="100px"
+        class="demo-ruleForm"
+      >
+        <div class="item">
+          <el-form-item label="物料名称" prop="stuffname">
+            <el-input v-model="addStuffForm.stuffname"></el-input>
+          </el-form-item>
+        </div>
+        <div class="item">
+          <el-form-item label="操作人" prop="userid">
+            <el-select v-model="addStuffForm.userid" placeholder="操作人">
+              <el-option
+                v-for="item in adminList"
+                :key="item.userId"
+                :label="item.userName"
+                :value="item.userId"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </div>
+        <!-- butn -->
+        <div class="item btns">
+          <el-form-item>
+            <el-button type="primary" @click="postAddStuff('addStuffForm')">确定</el-button>
+            <el-button @click="closeAddStuff('addStuffForm')">取消</el-button>
+          </el-form-item>
+        </div>
+      </el-form>
+    </div>
 
     <!-- 筛选内容 -->
     <ul class="selWrap">
-      <li class="btnsWrap leaveEnterBtns">
+      <!-- <li class="btnsWrap leaveEnterBtns">
         <el-button :class="{'activeBtn': activeName == 'leave'}" @click="activeName = 'leave'">出库</el-button>
         <el-button :class="{'activeBtn': activeName == 'enter'}" @click="activeName = 'enter'">入库</el-button>
+      </li>-->
+
+      <!-- 新增入库 -->
+      <li class="btnsWrap leaveEnterBtns">
+        <el-button
+          v-show="activeName == 'enter'"
+          @click="($refs.MaterEnterTables.showAddEnterBox())"
+          type="primary"
+        >
+          <i class="el-icon-circle-plus"></i>
+          新增入库
+        </el-button>
       </li>
       <!-- 选择出库物料名 -->
       <li class="selNameWrap" v-show="activeName == 'leave'">
@@ -43,9 +90,9 @@
         <el-select v-model="leaveForm.materLeaveVal" placeholder="请选择">
           <el-option
             v-for="item in stuffList"
-            :key="item.stuffid"
-            :label="item.stuffname"
-            :value="item.stuffid"
+            :key="item.stuffId"
+            :label="item.stuffName"
+            :value="item.stuffId"
           ></el-option>
         </el-select>
       </li>
@@ -55,9 +102,9 @@
         <el-select v-model="enterForm.materEnterVal" placeholder="请选择">
           <el-option
             v-for="item in stuffList"
-            :key="item.stuffid"
-            :label="item.stuffname"
-            :value="item.stuffid"
+            :key="item.stuffId"
+            :label="item.stuffName"
+            :value="item.stuffId"
           ></el-option>
         </el-select>
       </li>
@@ -75,7 +122,7 @@
       </li>
       <!-- 选择入库日期范围 -->
       <li class="selTimeWrap" v-show="activeName == 'enter'">
-        <span>出库时间:</span>
+        <span>入库时间:</span>
         <el-date-picker
           v-model="enterForm.selEnterTimeVal"
           type="datetimerange"
@@ -97,18 +144,6 @@
           ></el-option>
         </el-select>
       </li>
-      <!-- 选择出库供应商 -->
-      <li class="selIdWrap" v-show="activeName == 'enter'">
-        <span>供应商:</span>
-        <el-select v-model="enterForm.supplierVal" placeholder="请选择">
-          <el-option
-            v-for="item in supplierList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </li>
       <li class="btnsWrap">
         <el-button @click="PostSerBtnFn" type="primary">查询</el-button>
         <el-button @click="clearSerFn">重置</el-button>
@@ -116,29 +151,61 @@
     </ul>
     <!-- 表格区域 -->
     <div class="tabWrap">
-      <div v-show="activeName == 'leave'">
-        <MaterLeaveTables></MaterLeaveTables>
-      </div>
-      <div v-show=" activeName == 'enter'">
-        <MaterEnterTables :stuffList="stuffList" :adminList="adminList"></MaterEnterTables>
-      </div>
+      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+        <el-tab-pane label="出库" name="leave">
+          <MaterLeaveTables></MaterLeaveTables>
+        </el-tab-pane>
+        <el-tab-pane label="入库" name="enter">
+          <MaterEnterTables
+            :selVal="enterForm"
+            ref="MaterEnterTables"
+            @getStuffList="getStuffList"
+            :stuffList="stuffList"
+            :adminList="adminList"
+          ></MaterEnterTables>
+        </el-tab-pane>
+      </el-tabs>
     </div>
+    <!-- <div class="tabWrap">
+      <div v-show="activeName == 'leave'"></div>
+      <div v-show=" activeName == 'enter'"></div>
+    </div>-->
   </div>
 </template>
 
 <script>
+import qs from "qs"
+import { getUserName, getBoxId, getTime, initNavBar } from '@/Tools/intScaleNum'
 import MaterLeaveTables from '@/views/PC/components/Materials/MaterLeaveTables'
 import MaterEnterTables from '@/views/PC/components/Materials/MaterEnterTables'
-import AddEnterBox from '@/views/PC/components/AddEnterBox'
 export default {
   name: "Materials",
   components: {
-    AddEnterBox,
     MaterLeaveTables,
     MaterEnterTables
   },
   data() {
     return {
+
+      // 废弃添加物料相关
+      addMaterBox: false,
+      addMaterBoxLoad: false,
+      // 添加物料表单
+      addStuffForm: {
+        stuffname: '',
+        username: '',
+        userid: "",
+        time: "",
+      },
+      // 新增物料验证
+      stuffrules: {
+        stuffname: [
+          { required: true, message: '请输入物料名称', trigger: 'blur' }
+        ],
+        userid: [
+          { required: true, message: '请选择操作人员', trigger: 'blur' }
+        ],
+      },
       leaveForm: {
         // 所选出库物料
         materLeaveVal: '',
@@ -148,8 +215,6 @@ export default {
         proIdVal: '',
       },
       enterForm: {
-        // 供应商内容
-        supplierVal: "",
         // 所选入库物料
         materEnterVal: '',
         // 所选入库时间内容
@@ -174,22 +239,6 @@ export default {
           label: '产线4'
         }
       ],
-      // 供应商列表
-      supplierList: [
-        {
-          value: 'sj1',
-          label: '商家1'
-        }, {
-          value: 'js2',
-          label: '商家2'
-        }, {
-          value: 'sj3',
-          label: '商家3'
-        }, {
-          value: 'sj4',
-          label: '商家4'
-        }
-      ],
       // 物料列表
       stuffList: [],
       // 管理员信息
@@ -197,55 +246,102 @@ export default {
     }
   },
   created() {
+    // this.$store.dispatch('setTabState', "/page/Materials");
     // 获取物料列表
     this.getStuffList();
+    initNavBar(this)
     // 获取操作人员列表
     this.getAdminList();
   },
   methods: {
+    // tab切换
+    handleClick(tab, event) {
+      // console.log(tab, event);
+    },
+    // 提交新增物料表单
+    postAddStuff(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.addMaterBoxLoad = true;
+          let username = getUserName(this.adminList, this.addStuffForm.userid);
+          this.addStuffForm.time = getTime();
+          this.addStuffForm.username = username;
+          const data = qs.stringify({
+            stuffName: this.addStuffForm.stuffname,
+            userName: this.addStuffForm.username
+          })
+          this.axios.post('api/webapi/stuff/addStuff', data)
+            .then(res => {
+              if (res.data.code == 200) {
+                this.$notify.success({
+                  title: '新增物料成功',
+                });
+                this.getStuffList();
+                this.addMaterBox = false;
+                addMaterBoxLoad = false;
+              }
+            })
+        } else {
+          return false;
+        }
+      });
+    },
+    // 关闭并清空新增物料表单
+    closeAddStuff(formName) {
+      this.addMaterBox = false;
+      this.$refs[formName].resetFields();
+    },
+    // 计时器
+    getTime() {
+      const time = getTime();
+      this.addStuffForm.time = time.slice(0, 10);
+    },
     // 获取物料列表
     getStuffList() {
-      this.axios.get("http://localhost:53000/stuffList")
+      this.axios.get("api/webapi/warehouse/getAllStuffAmount?contentid=1")
         .then(res => {
-          const { data } = res;
-          this.stuffList = data;
+          const iconList = [
+            "icon-guazi",
+            "icon-huasheng",
+            "icon-yumi",
+            "icon-dadou"
+          ]
+          const { data } = res.data;
+          this.stuffList = data.splice(0, 4);;
+          this.stuffList.forEach((item, index) => {
+            item.icon = iconList[index];
+          });
         })
         .catch(err => console.log(err))
     },
     // 获取操作人列表
     getAdminList() {
-      this.axios.get("http://localhost:53000/adminList")
+      this.axios.get("api/webapi/getUserNameByAccess?useruuid=7be9a8b1a6784ea590af644fa7fb930d")
         .then(res => {
-          const { data } = res;
+          const { data } = res.data;
           this.adminList = data;
-        })
-        .catch(err => console.log(err));
+        });
+
     },
     // 新增物料
     addPackFn() {
-      this.$refs.AddEnterBox.showAddEnterBox();
-    },
-    // 新增物料确定
-    postFormFn(data) {
-      const obj = {
-        stuffname: data.stuffname,
-        time: data.time,
-        username: data.username,
-        userid: data.userid,
-      };
-      console.log(obj);
+      this.addMaterBox = true;
+      this.addStuffForm = {};
+      this.getTime();
     },
     // 查询方法
     PostSerBtnFn() {
       const { activeName } = this;
       if (activeName == 'leave') {
         const { leaveForm } = this;
-        console.log(leaveForm)
+        console.log(leaveForm);
+
         return;
       };
       if (activeName == 'enter') {
         const { enterForm } = this;
         console.log(enterForm);
+        this.$refs.MaterEnterTables.emitSelEnterList();
         return;
       }
     },
@@ -271,6 +367,63 @@ export default {
   padding: 0 20px;
   box-sizing: border-box;
   width: 100%;
+  .tabWrap {
+    .el-tabs__nav-scroll {
+      display: flex;
+      flex-direction: row-reverse;
+    }
+  }
+  .backBg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    z-index: 899;
+  }
+  .addMaterBox {
+    border-radius: 5px;
+    width: 500px;
+    margin: 0 auto;
+    position: fixed;
+    top: 200px;
+    left: calc(50% - 200px);
+    box-sizing: border-box;
+    padding: 30px 60px;
+    padding-left: 45px;
+    background: #fff;
+    z-index: 999;
+    .closeIcon {
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      font-weight: 700;
+      font-size: 20px;
+      right: 10px;
+    }
+    .item {
+      width: 290px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+    .hd {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      p {
+        font-size: 14px;
+        span {
+          margin-left: 10px;
+          display: inline-block;
+        }
+      }
+    }
+  }
   .pageSizeBtn {
     display: flex;
     justify-content: center;

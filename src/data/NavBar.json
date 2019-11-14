@@ -1,7 +1,30 @@
 {
   "navBar": [{
+      "title": "订单管理系统",
+      "icon": "icon-dingdan iconfont",
+      "childen": [{
+          "title": "全部订单",
+          "path": "/page/AllOrder"
+        },
+        {
+          "title": "正在生产订单",
+          "path": "/page/ProingOrder"
+        },
+        {
+          "title": "完成生产订单",
+          "path": "/page/CarryOrder"
+        }, {
+          "title": "待生产订单",
+          "path": "/page/AwatOrder"
+        }, {
+          "title": "异常订单",
+          "path": "/page/ErrorOrder"
+        }
+      ]
+    },
+    {
       "title": "仓储管理系统",
-      "icon": "el-icon-box",
+      "icon": "icon-cangku iconfont",
       "childen": [{
           "title": "料盒出入库管理",
           "path": "/page/BoxAdmin"
@@ -13,15 +36,19 @@
       ]
     },
     {
-      "title": "人员管理",
-      "icon": "el-icon-goblet-square-full",
+      "title": "产线管理系统",
+      "icon": "icon-chanxian iconfont",
       "childen": [{
-          "title": "人员管理1",
-          "path": "/BoxAdmin"
-        },
-        {
-          "title": "人员管理2",
-          "path": "/BoxAdmin"
+        "title": "产线管理",
+        "path": "/page/ProAdmin"
+      }]
+    },
+    {
+      "title": "后台管理",
+      "icon": "iconfont icon-icon-user",
+      "childen": [{
+          "title": "账号管理",
+          "path": "/page/UserInfo"
         }
       ]
     }
