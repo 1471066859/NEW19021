@@ -12,7 +12,6 @@
       <el-table-column prop="stuff.stuffName" label="物料名称"></el-table-column>
       <el-table-column prop="outInTime" label="出库时间"></el-table-column>
       <el-table-column prop="orderid" label="订单编号"></el-table-column>
-      <el-table-column prop="proid" label="产线编号"></el-table-column>
       <el-table-column prop="outinAmount" label="数量"></el-table-column>
     </el-table>
 

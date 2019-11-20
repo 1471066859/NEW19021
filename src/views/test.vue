@@ -1,32 +1,51 @@
 <template>
-  <div>
-    <p>描述文字</p>
+  <div class="test">
+    <el-autocomplete
+      v-model="state"
+      :fetch-suggestions="querySearchAsync"
+      placeholder="请输入内容"
+      @select="handleSelect"
+    ></el-autocomplete>
   </div>
 </template>
-
 <script>
 export default {
+  data() {
+    return {
+      restaurants: [],
+      state: '',
+      timeout: null
+    };
+  },
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+    loadAll() {
+      this.axios.get('http://localhost:3005/selUserList')
+        .then(res => {
+          const { data } = res;
+          this.restaurants = data;
+        })
     },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
-    }
-  }
-}
-</script>
-<style lang="scss" scope>
-p {
-  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    querySearchAsync(queryString, cb) {
+      var restaurants = this.restaurants;
+      var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants;
 
-  // font-style: 50px Extra large;
-  // font-family: 50px Extra large;
-  // font-size: 50px Extra large;
-  font: 20px Extra large;
-  // font-family: 	20px Extra large;
-  // font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
-  // "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-}
-</style>
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        cb(results);
+      }, 3000 * Math.random());
+    },
+    createStateFilter(queryString) {
+      return (state) => {
+        return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+    handleSelect(item) {
+      console.log(item);
+    }
+  },
+  mounted() {
+    // this.restaurants = this.loadAll();
+    this.loadAll();
+  }
+};
+</script>

@@ -14,12 +14,20 @@
           </h2>
         </div>
       </div>
+      <!-- <div class="item addMater" @click="addPackFn">
+        <p class="addWrap">
+          <i class="el-icon-circle-plus-outline"></i>
+          <span>新增物料</span>
+        </p>
+      </div>-->
     </div>
+
+    <!-- 废弃 新增物料弹窗 -->
 
     <div class="addMaterBox" v-show="addMaterBox" v-loading="addMaterBoxLoad">
       <i class="el-icon-close closeIcon" @click="closeAddStuff('addStuffForm')"></i>
       <div class="hd">
-        <h2>新增物料入库</h2>
+        <h2>新增物料</h2>
         <p>
           时间:
           <span>{{addStuffForm.time}}</span>
@@ -33,15 +41,8 @@
         class="demo-ruleForm"
       >
         <div class="item">
-          <el-form-item label="物料名称" prop="stuffid">
-            <el-select v-model="addStuffForm.stuffid" placeholder="请选择物料名称">
-              <el-option
-                v-for="item in stuffList"
-                :key="item.stuffId"
-                :label="item.stuffName"
-                :value="item.stuffId"
-              ></el-option>
-            </el-select>
+          <el-form-item label="物料名称" prop="stuffname">
+            <el-input v-model="addStuffForm.stuffname"></el-input>
           </el-form-item>
         </div>
         <div class="item">
@@ -54,13 +55,6 @@
                 :value="item.userId"
               ></el-option>
             </el-select>
-          </el-form-item>
-        </div>
-        <div class="item">
-          <el-form-item label="入库数量" prop="amount">
-            <el-input v-model.number="addStuffForm.amount">
-              <span slot="suffix" class="kgDes">kg</span>
-            </el-input>
           </el-form-item>
         </div>
         <!-- butn -->
@@ -77,76 +71,23 @@
     <div class="tabWrap">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="出库" name="leave">
-          <!-- 筛选 -->
+          <!-- 筛选内容 -->
           <ul class="selWrap">
-            <li class="selNameWrap">
-              <span>物料名称:</span>
-              <el-select v-model="leaveSel.stuffid" placeholder="请选择物料">
-                <el-option
-                  v-for="item in stuffList"
-                  :key="item.stuffId"
-                  :label="item.stuffName"
-                  :value="item.stuffId"
-                ></el-option>
-              </el-select>
-            </li>
-            <li class="selTimeWrap">
-              <span>出库时间:</span>
-              <el-date-picker
-                v-model="leaveSel.time"
-                type="datetimerange"
-                range-separator="至"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                align="right"
-              ></el-date-picker>
-            </li>
-            <li class="btnsWrap">
-              <el-button @click="PostSerBtnFn" type="primary">查询</el-button>
-              <el-button @click="clearSerFn">重置</el-button>
-            </li>
-          </ul>
-
-          <el-table
-            :data="stuffTabList"
-            height="450"
-            style="width: 100%"
-            v-loading="tableLoad"
-            :header-cell-style="{'background-color': '#fafafa'}"
-          >
-            <el-table-column type="index" label="序号" width="50"></el-table-column>
-            <el-table-column prop="batchId" label="批次"></el-table-column>
-            <el-table-column prop="stuff.stuffName" label="物料名称"></el-table-column>
-            <el-table-column prop="outInTime" label="出库时间"></el-table-column>
-            <el-table-column prop="orderid" label="订单编号"></el-table-column>
-            <el-table-column prop="outinAmount" label="数量"></el-table-column>
-          </el-table>
-
-          <div class="pageSizeBtn">
-            <el-pagination
-              background
-              @size-change="leaveHandleSizeChange"
-              @current-change="leaveHandleCurrentChange"
-              :current-page="leaveTable.page"
-              :page-size="leaveTable.size"
-              :page-sizes="[10, 15, 20, 25]"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="leaveTable.count"
-            ></el-pagination>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane label="入库" name="enter">
-          <ul class="selWrap">
+            <!-- 新增入库 -->
             <li class="btnsWrap leaveEnterBtns">
-              <el-button @click="addPackFn" type="success">
+              <el-button
+                v-show="activeName == 'enter'"
+                @click="($refs.MaterEnterTables.showAddEnterBox())"
+                type="success"
+              >
                 <i class="el-icon-circle-plus"></i>
                 新增入库
               </el-button>
             </li>
-            <li class="selNameWrap">
+            <!-- 选择出库物料名 -->
+            <li class="selNameWrap" v-show="activeName == 'leave'">
               <span>物料名称:</span>
-              <el-select v-model="enterSel.stuffid" placeholder="请选择">
+              <el-select v-model="leaveForm.materLeaveVal" placeholder="请选择">
                 <el-option
                   v-for="item in stuffList"
                   :key="item.stuffId"
@@ -155,86 +96,152 @@
                 ></el-option>
               </el-select>
             </li>
-            <li class="selTimeWrap">
+            <!-- 选择入库物料名 -->
+            <li class="selNameWrap" v-show="activeName == 'enter'">
+              <span>物料名称:</span>
+              <el-select v-model="enterForm.materEnterVal" placeholder="请选择">
+                <el-option
+                  v-for="item in stuffList"
+                  :key="item.stuffId"
+                  :label="item.stuffName"
+                  :value="item.stuffId"
+                ></el-option>
+              </el-select>
+            </li>
+            <!-- 选择出库日期范围 -->
+            <li class="selTimeWrap" v-show="activeName == 'leave'">
               <span>出库时间:</span>
               <el-date-picker
-                v-model="enterSel.time"
+                v-model="leaveForm.selLeaveTimeVal"
                 type="datetimerange"
                 range-separator="至"
-                value-format="yyyy-MM-dd HH:mm:ss"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
                 align="right"
               ></el-date-picker>
             </li>
+            <!-- 选择入库日期范围 -->
+            <li class="selTimeWrap" v-show="activeName == 'enter'">
+              <span>入库时间:</span>
+              <el-date-picker
+                v-model="enterForm.selEnterTimeVal"
+                type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                align="right"
+              ></el-date-picker>
+            </li>
+
             <li class="btnsWrap">
               <el-button @click="PostSerBtnFn" type="primary">查询</el-button>
               <el-button @click="clearSerFn">重置</el-button>
             </li>
           </ul>
-          <el-table
-            :data="stuffTabList"
-            height="450"
-            v-loading="tableLoad"
-            style="width: 100%"
-            :header-cell-style="{'background-color': '#fafafa'}"
-          >
-            <el-table-column type="index" label="序号" width="50"></el-table-column>
-            <el-table-column prop="batchId" label="库存编号"></el-table-column>
-            <el-table-column prop="stuff.stuffName" label="物料名称"></el-table-column>
-            <el-table-column prop="outInTime" label="入库时间"></el-table-column>
-            <el-table-column prop="outinAmount" label="数量(kg)"></el-table-column>
-            <el-table-column prop="userName" label="操作人员"></el-table-column>
-          </el-table>
-          <!-- 分页器 -->
-          <div class="pageSizeBtn">
-            <el-pagination
-              background
-              @size-change="enterHandleSizeChange"
-              @current-change="enterHandleCurrentChange"
-              :current-page="enterTable.Page"
-              :page-sizes="[10, 15, 20, 25]"
-              :page-size="enterTable.size"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="enterTable.count"
-            ></el-pagination>
-          </div>
+          <MaterLeaveTables></MaterLeaveTables>
+        </el-tab-pane>
+        <el-tab-pane label="入库" name="enter">
+          <!-- 筛选内容 -->
+          <ul class="selWrap">
+            <!-- 新增入库 -->
+            <li class="btnsWrap leaveEnterBtns">
+              <el-button
+                v-show="activeName == 'enter'"
+                @click="($refs.MaterEnterTables.showAddEnterBox())"
+                type="success"
+              >
+                <i class="el-icon-circle-plus"></i>
+                新增入库
+              </el-button>
+            </li>
+            <!-- 选择出库物料名 -->
+            <li class="selNameWrap" v-show="activeName == 'leave'">
+              <span>物料名称:</span>
+              <el-select v-model="leaveForm.materLeaveVal" placeholder="请选择">
+                <el-option
+                  v-for="item in stuffList"
+                  :key="item.stuffId"
+                  :label="item.stuffName"
+                  :value="item.stuffId"
+                ></el-option>
+              </el-select>
+            </li>
+            <!-- 选择入库物料名 -->
+            <li class="selNameWrap" v-show="activeName == 'enter'">
+              <span>物料名称:</span>
+              <el-select v-model="enterForm.materEnterVal" placeholder="请选择">
+                <el-option
+                  v-for="item in stuffList"
+                  :key="item.stuffId"
+                  :label="item.stuffName"
+                  :value="item.stuffId"
+                ></el-option>
+              </el-select>
+            </li>
+            <!-- 选择出库日期范围 -->
+            <li class="selTimeWrap" v-show="activeName == 'leave'">
+              <span>出库时间:</span>
+              <el-date-picker
+                v-model="leaveForm.selLeaveTimeVal"
+                type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                align="right"
+              ></el-date-picker>
+            </li>
+            <!-- 选择入库日期范围 -->
+            <li class="selTimeWrap" v-show="activeName == 'enter'">
+              <span>入库时间:</span>
+              <el-date-picker
+                v-model="enterForm.selEnterTimeVal"
+                type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                align="right"
+              ></el-date-picker>
+            </li>
+
+            <li class="btnsWrap">
+              <el-button @click="PostSerBtnFn" type="primary">查询</el-button>
+              <el-button @click="clearSerFn">重置</el-button>
+            </li>
+          </ul>
+          <MaterEnterTables
+            :selVal="enterForm"
+            ref="MaterEnterTables"
+            @getStuffList="getStuffList"
+            :stuffList="stuffList"
+            :adminList="adminList"
+          ></MaterEnterTables>
         </el-tab-pane>
       </el-tabs>
     </div>
+    <!-- <div class="tabWrap">
+      <div v-show="activeName == 'leave'"></div>
+      <div v-show=" activeName == 'enter'"></div>
+    </div>-->
   </div>
 </template>
 
 <script>
 import qs from "qs"
 import { getUserName, getBoxId, getTime, initNavBar } from '@/Tools/intScaleNum'
-
+import MaterLeaveTables from '@/views/PC/components/Materials/MaterLeaveTables'
+import MaterEnterTables from '@/views/PC/components/Materials/MaterEnterTables'
 export default {
   name: "Materials",
   components: {
-
+    MaterLeaveTables,
+    MaterEnterTables
   },
   data() {
     return {
-      // 料盒入库表单
+
+      // 废弃添加物料相关
       addMaterBox: false,
       addMaterBoxLoad: false,
-      // 表格数据
-      stuffTabList: [],
-      // 出库分页
-      leaveTable: {
-        page: 1,
-        size: 10,
-        count: 100
-      },
-      // 入库分页
-      enterTable: {
-        page: 1,
-        size: 10,
-        count: 100
-      },
-      // 表格loading
-      tableLoad: false,
       // 添加物料表单
       addStuffForm: {
         stuffname: '',
@@ -244,140 +251,61 @@ export default {
       },
       // 新增物料验证
       stuffrules: {
-        stuffid: [
+        stuffname: [
           { required: true, message: '请输入物料名称', trigger: 'blur' }
         ],
         userid: [
           { required: true, message: '请选择操作人员', trigger: 'blur' }
         ],
-        amount: [
-          { required: true, message: '请选择操作人员', trigger: 'blur' }
-        ],
       },
-      // 出库筛选
-      leaveSel: {
-        stuffid: '',
-        time: ''
+      leaveForm: {
+        // 所选出库物料
+        materLeaveVal: '',
+        // 所选出库时间内容
+        selLeaveTimeVal: '',
+        // 产线id内容
+        proIdVal: '',
       },
-      // 入库筛选
-      enterSel: {
-        stuffid: '',
-        time: ''
+      enterForm: {
+        // 所选入库物料
+        materEnterVal: '',
+        // 所选入库时间内容
+        selEnterTimeVal: ''
       },
       // 标签页内容
       activeName: 'leave',
-      // 物料列表
-      stuffList: [
+
+      // 产线列表
+      proIdList: [
         {
-          stuffName: '瓜子',
-          icon: "icon-guazi",
-          stuffId: 1,
-          warehouse: {
-            amount: 253
-          }
-        },
-        {
-          stuffName: '花生',
-          stuffId: 2,
-          icon: "icon-guazi",
-          warehouse: {
-            amount: 253
-          }
-        },
-        {
-          stuffName: '玉米',
-          stuffId: 3,
-          icon: "icon-guazi",
-          warehouse: {
-            amount: 253
-          }
-        },
-        {
-          stuffName: '大豆',
-          stuffId: 4,
-          icon: "icon-guazi",
-          warehouse: {
-            amount: 253
-          }
+          value: '选项1',
+          label: '产线1'
+        }, {
+          value: '选项2',
+          label: '产线2'
+        }, {
+          value: '选项3',
+          label: '产线3'
+        }, {
+          value: '选项4',
+          label: '产线4'
         }
       ],
+      // 物料列表
+      stuffList: [],
       // 管理员信息
-      adminList: [
-        {
-          userName: "mql",
-          userId: 1,
-        },
-        {
-          userName: "mql1",
-          userId: 2,
-        }
-      ]
+      adminList: []
     }
   },
   created() {
+    // this.$store.dispatch('setTabState', "/page/Materials");
     // 获取物料列表
     this.getStuffList();
-    this.getMaterLeaveList(this.leaveTable.page, this.leaveTable.size, this.leaveSel);
     initNavBar(this)
     // 获取操作人员列表
-    this.getAdminList()
-  },
-  watch: {
-    activeName(val) {
-      // 初始化分页条件
-      this.leaveTable.page = 1;
-      this.leaveTable.size = 10;
-      this.enterTable.page = 1;
-      this.enterTable.size = 10;
-      if (val == 'leave') {
-        // 出库
-        const page = this.leaveTable.page;
-        const size = this.leaveTable.size;
-        const sel = this.leaveSel;
-        this.getMaterLeaveList(page, size, sel);
-      } else if (val == "enter") {
-        // 入库
-        const page = this.enterTable.page;
-        const size = this.enterTable.size;
-        const sel = this.enterSel;
-        this.getMaterEnterList(page, size, sel);
-      };
-    }
+    this.getAdminList();
   },
   methods: {
-    PostSerBtnFn() {
-      const { activeName } = this;
-      if (activeName == "leave") {
-        // 出库查询
-        const page = this.leaveTable.page;
-        const size = this.leaveTable.size;
-        const sel = this.leaveSel;
-        this.getMaterLeaveList(page, size, sel);
-      }
-      if (activeName == "enter") {
-        // 入库查询
-        const page = this.enterTable.page;
-        const size = this.enterTable.size;
-        const sel = this.enterSel;
-        this.getMaterEnterList(page, size, sel);
-      }
-    },
-    clearSerFn() {
-      const { activeName } = this;
-      if (activeName == "leave") {
-        // 出库清空
-        this.leaveSel = {
-          stuffid: "",
-          time: ""
-        }
-      } else if (activeName == "enter") {
-        // 入库清空
-        this.enterSel = {
-          stuffid: "",
-          time: ""
-        }
-      }
-    },
     // tab切换
     handleClick(tab, event) {
       // console.log(tab, event);
@@ -390,12 +318,11 @@ export default {
           let username = getUserName(this.adminList, this.addStuffForm.userid);
           this.addStuffForm.time = getTime();
           this.addStuffForm.username = username;
-          const data = {
+          const data = qs.stringify({
             stuffName: this.addStuffForm.stuffname,
             userName: this.addStuffForm.username
-          }
-          console.log(data, '物料信息新增');
-          this.axios.post('api/webapi/stuff/addStuff', qs.stringify(data))
+          })
+          this.axios.post('api/webapi/stuff/addStuff', data)
             .then(res => {
               if (res.data.code == 200) {
                 this.$notify.success({
@@ -420,7 +347,6 @@ export default {
     getTime() {
       const time = getTime();
       this.addStuffForm.time = time.slice(0, 10);
-      console.log(this.addStuffForm.time, 1111);
     },
     // 获取物料列表
     getStuffList() {
@@ -433,7 +359,7 @@ export default {
             "icon-dadou"
           ]
           const { data } = res.data;
-          this.stuffList = data.splice(0, 4);
+          this.stuffList = data.splice(0, 4);;
           this.stuffList.forEach((item, index) => {
             item.icon = iconList[index];
           });
@@ -442,9 +368,8 @@ export default {
     },
     // 获取操作人列表
     getAdminList() {
-      this.axios.get("api/webapi/user/getAdministrator")
+      this.axios.get("api/webapi/getUserNameByAccess?useruuid=7be9a8b1a6784ea590af644fa7fb930d")
         .then(res => {
-          console.log(res);
           const { data } = res.data;
           this.adminList = data;
         });
@@ -452,87 +377,38 @@ export default {
     },
     // 新增物料
     addPackFn() {
-      console.log(123);
       this.addMaterBox = true;
       this.addStuffForm = {};
       this.getTime();
     },
-    // 拉取物料入库信息
-    getMaterEnterList(page, size, sel) {
-      this.tableLoad = true;
-      const data = {
-        contentType: 1,
-        outInType: 1,
-        pageNum: page,
-        pageSize: size,
-        stuffid: sel.stuffid,
-        startTime: sel.time[0],
-        endTime: sel.time[1]
-      };
-      console.log(data);
-      this.axios.post('api/webapi/warehouse/getOutinWarehouseInfo', qs.stringify(data))
-        .then(res => {
-          const { data } = res.data
-          this.enterTable.count = res.data.count;
-          this.materEnterList = data;
-          this.tableLoad = false;
-        })
-    },
-    // 拉取物料出库列表
-    getMaterLeaveList(page, size, sel) {
-      this.tableLoad = true;
-      const data = {
-        contentType: 1,
-        outInType: 2,
-        pageNum: page,
-        pageSize: size,
-        stuffid: sel.stuffid,
-        startTime: sel.time[0],
-        endTime: sel.time[1]
-      };
-      console.log(data);
-      this.axios.post('api/webapi/warehouse/getOutinWarehouseInfo', qs.stringify(data))
-        .then(res => {
-          this.leaveTable.count = res.data.count;
-          const { data } = res.data;
-          this.materLeaveList = data;
-          this.tableLoad = false;
-        })
-    },
-    // 出库分页器相关
-    leaveHandleSizeChange(val) {
-      this.leaveTable.size = val;
-      const page = this.leaveTable.page;
-      const size = this.leaveTable.page;
-      const sel = this.leaveSel;
-      this.getMaterLeaveList(page, size, sel);
-    },
-    leaveHandleCurrentChange(val) {
-      this.userPage = val;
-      const page = this.leaveTable.page;
-      const size = this.leaveTable.page;
-      const sel = this.leaveSel;
-      this.getMaterLeaveList(page, size, sel);
-      console.log(`当前页: ${val}`);
-    },
+    // 查询方法
+    PostSerBtnFn() {
+      const { activeName } = this;
+      if (activeName == 'leave') {
+        const { leaveForm } = this;
+        console.log(leaveForm);
 
-    // 入库分页器相关
-    enterHandleSizeChange(val) {
-      this.roleUserSize = val;
-      console.log(`每页 ${val} 条`);
-      const page = this.enterTable.page;
-      const size = this.enterTable.size;
-      const sel = this.enterSel;
-      this.getMaterEnterList(page, size, sel);
+        return;
+      };
+      if (activeName == 'enter') {
+        const { enterForm } = this;
+        console.log(enterForm);
+        this.$refs.MaterEnterTables.emitSelEnterList();
+        return;
+      }
     },
-    enterHandleCurrentChange(val) {
-      this.roleUserPage = val;
-      console.log(`当前页: ${val}`);
-      const page = this.enterTable.page;
-      const size = this.enterTable.size;
-      const sel = this.enterSel;
-      this.getMaterEnterList(page, size, sel);
-    },
+    // 情况筛选内容
+    clearSerFn() {
+      const { activeName } = this;
+      if (activeName == 'leave') {
+        this.leaveForm = {}
+        return;
+      };
+      if (activeName == 'enter') {
+        this.enterForm = {}
+        return;
+      }
+    }
   },
 
 }
@@ -544,6 +420,10 @@ export default {
   box-sizing: border-box;
   width: 100%;
   .tabWrap {
+    .el-tabs__nav-scroll {
+      // display: flex;
+      // flex-direction: row-reverse;
+    }
   }
   .backBg {
     position: fixed;
@@ -636,6 +516,7 @@ export default {
     display: flex;
     padding-left: 40px;
     margin-top: 20px;
+    border-bottom: 1px solid #ccc;
     padding-bottom: 20px;
     .addMater {
       cursor: pointer;

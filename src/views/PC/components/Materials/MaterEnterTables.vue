@@ -12,7 +12,6 @@
       <el-table-column prop="batchId" label="库存编号"></el-table-column>
       <el-table-column prop="stuff.stuffName" label="物料名称"></el-table-column>
       <el-table-column prop="outInTime" label="入库时间"></el-table-column>
-      <el-table-column prop="supplier" label="供应商"></el-table-column>
       <el-table-column prop="outinAmount" label="数量(kg)"></el-table-column>
       <el-table-column prop="userName" label="操作人员"></el-table-column>
       <!-- <el-table-column align="right">
@@ -92,7 +91,9 @@
         </div>
         <div class="item">
           <el-form-item label="入库数量" prop="amount">
-            <el-input v-model.number="addStuffForm.amount"></el-input>
+            <el-input v-model.number="addStuffForm.amount">
+              <span slot="suffix" class="kgDes">kg</span>
+            </el-input>
           </el-form-item>
         </div>
         <!-- butn -->
@@ -132,7 +133,7 @@ export default {
   },
   created() {
     this.getMaterEnterList(this.page, this.size, this.selVal);
-  
+
   },
   data() {
     return {
@@ -215,7 +216,7 @@ export default {
                 });
                 this.addMaterBox = false;
                 this.addMaterBoxLoad = false;
-                this.getMaterEnterList(this.page, this.size);
+                this.getMaterEnterList(this.page, this.size,this.selVal);
                 this.$emit('getStuffList');
               }
             })

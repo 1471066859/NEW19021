@@ -25,10 +25,7 @@
     {
       "title": "仓储管理系统",
       "icon": "icon-cangku iconfont",
-      "childen": [{
-          "title": "料盒出入库管理",
-          "path": "/page/BoxAdmin"
-        },
+      "childen": [
         {
           "title": "物料出入库管理",
           "path": "/page/Materials"
@@ -52,5 +49,10 @@
         }
       ]
     }
-  ]
+  ],
+  "feiqi":{
+    "title": "料盒出入库管理",
+    "path": "/page/BoxAdmin"
+  }
 }
+

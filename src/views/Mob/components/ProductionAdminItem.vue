@@ -6,7 +6,7 @@
     </div>
 
     <div class="itemRight">
-      订单编号:
+      料盒RFID:
       <span>{{proItem.orderId}}</span>
     </div>
   </div>

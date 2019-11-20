@@ -20,13 +20,13 @@
             class="unitList"
             v-for="(item, index) in unitList"
             :key="index"
-            :class="{'activeUnitItem': activeUnitItem == index}"
+            :class="{'activeUnitItem': item.isAct}"
           >
             <i
               class="el-icon-caret-bottom moreBoxId"
               v-show="item.boxList.length > 1"
               @click="moreBoxId(index)"
-              :class="{'iconActive': activeUnitItem==index}"
+              :class="{'iconActive': item.isAct}"
             ></i>
             <li>{{item.index}}</li>
             <li>{{item.unitName}}</li>
@@ -35,11 +35,7 @@
               {{item.unitState}}
             </li>
             <!-- <li style="overflow:scroll" v-if="item.boxList"> -->
-            <li
-              class="boxList"
-              :class="{'isScroll': activeUnitItem == index}"
-              v-show="item.boxList"
-            >
+            <li class="boxList" :class="{'isScroll': item.isAct}" v-show="item.boxList">
               <p
                 v-show="item.boxList.length > 0"
                 v-for="(boxItem, i) in item.boxList"
@@ -64,20 +60,28 @@ export default {
   data() {
     return {
       activeName: 'pro001',
-      activeUnitItem: null,
-      unitList: []
+      unitList: [],
+      timer: null
     };
+  },
+  destroyed() {
+    clearInterval(this.timer);
   },
   created() {
     initNavBar(this);
     this.getUnitData();
+    this.timer = setInterval(() => {
+      this.getUnitData();
+    }, 1000);
   },
   methods: {
     getUnitData() {
+      console.log('请求数据');
       this.axios.get('http://localhost:3005/proAdminList')
         .then(res => {
           const { data } = res;
           data.forEach((element, index) => {
+            element.isAct = false;
             element.index = ++index;
           });
           this.unitList = data;
@@ -106,11 +110,12 @@ export default {
       console.log(tab, event);
     },
     moreBoxId(index) {
-      if (this.activeUnitItem == index) {
-        this.activeUnitItem = null;
-        return;
-      }
-      this.activeUnitItem = index;
+      this.unitList[index].isAct = !this.unitList[index].isAct;
+      // if (this.activeUnitItem == index) {
+      //   this.activeUnitItem = null;
+      //   return;
+      // }
+      // this.activeUnitItem = index;
     },
     stateIcon(state) {
       switch (state) {
@@ -180,7 +185,6 @@ export default {
         li {
           flex: 1;
           box-sizing: border-box;
-          padding: 0 50px;
           text-align: left;
         }
         .activeUnitItem {
@@ -218,6 +222,7 @@ export default {
           display: flex;
           justify-content: space-around;
           transition: all 1s;
+          padding: 0 10px;
           height: 50px;
           box-sizing: border-box;
           line-height: 50px;

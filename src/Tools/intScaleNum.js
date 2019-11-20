@@ -22,15 +22,16 @@ export const initNavBar = (_this) => {
 // 设置订单状态icon标识
 export const iconBg = key => {
   // return 'red'
-  switch (key.rate) {
-    case 0:
-      return 'icon-loading-v'
+
+  switch (key) {
     case 1:
-      return 'icon-yichang'
+      return 'icon-loading-v'
     case 2:
       return 'icon-kaishi'
     case 3:
       return 'icon-wancheng-yuanshijituantubiao'
+    case 4:
+      return 'icon-yichang'
     default:
       break;
   }

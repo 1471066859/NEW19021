@@ -6,10 +6,14 @@ import './plugins/element.js'
 import '../src/assets/base.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import qs from 'qs'
 import "@/assets/fonts/iconfont.css"
 
 
-import { InfiniteScroll } from 'mint-ui';
+Vue.prototype.qs = qs;
+import {
+  InfiniteScroll
+} from 'mint-ui';
 
 Vue.use(InfiniteScroll);
 

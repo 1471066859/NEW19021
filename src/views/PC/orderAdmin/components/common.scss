@@ -6,6 +6,36 @@
   padding-bottom: 30px;
 }
 
+.back {
+  position: absolute;
+  // width: calc(100% - 400px);
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  background: #000;
+  z-index: 999;
+  right: 0;
+  top: 0;
+}
+
+.drawer {
+  padding: 50px;
+  padding-top: 100px;
+  z-index: 1000;
+  background: #fff;
+  position: absolute;
+  width: 400px;
+  // box-sizing: border-box;
+  left: -500px;
+  top: 0;
+  height: 100%;
+  transition: left 0.3s;
+}
+
+.desPopOverAct {
+  left: 0 !important;
+}
+
 .stateIcon {
   margin-right: 10px;
   font-size: 18px;

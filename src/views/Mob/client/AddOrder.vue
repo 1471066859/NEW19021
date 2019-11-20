@@ -124,7 +124,7 @@ export default {
       ,
       // 商品信息
       shop_list: [
-
+        
       ],
       // slots: [
       //   {
