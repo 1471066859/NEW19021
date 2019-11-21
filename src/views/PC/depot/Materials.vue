@@ -37,9 +37,9 @@
             <el-select v-model="addStuffForm.stuffid" placeholder="请选择物料名称">
               <el-option
                 v-for="item in stuffList"
-                :key="item.stuffId"
+                :key="item.id"
                 :label="item.stuffName"
-                :value="item.stuffId"
+                :value="item.id"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -51,7 +51,7 @@
                 v-for="item in adminList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -81,12 +81,12 @@
           <ul class="selWrap">
             <li class="selNameWrap">
               <span>物料名称:</span>
-              <el-select v-model="leaveSel.stuffid" placeholder="请选择物料">
+              <el-select v-model="leaveSel.stuffid" placeholder="请选择">
                 <el-option
                   v-for="item in stuffList"
                   :key="item.stuffId"
                   :label="item.stuffName"
-                  :value="item.stuffId"
+                  :value="item.stuffName"
                 ></el-option>
               </el-select>
             </li>
@@ -118,9 +118,9 @@
             <el-table-column type="index" label="序号" width="50"></el-table-column>
             <el-table-column prop="batchId" label="批次"></el-table-column>
             <el-table-column prop="stuff.stuffName" label="物料名称"></el-table-column>
-            <el-table-column prop="outInTime" label="出库时间"></el-table-column>
-            <el-table-column prop="orderid" label="订单编号"></el-table-column>
-            <el-table-column prop="outinAmount" label="数量"></el-table-column>
+            <el-table-column prop="time" label="出库时间"></el-table-column>
+            <!-- <el-table-column prop="orderid" label="订单编号"></el-table-column> -->
+            <el-table-column prop="amount" label="数量(kg)"></el-table-column>
           </el-table>
 
           <div class="pageSizeBtn">
@@ -151,7 +151,7 @@
                   v-for="item in stuffList"
                   :key="item.stuffId"
                   :label="item.stuffName"
-                  :value="item.stuffId"
+                  :value="item.stuffName"
                 ></el-option>
               </el-select>
             </li>
@@ -182,8 +182,8 @@
             <el-table-column type="index" label="序号" width="50"></el-table-column>
             <el-table-column prop="batchId" label="库存编号"></el-table-column>
             <el-table-column prop="stuff.stuffName" label="物料名称"></el-table-column>
-            <el-table-column prop="outInTime" label="入库时间"></el-table-column>
-            <el-table-column prop="outinAmount" label="数量(kg)"></el-table-column>
+            <el-table-column prop="time" label="入库时间"></el-table-column>
+            <el-table-column prop="amount" label="数量(kg)"></el-table-column>
             <el-table-column prop="userName" label="操作人员"></el-table-column>
           </el-table>
           <!-- 分页器 -->
@@ -387,23 +387,27 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.addMaterBoxLoad = true;
-          let username = getUserName(this.adminList, this.addStuffForm.userid);
+          // let username = getUserName(this.adminList, this.addStuffForm.userid);
           this.addStuffForm.time = getTime();
-          this.addStuffForm.username = username;
+          // this.addStuffForm.username = username;
           const data = {
-            stuffName: this.addStuffForm.stuffname,
+            contentType: 1,
+            outInType: 1,
+            contentId: this.addStuffForm.stuffid,
+            amount: this.addStuffForm.amount,
             userName: this.addStuffForm.username
           }
           console.log(data, '物料信息新增');
-          this.axios.post('api/webapi/stuff/addStuff', qs.stringify(data))
+          this.axios.post('api/webapi/warehouse/insertWarehouseInfo', qs.stringify(data))
             .then(res => {
+              console.log(res);
               if (res.data.code == 200) {
                 this.$notify.success({
                   title: '新增物料成功',
                 });
                 this.getStuffList();
                 this.addMaterBox = false;
-                addMaterBoxLoad = false;
+                this.addMaterBoxLoad = false;
               }
             })
         } else {
@@ -444,7 +448,7 @@ export default {
     getAdminList() {
       this.axios.get("api/webapi/user/getAdministrator")
         .then(res => {
-          console.log(res);
+          console.log(res, '操作人');
           const { data } = res.data;
           this.adminList = data;
         });
@@ -465,16 +469,25 @@ export default {
         outInType: 1,
         pageNum: page,
         pageSize: size,
-        stuffid: sel.stuffid,
-        startTime: sel.time[0],
-        endTime: sel.time[1]
+        contentName: sel.stuffid,
+        outInTimeStart: sel.time[0],
+        outInTimeEnd: sel.time[1]
       };
-      console.log(data);
-      this.axios.post('api/webapi/warehouse/getOutinWarehouseInfo', qs.stringify(data))
+      const parms = {}
+      if (data.contentName != "") parms.contentName = data.contentName;
+      if (data.outInTimeStart != "") parms.outInTimeStart = data.outInTimeStart;
+      if (data.outInTimeEnd != "") parms.outInTimeEnd = data.outInTimeEnd;
+      parms.contentType = 1;
+      parms.outInType = 1;
+      parms.pageNum = page;
+      parms.pageSize = size;
+      console.log(data,'入库信息');
+      this.axios.post('api/webapi/warehouse/getOutinWarehouseInfo', qs.stringify(parms))
         .then(res => {
+          console.log(res,'入库数据表格');
           const { data } = res.data
           this.enterTable.count = res.data.count;
-          this.materEnterList = data;
+          this.stuffTabList = data;
           this.tableLoad = false;
         })
     },
@@ -486,16 +499,25 @@ export default {
         outInType: 2,
         pageNum: page,
         pageSize: size,
-        stuffid: sel.stuffid,
-        startTime: sel.time[0],
-        endTime: sel.time[1]
+        contentName: sel.stuffid,
+        outInTimeStart: sel.time[0],
+        outInTimeEnd: sel.time[1]
       };
+      const parms = {}
+      if (data.contentName != "") parms.contentName = data.contentName;
+      if (data.outInTimeStart != "") parms.outInTimeStart = data.outInTimeStart;
+      if (data.outInTimeEnd != "") parms.outInTimeEnd = data.outInTimeEnd;
+      parms.contentType = 1;
+      parms.outInType = 2;
+      parms.pageNum = page;
+      parms.pageSize = size;
       console.log(data);
-      this.axios.post('api/webapi/warehouse/getOutinWarehouseInfo', qs.stringify(data))
+      this.axios.post('api/webapi/warehouse/getOutinWarehouseInfo', qs.stringify(parms))
         .then(res => {
+          console.log(res, '出库信息');
           this.leaveTable.count = res.data.count;
           const { data } = res.data;
-          this.materLeaveList = data;
+          this.stuffTabList = data;
           this.tableLoad = false;
         })
     },

@@ -14,7 +14,7 @@
       </li>
       <li>
         <p>下单人:</p>
-        <span>{{orderTitle.userName}}</span>
+        <span v-if="orderTitle.user">{{orderTitle.user.userName}}</span>
       </li>
       <li class="errDesWrap" v-if="orderInfo.deviantInfo">
         <p>异常原因:</p>

@@ -70,13 +70,52 @@ export default {
   created() {
     initNavBar(this);
     this.getUnitData();
-    this.timer = setInterval(() => {
-      this.getUnitData();
-    }, 1000);
+    // this.timer = setInterval(() => {
+    this.getUpdateUnitData();
+    // }, 1000);
   },
   methods: {
     getUnitData() {
-      console.log('请求数据');
+      // this.axios.get('api/webapi/order/getUnitDetail')
+      //   .then(res => {
+      //     console.log(res,'res');
+      //     const { data } = res.data;
+      //     const list = []
+      //     data.forEach((item, i) => {
+      //       if (item.unitName != "单元7") {
+      //         item.isAct = false;
+      //         this.unitList[i] = item;
+      //       } else {
+      //         list.push(item)
+      //       }
+      //     })
+      //     // console.log(this.unitList);
+      //     // console.log(list);
+      //     const item = list.find((item) => {
+      //       return item.unitName == "单元7"
+      //     });
+      //     item.isAct = false;
+      //     console.log(item);
+      //     // this.unitList.push(item)
+      //     console.log(this.unitList, 111111);
+          // 拿到堆垛区域料盒list
+          // let boxList = []
+          // data.forEach((item, index) => {
+          //   if (item.unitName == "单元7") {
+          //     // this.unitList[index] = item;
+          //     boxList.push({
+          //       boxId: item.orderStuffPack.packRfid,
+          //     });
+          //     // this.unitList[index].boxList = boxList;
+          //   } else {
+          //     item.isAct = false;
+          //     item.index = ++index;
+
+          //     console.log(this.unitList);
+          //   }
+
+          // });
+        // })
       this.axios.get('http://localhost:3005/proAdminList')
         .then(res => {
           const { data } = res;
@@ -85,6 +124,16 @@ export default {
             element.index = ++index;
           });
           this.unitList = data;
+        })
+    },
+    getUpdateUnitData() {
+      console.log('请求数据');
+      this.axios.get('http://localhost:3005/proAdminList')
+        .then(res => {
+          const data = res.data;
+          this.unitList.forEach((item, index) => {
+            item.boxList = data[index].boxList;
+          });
         })
     },
     stateColor(state) {
@@ -156,7 +205,7 @@ export default {
   }
 
   .isScroll {
-    overflow: scroll;
+    // overflow: scroll;
   }
   h1 {
     font-size: 18px;
@@ -179,17 +228,24 @@ export default {
         }
       }
       .proRight {
+        // max-height: 400px;
+        max-height: 352px;
+        overflow: scroll;
+        border: 1px solid #f2f2f2;
         margin-right: 100px;
         flex: 1;
+        box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
         li {
           flex: 1;
           box-sizing: border-box;
           text-align: left;
         }
+        .reAct {
+        }
         .activeUnitItem {
+          height: auto;
           transition: all 0.5s;
-          height: 160px;
           overflow: scroll !important;
         }
         .unitList {

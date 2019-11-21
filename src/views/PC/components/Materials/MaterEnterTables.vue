@@ -11,8 +11,8 @@
       <el-table-column type="index" label="序号" width="50"></el-table-column>
       <el-table-column prop="batchId" label="库存编号"></el-table-column>
       <el-table-column prop="stuff.stuffName" label="物料名称"></el-table-column>
-      <el-table-column prop="outInTime" label="入库时间"></el-table-column>
-      <el-table-column prop="outinAmount" label="数量(kg)"></el-table-column>
+      <el-table-column prop="time" label="入库时间"></el-table-column>
+      <el-table-column prop="amount" label="数量(kg)"></el-table-column>
       <el-table-column prop="userName" label="操作人员"></el-table-column>
       <!-- <el-table-column align="right">
         <template slot="header" slot-scope="scope">
@@ -58,9 +58,9 @@
             <el-select v-model="addStuffForm.stuffid" placeholder="请选择物料名称">
               <el-option
                 v-for="item in stuffList"
-                :key="item.stuffId"
+                :key="item.id"
                 :label="item.stuffName"
-                :value="item.stuffId"
+                :value="item.id"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -79,12 +79,12 @@
         </div>-->
         <div class="item">
           <el-form-item label="操作人" prop="userid">
-            <el-select v-model="addStuffForm.userid" placeholder="操作人">
+            <el-select v-model="addStuffForm.username" placeholder="操作人">
               <el-option
                 v-for="item in adminList"
                 :key="item.userId"
                 :label="item.userName"
-                :value="item.userId"
+                :value="item.userName"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -133,6 +133,7 @@ export default {
   },
   created() {
     this.getMaterEnterList(this.page, this.size, this.selVal);
+    console.log(this.stuffList, 1111);
 
   },
   data() {
@@ -178,7 +179,7 @@ export default {
         stuffid: [
           { required: true, message: '请选择物料名称', trigger: 'blur' }
         ],
-        userid: [
+        username: [
           { required: true, message: '请选择操作人员', trigger: 'blur' }
         ],
         // supplier: [
@@ -197,26 +198,28 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.addMaterBoxLoad = true;
-          const stuffname = getStuffName(this.stuffList, this.addStuffForm.stuffid);
-          this.addStuffForm.stuffname = stuffname;
+          // const stuffname = getStuffName(this.stuffList, this.addStuffForm.stuffid);
+          // this.addStuffForm.stuffname = stuffname;
           this.addStuffForm.time = getTime();
-          const username = getUserName(this.adminList, this.addStuffForm.userid);
-          this.addStuffForm.username = username;
+          // const username = getUserName(this.adminList, this.addStuffForm.userid);
+          // this.addStuffForm.username = username;
           const data = qs.stringify({
             contentType: 1,
+            outInType: 1,
             contentId: this.addStuffForm.stuffid,
             amount: this.addStuffForm.amount,
             userName: this.addStuffForm.username
           })
           this.axios.post('api/webapi/warehouse/insertWarehouseInfo', data)
             .then(res => {
+              console.log(res, '物料入库');
               if (res.data.code == 200) {
                 this.$notify.success({
                   title: '物料入库成功',
                 });
                 this.addMaterBox = false;
                 this.addMaterBoxLoad = false;
-                this.getMaterEnterList(this.page, this.size,this.selVal);
+                this.getMaterEnterList(this.page, this.size, this.selVal);
                 this.$emit('getStuffList');
               }
             })
@@ -240,21 +243,32 @@ export default {
     // 父组件调动筛选分页
     emitSelEnterList() {
       console.log(this.page, this.size, this.selVal);
-
+      this.getMaterEnterList(this.page, this.size, this.selVal)
     },
     // 拉取物料入库信息
-    getMaterEnterList(page, size, selVal) {
-      console.log(selVal)
+    getMaterEnterList(page, size, sel) {
+      // console.log(selVal)
       this.tableLoad = true;
+      const parms = {};
+      if (sel.materEnterVal != "") parms.materEnterVal = sel.materEnterVal;
+      if (sel.selEnterTimeVal != "") parms.selEnterTimeVal[0] = sel.selEnterTimeVal[0];
+      if (sel.selEnterTimeVal != "") parms.selEnterTimeVal[1] = sel.selEnterTimeVal[1];
+      parms.contentType = 1;
+      parms.outInType = 1;
+      parms.pageNum = page;
+      parms.pageSize = size;
       const data = qs.stringify({
         contentType: 1,
         outInType: 1,
         pageNum: page,
         pageSize: size,
-        // contentName: selVal.materEnterVal
+        // contentName: selVal.materEnterVal,
+        // outInTimeStart: selVal.selEnterTimeVal[0],
+        // outInTimeEnd: selVal.selEnterTimeVal[0]
       })
-      this.axios.post('api/webapi/warehouse/getOutinWarehouseInfo', data)
+      this.axios.post('api/webapi/warehouse/getOutinWarehouseInfo', qs.stringify(parms))
         .then(res => {
+          console.log(res, '物料');
           const { data } = res.data
           this.sizeCount = res.data.count;
           this.materEnterList = data;

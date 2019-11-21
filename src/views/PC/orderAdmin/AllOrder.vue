@@ -84,12 +84,12 @@
       >
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="orderId" label="订单编号"></el-table-column>
-        <el-table-column prop="time" label="下单时间"></el-table-column>
-        <el-table-column prop="userName" label="下单人"></el-table-column>
+        <el-table-column prop="startTime" label="下单时间"></el-table-column>
+        <el-table-column prop="user.userName" label="下单人"></el-table-column>
         <el-table-column prop="orderState" label="订单状态">
           <template slot-scope="scope">
-            <i class="stateIcon iconfont" :class="iconBg(scope.row.rate)"></i>
-            {{scope.row.orderState}}
+            <i class="stateIcon iconfont" :class="iconBg(scope.row.orderState)"></i>
+            {{scope.row.orderStateName}}
           </template>
         </el-table-column>
         <el-table-column prop="des" label="详情" width="50">
@@ -109,7 +109,7 @@
         :page-sizes="[10, 15, 20, 25]"
         :page-size="size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="100"
+        :total="count"
       ></el-pagination>
     </div>
   </div>
@@ -147,6 +147,7 @@ export default {
       ],
       orderStateList: [
       ],
+      count: 100,
       page: 1,
       size: 10,
       allOrderList: []
@@ -180,8 +181,9 @@ export default {
     },
     // 拉取订单信息
     getOrderList(page, size, sels) {
+      this.loading = true;
       const data = qs.stringify({
-        contenType: sels.orderState,
+        typeId: sels.orderState,
         pageNum: page,
         pageSize: size,
         userName: sels.userName,
@@ -189,20 +191,40 @@ export default {
         startTime: sels.time[0],
         endTime: sels.time[1]
       });
-      const obj = {
-        contenType: sels.orderState,
-        pageNum: page,
-        pageSize: size,
-        userName: sels.userName,
-        orderId: sels.orderId,
-        startTime: sels.time[0],
-        endTime: sels.time[1]
-      }
-      this.axios.get('http://localhost:3005/allOrderList?_start=0&_end=10')
+      console.log(data);
+      // this.axios.get('http://localhost:3005/allOrderList?_start=0&_end=10')
+      this.axios.post('api/webapi/order/getAllOrdersByTypeId', data)
         .then(res => {
-          const { data } = res;
-          this.allOrderList = data;
+          console.log(res);
+          const { data, code, count, msg } = res.data;
+          if (code == 200) {
+            this.count = count;
+            data.forEach(element => {
+              switch (element.orderState) {
+                case 1:
+                  element.orderStateName = "待生产"
+                  break;
+                case 2:
+                  element.orderStateName = "正在生产"
+                  break;
+                case 3:
+                  element.orderStateName = "已完成"
+                  break;
+                case 4:
+                  element.orderStateName = "异常"
+                  break;
+                default:
+                  break;
+              }
+            });
+            this.allOrderList = data;
+            this.loading = false;
+          } else {
+            alert('数据拉取失败');
+            console.log(res);
+          }
         })
+        .catch(err => console.log(err));
     },
     // 拉取订单状态
     getOrderStateList() {

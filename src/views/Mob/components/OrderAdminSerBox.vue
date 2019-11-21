@@ -3,8 +3,22 @@
     <div class="searchLoad" v-show="showSearchLoad">
       <div class="row1">
         <p>创建人</p>
-        <el-cascader v-model="peopleVal" :options="peopleOptions" @change="handleChange"></el-cascader>
+        <!-- <el-cascader v-model="peopleVal" :options="peopleOptions" @change="handleChange"></el-cascader> -->
+        <el-autocomplete
+          class="inline-input"
+          v-model="peopleVal"
+          :fetch-suggestions="querySearch"
+          placeholder="请输入下单人姓名"
+          :trigger-on-focus="false"
+          suffix-icon="el-icon-edit-outline"
+        ></el-autocomplete>
+        <p>订单编号</p>
+        <el-input placeholder="请输入订单编号" suffix-icon="el-icon-edit-outline" v-model="productionVal"></el-input>
       </div>
+
+      <!-- <div class="row1">
+        <el-input placeholder="请输入订单编号" suffix-icon="el-icon-edit-outline" v-model="productionVal"></el-input>
+      </div>-->
 
       <div class="searchList">
         <div class="searchItem searchRow">
@@ -12,14 +26,15 @@
           <el-date-picker
             v-model="timeOption"
             type="datetimerange"
+            value-format="yyyy-MM-dd HH:mm:ss"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             :default-time="['12:00:00']"
           ></el-date-picker>
         </div>
-        <div class="searchItem">
-          <p>产线编号:</p>
+        <!-- <div class="searchItem"> -->
+        <!-- <p>产线编号:</p>
           <el-select v-model="productionVal" placeholder="选择产线">
             <el-option
               v-for="item in productionOptions"
@@ -27,16 +42,16 @@
               :label="item.label"
               :value="item.value"
             ></el-option>
-          </el-select>
-        </div>
+        </el-select>-->
+        <!-- </div> -->
         <div class="searchItem">
           <p>订单状态:</p>
           <el-select v-model="orderStat" placeholder="选择订单状态">
             <el-option
-              v-for="item in orderStatOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in orderStateList"
+              :key="item.stateId"
+              :label="item.stateName"
+              :value="item.stateId"
             ></el-option>
           </el-select>
         </div>
@@ -50,6 +65,7 @@
 
 <script>
 import '@/hotcss/hotcss'
+import { querySearch, createFilter, getUserList } from '@/views/PC/orderAdmin/components/common'
 export default {
   name: 'OrderAdminBox',
   props: {
@@ -60,7 +76,9 @@ export default {
   data() {
     return {
       // 创建人信息
-      peopleVal: [],
+      peopleVal: "",
+      // 用户集合
+      userList: [],
       peopleOptions: [
         {
           value: 'class1',
@@ -136,6 +154,8 @@ export default {
         }],
       // 产线编号model
       productionVal: '',
+      // 可筛选状态集合
+      orderStateList: [],
       // 产线编号
       productionOptions: [
         {
@@ -153,7 +173,21 @@ export default {
         }],
     }
   },
+  created() {
+    this.getUserList();
+    this.getOrderStateList();
+  },
   methods: {
+    getOrderStateList() {
+      this.axios.get('http://localhost:3005/orderStateList')
+        .then(res => {
+          const { data } = res;
+          this.orderStateList = data;
+        })
+    },
+    querySearch,
+    createFilter,
+    getUserList,
     clearSearchData() {
       this.timeOption = ''
       this.peopleVal = ''
@@ -182,6 +216,13 @@ export default {
 $designWidth: 375;
 
 // 覆盖element样式
+.el-autocomplete {
+  width: 100%;
+}
+.el-autocomplete-suggestion li {
+  font-size: px(14);
+  line-height: px(20);
+}
 .el-picker-panel__footer {
   display: flex;
   justify-content: space-between;
@@ -274,7 +315,7 @@ $designWidth: 375;
 }
 
 .searchLoad {
-  height: px(380);
+  height: px(400);
   background-color: rgba(0, 0, 0, 0.847058);
   .searchBtnFn {
     background: #3f91f7;
@@ -287,7 +328,7 @@ $designWidth: 375;
     margin: 0 auto;
     // margin-top: px(50);
     // margin-bottom: px(50);
-    margin-top: px(100);
+    margin-top: px(50);
     border-radius: px(4);
   }
   .row1 {

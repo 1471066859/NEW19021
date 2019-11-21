@@ -72,6 +72,12 @@ $designWidth: 375;
   font-size: px(16);
   height: 100%;
   box-sizing: border-box;
+  h2 {
+    font-size: px(14);
+    padding: px(10);
+    border-bottom: 1px solid #ccc;
+    margin-bottom: px(10);
+  }
   .orderState {
     i {
       height: px(5);
@@ -82,7 +88,7 @@ $designWidth: 375;
     background: #fff;
     h2 {
       font-size: px(14);
-      padding: px(5);
+      padding: px(10);
       border-bottom: 1px solid #ccc;
       margin-bottom: px(10);
     }
@@ -104,7 +110,6 @@ $designWidth: 375;
     }
     h2 {
       font-size: px(14);
-      font-weight: 400;
       border-bottom: 1px solid #ccc;
       padding: px(10);
     }

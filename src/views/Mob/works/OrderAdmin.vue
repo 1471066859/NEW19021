@@ -29,8 +29,8 @@
       @click.capture="closeSearchLoad"
     >
       <OrderAdminTable
-        v-for="OrderItem in OrderAdminTableList"
-        :key="OrderItem.orderId"
+        v-for="(OrderItem,index) in OrderAdminTableList"
+        :key="index"
         :OrderAdminTable="OrderItem"
       />
       <p class="loadText">
@@ -58,7 +58,9 @@ export default {
       loadText: '数据加载中...',
       loading: false,
       // 筛选数据
-      selData: {},
+      selData: {
+        timeOption: []
+      },
       OrderAdminTableList: [
         {
           orderId: 'D2043',
@@ -66,64 +68,18 @@ export default {
           orderStatus: '未生产',
           orderTime: "2018-12-30 20:18:30",
           proId: "001"
-        },
-        {
-          orderId: 'D20243',
-          orderUser: '马麒麟',
-          orderStatus: '未生产',
-          orderTime: "2018-12-30 20:18:30",
-          proId: "001"
-        },
-        {
-          orderId: 'D12043',
-          orderUser: '马麒麟',
-          orderStatus: '未生产',
-          orderTime: "2018-12-30 20:18:30",
-          proId: "001"
-        },
-        {
-          orderId: 'D204443',
-          orderUser: '马麒麟',
-          orderStatus: '未生产',
-          orderTime: "2018-12-30 20:18:30",
-          proId: "001"
-        },
-        {
-          orderId: 'D3312043',
-          orderUser: '马麒麟',
-          orderStatus: '未生产',
-          orderTime: "2018-12-30 20:18:30",
-          proId: "001"
-        },
-        {
-          orderId: 'D204133',
-          orderUser: '马麒麟',
-          orderStatus: '未生产',
-          orderTime: "2018-12-30 20:18:30",
-          proId: "001"
-        },
-        {
-          orderId: 'D2231043',
-          orderUser: '马麒麟',
-          orderStatus: '未生产',
-          orderTime: "2018-12-30 20:18:30",
-          proId: "001"
-        },
-        {
-          orderId: 'D2044523',
-          orderUser: '马麒麟',
-          orderStatus: '未生产',
-          orderTime: "2018-12-30 20:18:30",
-          proId: "001"
-        },
+        }
       ],
-      getNum: 1
-
+      getNum: 1,
+      page: 1,
+      size: 6,
+      isSel: false
     }
   },
   created() {
     this.$store.dispatch("setTabState", 1);
     this.$store.dispatch('setMobHdMsg', "WELCOME");
+    this.getOrderList(this.page, this.size, this.selData)
   },
   // beforeRouteEnter(to, from, next) {
   //   next(vm => {
@@ -131,6 +87,61 @@ export default {
   //   })
   // },
   methods: {
+    getOrderList(page, size, sel) {
+      this.loading = true;
+      const data = this.qs.stringify({
+        typeId: sel.orderStat,
+        pageNum: page,
+        pageSize: size,
+        userName: sel.peopleVal,
+        orderId: sel.productionVal,
+        startTime: sel.timeOption[0],
+        endTime: sel.timeOption[1]
+      });
+      this.axios.post('api/webapi/order/getAllOrdersByTypeId', data)
+        .then(res => {
+          console.log(res);
+          const { data, code } = res.data;
+          if (data.length == 0) {
+            this.loading = false;
+            this.loadText = "暂无更多数据";
+            return;
+          }
+          data.forEach(element => {
+            element.proId = "产线1"
+            switch (element.orderState) {
+              case 1:
+                element.orderStateName = "待生产"
+                break;
+              case 2:
+                element.orderStateName = "正在生产"
+                break;
+              case 3:
+                element.orderStateName = "已完成"
+                break;
+              case 4:
+                element.orderStateName = "异常"
+                break;
+              default:
+                break;
+            }
+          });
+          console.log(this.isSel,123131312);
+          if (this.isSel) {
+            console.log(data, 1111);
+            console.log(88888888);
+            this.OrderAdminTableList = data;
+            this.isSel = false
+          } else {
+            console.log(12312312312);
+            data.forEach(item => {
+
+              this.OrderAdminTableList.push(item);
+            })
+          }
+          this.loading = false;
+        })
+    },
     // 显示弹窗
     showSearchLoadFn() {
       this.showSearchLoad = !this.showSearchLoad;
@@ -140,22 +151,8 @@ export default {
     },
     // 加载更多
     loadMore() {
-      if (this.getNum == 5) {
-        this.loading = false;
-        this.loadText = "暂无更多数据";
-        return;
-      }
-      this.loading = true;
-      setTimeout(() => {
-        this.OrderAdminTableList.push({
-          orderId: this.getNum++,
-          orderUser: 'mqlmqlmql',
-          orderStatus: '未生产',
-          orderTime: "2018-12-30 20:18:30",
-          proId: "001"
-        });
-        this.loading = false;
-      }, 1000);
+      ++this.size;
+      this.getOrderList(this.page, this.size, this.selData)
     },
     // 关闭弹窗清空数据
     closeSearchLoad() {
@@ -168,6 +165,9 @@ export default {
       this.$refs.OrderAdminSerBoxRef.clearSearchData();
       this.selData = data;
       console.log(this.selData);
+      // 初始化瀑布流
+      this.isSel = true;
+      this.getOrderList(this.page, this.size, this.selData);
     }
   }
 }

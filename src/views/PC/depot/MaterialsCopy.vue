@@ -90,9 +90,9 @@
               <el-select v-model="leaveForm.materLeaveVal" placeholder="请选择">
                 <el-option
                   v-for="item in stuffList"
-                  :key="item.stuffId"
+                  :key="item.id"
                   :label="item.stuffName"
-                  :value="item.stuffId"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </li>
@@ -102,9 +102,9 @@
               <el-select v-model="enterForm.materEnterVal" placeholder="请选择">
                 <el-option
                   v-for="item in stuffList"
-                  :key="item.stuffId"
+                  :key="item.id"
                   :label="item.stuffName"
-                  :value="item.stuffId"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </li>
@@ -114,6 +114,7 @@
               <el-date-picker
                 v-model="leaveForm.selLeaveTimeVal"
                 type="datetimerange"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
@@ -126,6 +127,7 @@
               <el-date-picker
                 v-model="enterForm.selEnterTimeVal"
                 type="datetimerange"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 range-separator="至"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
@@ -138,7 +140,7 @@
               <el-button @click="clearSerFn">重置</el-button>
             </li>
           </ul>
-          <MaterLeaveTables></MaterLeaveTables>
+          <MaterLeaveTables ref="MaterLeaveTables" :selVal="enterForm"></MaterLeaveTables>
         </el-tab-pane>
         <el-tab-pane label="入库" name="enter">
           <!-- 筛选内容 -->
@@ -160,9 +162,9 @@
               <el-select v-model="leaveForm.materLeaveVal" placeholder="请选择">
                 <el-option
                   v-for="item in stuffList"
-                  :key="item.stuffId"
+                  :key="item.id"
                   :label="item.stuffName"
-                  :value="item.stuffId"
+                  :value="item.stuffName"
                 ></el-option>
               </el-select>
             </li>
@@ -172,9 +174,9 @@
               <el-select v-model="enterForm.materEnterVal" placeholder="请选择">
                 <el-option
                   v-for="item in stuffList"
-                  :key="item.stuffId"
+                  :key="item.id"
                   :label="item.stuffName"
-                  :value="item.stuffId"
+                  :value="item.stuffName"
                 ></el-option>
               </el-select>
             </li>
@@ -186,6 +188,7 @@
                 type="datetimerange"
                 range-separator="至"
                 start-placeholder="开始日期"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 end-placeholder="结束日期"
                 align="right"
               ></el-date-picker>
@@ -198,6 +201,7 @@
                 type="datetimerange"
                 range-separator="至"
                 start-placeholder="开始日期"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 end-placeholder="结束日期"
                 align="right"
               ></el-date-picker>
@@ -292,7 +296,40 @@ export default {
         }
       ],
       // 物料列表
-      stuffList: [],
+      stuffList: [
+        {
+          stuffName: '瓜子',
+          icon: "icon-guazi",
+          stuffId: 1,
+          warehouse: {
+            amount: 253
+          }
+        },
+        {
+          stuffName: '花生',
+          stuffId: 2,
+          icon: "icon-guazi",
+          warehouse: {
+            amount: 253
+          }
+        },
+        {
+          stuffName: '玉米',
+          stuffId: 3,
+          icon: "icon-guazi",
+          warehouse: {
+            amount: 253
+          }
+        },
+        {
+          stuffName: '大豆',
+          stuffId: 4,
+          icon: "icon-guazi",
+          warehouse: {
+            amount: 253
+          }
+        }
+      ],
       // 管理员信息
       adminList: []
     }
@@ -350,8 +387,10 @@ export default {
     },
     // 获取物料列表
     getStuffList() {
+      console.log(12312321);
       this.axios.get("api/webapi/warehouse/getAllStuffAmount?contentid=1")
         .then(res => {
+          console.log(res, '物料信息');
           const iconList = [
             "icon-guazi",
             "icon-huasheng",
@@ -359,7 +398,8 @@ export default {
             "icon-dadou"
           ]
           const { data } = res.data;
-          this.stuffList = data.splice(0, 4);;
+          // this.stuffList = data.splice(0, 4);;
+          this.stuffList = data;
           this.stuffList.forEach((item, index) => {
             item.icon = iconList[index];
           });
@@ -368,10 +408,12 @@ export default {
     },
     // 获取操作人列表
     getAdminList() {
-      this.axios.get("api/webapi/getUserNameByAccess?useruuid=7be9a8b1a6784ea590af644fa7fb930d")
+      this.axios.get("api/webapi/user/getAdministrator")
         .then(res => {
+          console.log(res);
           const { data } = res.data;
           this.adminList = data;
+          console.log(data, '操作人');
         });
 
     },
@@ -386,6 +428,7 @@ export default {
       const { activeName } = this;
       if (activeName == 'leave') {
         const { leaveForm } = this;
+        this.$refs.MaterLeaveTables.getMaterLeaveList();
         console.log(leaveForm);
 
         return;
@@ -515,8 +558,8 @@ export default {
   .materWrap {
     display: flex;
     padding-left: 40px;
-    margin-top: 20px;
-    border-bottom: 1px solid #ccc;
+    // margin-top: 20px;
+    // border-bottom: 1px solid #ccc;
     padding-bottom: 20px;
     .addMater {
       cursor: pointer;

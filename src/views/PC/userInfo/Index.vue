@@ -48,8 +48,9 @@
           >
             <el-table-column type="selection" v-if="tabSelKey" width="55"></el-table-column>
             <el-table-column type="index" label="序号" width="50"></el-table-column>
-            <el-table-column prop="userName" label="用户名"></el-table-column>
+            <el-table-column prop="userName" label="姓名"></el-table-column>
             <el-table-column prop="loginId" label="用户账号"></el-table-column>
+            <el-table-column prop="createTime" label="创建时间"></el-table-column>
             <el-table-column prop="roleName" label="权限"></el-table-column>
             <el-table-column align="right" width>
               <template slot="header" slot-scope="scope">
@@ -114,8 +115,9 @@
           >
             <el-table-column type="selection" v-if="tabSelKey" width="55"></el-table-column>
             <el-table-column type="index" label="序号" width="50"></el-table-column>
-            <el-table-column prop="userName" label="用户名"></el-table-column>
+            <el-table-column prop="userName" label="姓名"></el-table-column>
             <el-table-column prop="loginId" label="用户账号"></el-table-column>
+            <el-table-column prop="createTime" label="创建时间"></el-table-column>
             <el-table-column prop="roleName" label="权限"></el-table-column>
             <el-table-column align="right" width>
               <template slot="header" slot-scope="scope">
@@ -228,7 +230,6 @@ export default {
     this.postSetUser();
     initNavBar(this);
     this.getUserList();
-    // 修改！！！！
     this.getUserTabList(this.userTable.userPage, this.userTable.userSize, this.userSel)
   },
   methods: {
@@ -253,46 +254,28 @@ export default {
     // 确定修改提交方法
     postSetUser() {
       // 拿到数据
-      console.log(this.multipleSelection);
+      // console.log(this.multipleSelection);
       // 
       if (this.activeName == "Users") {
+        console.log(1111);
         // 权限升级
-        const user = JSON.stringify(this.multipleSelection);
-
-        let data = this.qs.stringify({
-          user: [{ id: 3 }]
-        });
-
-        let data1 = JSON.stringify({
-          user: [{ id: 3 }]
-        })
-
-        let data2 = {
-          user: [
-            3, 1, 2
-          ]
-        }
-        // console.log(data, 'data');
-        // console.log(data1, 'data1');
-        // console.log(data2, 'data2');
-        console.log(JSON.stringify(data2));
-        // let str = { 'user': "[3,4,5,6,7]" }
-        // let str = {
-        //   user: [
-        //     1, 2, 3
-        //   ]
-        // }
-        let str = 'user:[1,2,3]'
-        const arr = [
-          {
-            id: 3
+        // const user = qs.stringify({ a: ['b', 'c', 'd'] });
+        // const user1 = qs.stringify({ user: [1, 2, 3] });
+        // console.log(user1);
+        // return;
+        // const user = JSON.stringify(this.multipleSelection)
+        // let user = JSON.stringify({
+        //   user: [1, 2, 3]
+        // })
+        let data = { user: [1, 2, 3] }
+        this.axios.post('api/webapi/user/updateRoleToAdmin', JSON.stringify(data), {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
           }
-        ]
-        this.axios.post('api/webapi/user/updateRoleFromAdmin')
+        })
           .then((res) => {
             console.log(res, '权限修改');
           })
-        // return;
         // 清空存放拿到的数据容器
         // this.$refs.multipleTable.clearSelection();
         // 关闭多选
@@ -322,7 +305,9 @@ export default {
         pageNum: page,
         pageSize: size
       };
+
       const parms = this.filterParms(data);
+      ;
       this.axios.post('api/webapi/user/selectUsersByCondition', this.qs.stringify(parms))
         .then(res => {
           console.log(res);
@@ -374,7 +359,9 @@ export default {
         pageNum: page,
         pageSize: size
       };
+      console.log(qs.stringify(data));
       const parms = this.filterParms(data);
+      console.log(parms.role);
       this.axios.post('api/webapi/user/selectUsersByCondition', qs.stringify(parms))
         .then(res => {
           console.log(res);

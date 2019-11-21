@@ -71,7 +71,7 @@
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="orderId" label="订单编号"></el-table-column>
         <el-table-column prop="startTime" label="下单时间"></el-table-column>
-        <el-table-column prop="userName" label="下单人"></el-table-column>
+        <el-table-column prop="user.userName" label="下单人"></el-table-column>
         <el-table-column prop="orderState" label="订单状态">
           <template slot-scope="scope">
             <i class="stateIcon iconfont" :class="iconBg(scope.row.orderState)"></i>

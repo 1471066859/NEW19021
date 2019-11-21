@@ -433,6 +433,7 @@
     {
       "unitName": "视觉检测",
       "unitState": "工作中",
+
       "boxList": [{
           "boxId": "0asd01"
         },

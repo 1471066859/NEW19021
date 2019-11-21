@@ -13,17 +13,17 @@
       <div class="bd_row_top">
         <div class="poeople">
           创建人:
-          <span>{{OrderAdminTable.orderUser}}</span>
+          <span v-if="OrderAdminTable.user">{{OrderAdminTable.user.userName}}</span>
         </div>
         <div class="status">
           订单状态:
-          <span>{{OrderAdminTable.orderStatus}}</span>
+          <span>{{OrderAdminTable.orderStateName}}</span>
         </div>
       </div>
       <div class="bd_row_bottom">
         <div class="time">
           创建时间:
-          <span>{{OrderAdminTable.orderTime}}</span>
+          <span>{{OrderAdminTable.startTime}}</span>
         </div>
         <div class="pro_id">
           产线编号:
