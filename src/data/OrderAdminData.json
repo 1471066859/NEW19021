@@ -416,6 +416,7 @@
         }
       ]
     },
+
     {
       "unitName": "投料区",
       "unitState": "工作中",
@@ -475,6 +476,1096 @@
         },
         {
           "boxId": "#dadfa1"
+        }
+      ]
+    }
+  ],
+  "proAdminLists": [
+
+    {
+      "id": 2,
+      "unitName": "单元2",
+      "unitState": 1,
+      "unitOrderStuffPackDetailRes": [{
+        "id": 7,
+        "orderStuffPackId": null,
+        "unitId": null,
+        "startTime": "2019-11-21 13:24:09",
+        "endTime": "2019-11-30 13:07:13",
+        "orderStuffPack": {
+          "id": null,
+          "ordersId": null,
+          "stuffId": null,
+          "packId": null,
+          "packRfid": "测试3RFId"
+        },
+        "orders": {
+          "id": null,
+          "orderId": null,
+          "userId": null,
+          "startTime": "2019-11-30 11:55:44",
+          "endTime": "2019-11-30 11:55:50",
+          "orderState": 1,
+          "isDel": null
+        },
+        "stuff": {
+          "id": null,
+          "stuffName": "物料二",
+          "attrId": null
+        },
+        "pack": {
+          "id": null,
+          "packName": "大盒",
+          "attrId": null
+        },
+        "user": {
+          "id": null,
+          "loginId": null,
+          "userName": "测试名1",
+          "userPwd": null,
+          "role": null,
+          "isDel": null,
+          "createTime": null
+        }
+      }]
+    },
+    {
+      "id": 1,
+      "unitName": "单元1",
+      "unitState": 1,
+      "unitOrderStuffPackDetailRes": [{
+        "id": 8,
+        "orderStuffPackId": null,
+        "unitId": null,
+        "startTime": "2019-11-21 13:24:08",
+        "endTime": "2019-11-27 13:07:22",
+        "orderStuffPack": {
+          "id": null,
+          "ordersId": null,
+          "stuffId": null,
+          "packId": null,
+          "packRfid": "测试4RFId"
+        },
+        "orders": {
+          "id": null,
+          "orderId": null,
+          "userId": null,
+          "startTime": "2019-11-30 11:55:44",
+          "endTime": "2019-11-30 11:55:50",
+          "orderState": 1,
+          "isDel": null
+        },
+        "stuff": {
+          "id": null,
+          "stuffName": "物料二",
+          "attrId": null
+        },
+        "pack": {
+          "id": null,
+          "packName": "小盒",
+          "attrId": null
+        },
+        "user": {
+          "id": null,
+          "loginId": null,
+          "userName": "测试名1",
+          "userPwd": null,
+          "role": null,
+          "isDel": null,
+          "createTime": null
+        }
+      }]
+    },
+    {
+      "id": 3,
+      "unitName": "单元3",
+      "unitState": 1,
+      "unitOrderStuffPackDetailRes": [
+        {
+          "id": 1,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:20:58",
+          "endTime": "2019-11-20 09:42:34",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "1"
+          },
+          "orders": null,
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "大盒",
+            "attrId": null
+          },
+          "user": null
+        },
+        {
+          "id": 2,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:20:56",
+          "endTime": "2019-11-21 09:42:41",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "2"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-20 09:06:23",
+            "endTime": "2019-11-21 09:06:27",
+            "orderState": 2,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料二",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "2222",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 3,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:20:56",
+          "endTime": "2019-11-22 09:42:46",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "3"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-22 09:06:35",
+            "endTime": "2019-11-23 09:06:40",
+            "orderState": 2,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料三",
+            "attrId": null
+          },
+          "pack": null,
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "3333",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 4,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:20:55",
+          "endTime": "2019-11-30 09:42:52",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "4"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-24 09:06:48",
+            "endTime": "2019-11-25 09:06:52",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料四",
+            "attrId": null
+          },
+          "pack": null,
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "44444",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 5,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:20:55",
+          "endTime": "2019-12-02 11:56:51",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试1RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "大盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        }
+      ]
+      
+    },
+    {
+      "id": 4,
+      "unitName": "单元4",
+      "unitState": 1,
+      "unitOrderStuffPackDetailRes": []
+    },
+    {
+      "id": 5,
+      "unitName": "单元5",
+      "unitState": 1,
+      "unitOrderStuffPackDetailRes": []
+    },
+    {
+      "id": 6,
+      "unitName": "单元6",
+      "unitState": 1,
+      "unitOrderStuffPackDetailRes": []
+    },
+    {
+      "id": 7,
+      "unitName": "单元7",
+      "unitState": 1,
+      "unitOrderStuffPackDetailRes": [
+        {
+          "id": 1,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:20:58",
+          "endTime": "2019-11-20 09:42:34",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "1"
+          },
+          "orders": null,
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "大盒",
+            "attrId": null
+          },
+          "user": null
+        },
+        {
+          "id": 2,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:20:56",
+          "endTime": "2019-11-21 09:42:41",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "2"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-20 09:06:23",
+            "endTime": "2019-11-21 09:06:27",
+            "orderState": 2,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料二",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "2222",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 3,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:20:56",
+          "endTime": "2019-11-22 09:42:46",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "3"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-22 09:06:35",
+            "endTime": "2019-11-23 09:06:40",
+            "orderState": 2,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料三",
+            "attrId": null
+          },
+          "pack": null,
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "3333",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 4,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:20:55",
+          "endTime": "2019-11-30 09:42:52",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "4"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-24 09:06:48",
+            "endTime": "2019-11-25 09:06:52",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料四",
+            "attrId": null
+          },
+          "pack": null,
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "44444",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 5,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:20:55",
+          "endTime": "2019-12-02 11:56:51",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试1RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "大盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
+        },
+        {
+          "id": 6,
+          "orderStuffPackId": null,
+          "unitId": null,
+          "startTime": "2019-11-21 13:18:59",
+          "endTime": "2019-11-28 13:07:05",
+          "orderStuffPack": {
+            "id": null,
+            "ordersId": null,
+            "stuffId": null,
+            "packId": null,
+            "packRfid": "测试2RFId"
+          },
+          "orders": {
+            "id": null,
+            "orderId": null,
+            "userId": null,
+            "startTime": "2019-11-30 11:55:44",
+            "endTime": "2019-11-30 11:55:50",
+            "orderState": 1,
+            "isDel": null
+          },
+          "stuff": {
+            "id": null,
+            "stuffName": "物料一",
+            "attrId": null
+          },
+          "pack": {
+            "id": null,
+            "packName": "小盒",
+            "attrId": null
+          },
+          "user": {
+            "id": null,
+            "loginId": null,
+            "userName": "测试名1",
+            "userPwd": null,
+            "role": null,
+            "isDel": null,
+            "createTime": null
+          }
         }
       ]
     }
@@ -671,5 +1762,54 @@
       "value": "南拳妈妈龙虾盖浇饭",
       "address": "普陀区金沙江路1699号鑫乐惠美食广场A13"
     }
-  ]
+  ],
+  "getAllUsers": {
+    "count": 5,
+    "data": [{
+        "id": 1,
+        "loginId": "1",
+        "userName": "1111",
+        "userPwd": "1",
+        "role": 1,
+        "isDel": 1,
+        "createTime": "2019-11-20 13:37:29"
+      },
+      {
+        "id": 2,
+        "loginId": "2",
+        "userName": "2222",
+        "userPwd": "2",
+        "role": 0,
+        "isDel": 1,
+        "createTime": "2019-11-19 16:21:07"
+      },
+      {
+        "id": 3,
+        "loginId": "3",
+        "userName": "3333",
+        "userPwd": "3",
+        "role": 0,
+        "isDel": 1,
+        "createTime": "2019-11-19 16:21:07"
+      },
+      {
+        "id": 5,
+        "loginId": "5",
+        "userName": "55555",
+        "userPwd": "5",
+        "role": 1,
+        "isDel": 1,
+        "createTime": "2019-11-19 14:04:35"
+      },
+      {
+        "id": 4,
+        "loginId": "4",
+        "userName": "44444",
+        "userPwd": "4",
+        "role": 1,
+        "isDel": 1,
+        "createTime": "2019-11-19 14:04:33"
+      }
+    ]
+  }
 }
