@@ -64,7 +64,7 @@ export function handleSizeChange(val) {
 // 条件查询
 export function postSelFn() {
   this.page = 1;
-  this.size = 10;
+  // this.size = 10;
   const {
     selForm,
     page,

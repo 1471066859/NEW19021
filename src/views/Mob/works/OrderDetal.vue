@@ -5,17 +5,17 @@
       <div class="title">
         <div class="left">
           订单号:
-          <span>#1234</span>
+          <span>{{orderInfo.orderId}}</span>
         </div>
-        <div class="right">生产中</div>
+        <div class="right">{{orderInfo.orderState}}</div>
       </div>
       <!-- 物料列表 -->
       <div class="stuffList">
-        <div class="item" v-for="i in 4" :key="i">
+        <div class="item" v-if="orderStuffInfo" v-for="(item, index) in orderStuffInfo" :key="index">
           <div class="left">
-            <span>商品1</span>
+            <span>{{item.stuffName}}</span>
             -
-            <span>小料盒</span>
+            <span>{{item.packName}}</span>
           </div>
           <div class="right">X1</div>
         </div>
@@ -26,16 +26,16 @@
         <h2>订单信息</h2>
         <div class="item">
           创建人:
-          <span>张三</span>
+          <span>{{orderInfo.userName}}</span>
         </div>
         <div class="item itemFlex">
           <div class="infoLeft">
             产线编号:
-            <span>001</span>
+            <span>{{orderInfo.proId}}</span>
           </div>
           <div class="infoRgiht">
             创建时间:
-            <span>2019-12-20 12:30:22</span>
+            <span>{{orderInfo.time}}</span>
           </div>
         </div>
       </div>
@@ -43,9 +43,10 @@
     <div class="orderState">
       <i></i>
       <h2>订单进度</h2>
-      <div class="item" v-for="(item, i) in 4" :key="i">
-        <div class="itemLeft">商品1</div>
-        <div class="itemRight">投料中</div>
+      <!-- <div class="item" v-if="orderStuffInfo" v-for="(item, i) in orderStuffInfo.orderStuffPackRes" :key="i"> -->
+      <div class="item" v-if="orderStuffInfo" v-for="(item, i) in orderStuffInfo" :key="i">
+        <div class="itemLeft">{{item.stuffName}}</div>
+        <div class="itemRight" v-if="item.orderStuffUnit" >{{item.orderStuffUnit.unitName}}</div>
       </div>
     </div>
   </div>
@@ -56,10 +57,66 @@ export default {
   name: 'OrderDetal',
   data() {
     return {
-
+      orderInfo: {
+        orderId: null,
+        time: null,
+        userName: null,
+        orderState: null
+      },
+      timer:null,
+      orderStuffInfo: null
     }
   },
-
+  created() {
+    // console.log(this.$route.query);
+    this.getOrderStuffInfo();
+    this.getOrderInfo();
+    this.timer = setInterval(() => {
+    this.getOrderStuffInfo();
+    }, 1000);
+  },
+ destroyed() {
+clearInterval(this.timer) 
+  },
+  methods: {
+    getOrderStuffInfo() {
+      const { id } = this.$route.query;
+      console.log(id);
+      const data = this.qs.stringify({
+        id,
+      });
+      this.axios.post('api/webapi/order/getOrdersById', data)
+        .then(res => {
+          // console.log(res);
+          const { code, data, msg } = res.data;
+          data.orderStuffPackRes.forEach(item => {
+            if (item.stuffId == 1) item.stuffName = "物料1"
+            if (item.stuffId == 2) item.stuffName = "物料2"
+            if (item.stuffId == 3) item.stuffName = "物料3"
+            if (item.stuffId == 4) item.stuffName = "物料4"
+            if (item.packId == 1) item.packName = "大料盒"
+            if (item.packId == 2) item.packName = "小料盒"
+            if (item.orderStuffUnit.unitId == 1) item.orderStuffUnit.unitName = "上料区"
+            if (item.orderStuffUnit.unitId == 2) item.orderStuffUnit.unitName = "投料区"
+            if (item.orderStuffUnit.unitId == 3) item.orderStuffUnit.unitName = "视觉检测"
+            if (item.orderStuffUnit.unitId == 4) item.orderStuffUnit.unitName = "异常区"
+            if (item.orderStuffUnit.unitId == 5) item.orderStuffUnit.unitName = "堆垛区"
+            if (item.orderStuffUnit.unitId == 6) item.orderStuffUnit.unitName = "堆垛区"
+            if (item.orderStuffUnit.unitId == 7) item.orderStuffUnit.unitName = "堆垛区"
+          });
+          this.orderStuffInfo = data.orderStuffPackRes;
+          // console.log(this.orderStuffInfo, '11111');
+        })
+        .catch(err => console.log(err));
+    },
+    getOrderInfo() {
+      this.orderInfo.orderId = sessionStorage.getItem('orderId');
+      this.orderInfo.time = sessionStorage.getItem('time');
+      this.orderInfo.userName = sessionStorage.getItem('userName');
+      this.orderInfo.orderState = sessionStorage.getItem('orderState');
+      this.orderInfo.proId = sessionStorage.getItem('proId');
+    }
+  }
 }
 </script>
 

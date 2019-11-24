@@ -58,7 +58,11 @@
       </div>
 
       <!-- 查询确定 -->
+      <div class="btnWrap">
+
       <div class="searchBtnFn" @click="searchBtnFn">查询</div>
+      <div class="searchBtnFn clear" @click="clearSearchData">清空</div>
+      </div>
     </div>
   </el-collapse-transition>
 </template>
@@ -180,6 +184,11 @@ export default {
   methods: {
     getOrderStateList() {
       this.axios.get('http://localhost:3005/orderStateList')
+        .then(res => {
+          const { data } = res;
+          this.orderStateList = data;
+        })
+         this.axios.get('http://localhost:3005/orderStateList')
         .then(res => {
           const { data } = res;
           this.orderStateList = data;
@@ -317,19 +326,28 @@ $designWidth: 375;
 .searchLoad {
   height: px(400);
   background-color: rgba(0, 0, 0, 0.847058);
-  .searchBtnFn {
-    background: #3f91f7;
-    color: #fff;
-    font-size: px(12);
-    text-align: center;
-    width: px(80);
-    height: px(30);
-    line-height: px(30);
-    margin: 0 auto;
+  .btnWrap {
+    margin-top: px(50);
+    display:flex;
+    justify-content: space-between;
+    padding: 0 px(40);
+    .clear {
+      background: #f2f2f2 !important;
+      color: #000 !important;
+    }
+    .searchBtnFn {
+      background: #3f91f7;
+      color: #fff;
+      font-size: px(12);
+      text-align: center;
+      width: px(80);
+      height: px(30);
+      line-height: px(30);
+    // margin: 0 auto;
     // margin-top: px(50);
     // margin-bottom: px(50);
-    margin-top: px(50);
-    border-radius: px(4);
+      border-radius: px(4);
+    }
   }
   .row1 {
     padding: px(0) px(20);

@@ -55,7 +55,7 @@
       <!-- btn区域 -->
       <div class="btns">
         <el-button type="primary" @click="postSelFn">查询</el-button>
-        <el-button @click="selForm={}">清空</el-button>
+        <el-button @click="closeSelForm">清空</el-button>
       </div>
     </div>
     <!-- 数据展示区域 -->
@@ -144,6 +144,13 @@ export default {
     }
   },
   methods: {
+       closeSelForm() {
+      this.selForm = {
+        orderId: "",
+        time: "",
+        userName: ""
+      }
+     },
     querySearch,
     createFilter,
     getOrderList(page, size, sels) {

@@ -54,7 +54,7 @@
       <!-- btn区域 -->
       <div class="btns">
         <el-button type="primary" @click="postSelFn">查询</el-button>
-        <el-button @click="selForm={}">清空</el-button>
+        <el-button @click="closeSelForm">清空</el-button>
       </div>
     </div>
     <!-- 数据展示区域 -->
@@ -158,6 +158,13 @@ export default {
     }
   },
   methods: {
+    closeSelForm() {
+      this.selForm = {
+        orderId: "",
+        time: "",
+        userName: ""
+      }
+    },
     querySearch,
     createFilter,
     getOrderList(page, size, sels) {
@@ -199,17 +206,6 @@ export default {
         .catch(err => console.log(err));
     },
     getUserList,
-    // getUserList() {
-    //   this.axios.get('http://localhost:3005/userList')
-    //     .then(res => {
-    //       const { data } = res;
-    //       data.forEach((item, i) => {
-    //         this.userList.push({
-    //           value: item.userName
-    //         })
-    //       });
-    //     })
-    // },
     iconBg(key) {
       return iconBg(key);
     },
@@ -271,20 +267,31 @@ export default {
         })
         this.axios.post('api/webapi/order/updateOrderState', data)
           .then(res => {
-            console.log(res);
+            console.log(res, '立即开始生产订单！！！！');
             const { code, msg } = res.data;
             if (code == 200) {
               this.loading = false;
-              this.$message({
+              this.$notify({
                 type: 'success',
-                message: `${orderId} 操作成功，成功立即生产该订单`
+                title: `${orderId} 操作成功`,
+                message: `立即开始生产订单 ${orderId}`
               });
+              // this.$message({
+              //   type: 'success',
+              //   message: `${orderId} 操作成功，成功立即生产该订单`
+              // });
               this.getOrderList(this.page, this.size, this.selForm);
             } else {
               this.loading = false;
-              this.$message({
+              // this.$message({
+              //   type: 'error',
+              //   message: `${orderId} 操作失败，失败原因`
+              // });
+              this.$notify({
                 type: 'error',
-                message: `${orderId} 操作失败，失败原因`
+                title: `${orderId} 操作失败`,
+                message: `删除失败原因`,
+                duration: 0
               });
               this.getOrderList(this.page, this.size, this.selForm);
             }

@@ -9,45 +9,51 @@
         </div>
 
         <div class="proRight">
-          <!-- 表头 -->
-          <ul style="border: 1px solid #DCDFE6">
-            <Li>序号</Li>
-            <Li>单元</Li>
-            <Li>状态</Li>
-            <Li>料盒ID</Li>
-          </ul>
-          <ul
-            class="unitList"
-            v-for="(item, index) in unitList"
-            :key="index"
-            :class="{'activeUnitItem': item.isAct}"
-          >
-            <i
-              class="el-icon-caret-bottom moreBoxId"
-              v-show="item.boxList.length > 1"
-              @click="moreBoxId(index)"
-              :class="{'iconActive': item.isAct}"
-            ></i>
-            <li>{{item.index}}</li>
-            <li>{{item.unitName}}</li>
-            <li :style="{'color':stateColor(item.unitState)}">
-              <i class="iconfont" :class="stateIcon(item.unitState)"></i>
-              {{item.unitState}}
-            </li>
-            <!-- <li style="overflow:scroll" v-if="item.boxList"> -->
-            <li class="boxList" :class="{'isScroll': item.isAct}" v-show="item.boxList">
-              <p
-                v-show="item.boxList.length > 0"
-                v-for="(boxItem, i) in item.boxList"
-                :key="i"
-              >{{boxItem.boxId}}</p>
-              <p
-                v-show="item.boxList.length == 0"
-                style="font-size:30px"
-                class="iconfont icon-jianqujianhaowubiankuang"
-              ></p>
-            </li>
-          </ul>
+          <el-scrollbar style="height:100%">
+            <!-- 表头 -->
+            <ul style="border: 1px solid #DCDFE6">
+              <Li>序号</Li>
+              <Li>单元</Li>
+              <Li>状态</Li>
+              <Li>料盒ID</Li>
+            </ul>
+            <ul
+              class="unitList"
+              v-for="(item, index) in unitList"
+              :key="index"
+              :class="{'activeUnitItem': item.isAct}"
+            >
+              <i
+                class="el-icon-caret-bottom moreBoxId"
+                v-show="item.unitOrderStuffPackDetailRes.length > 1"
+                @click="moreBoxId(index)"
+                :class="{'iconActive': item.isAct}"
+              ></i>
+              <li>{{item.index}}</li>
+              <li>{{item.unitName}}</li>
+              <li :style="{'color':stateColor(item.unitState)}">
+                <i class="iconfont" :class="stateIcon(item.unitState)"></i>
+                {{item.unitStateName}}
+              </li>
+              <!-- <li style="overflow:scroll" v-if="item.boxList"> -->
+              <li
+                class="boxList"
+                :class="{'isScroll': item.isAct}"
+                v-show="item.unitOrderStuffPackDetailRes"
+              >
+                <p
+                  v-show="item.unitOrderStuffPackDetailRes.length > 0"
+                  v-for="(boxItem, i) in item.unitOrderStuffPackDetailRes"
+                  :key="i"
+                >{{boxItem.id}}</p>
+                <p
+                  v-show="item.unitOrderStuffPackDetailRes.length == 0"
+                  style="font-size:30px"
+                  class="iconfont icon-jianqujianhaowubiankuang"
+                ></p>
+              </li>
+            </ul>
+          </el-scrollbar>
         </div>
       </div>
     </div>
@@ -70,84 +76,62 @@ export default {
   created() {
     initNavBar(this);
     this.getUnitData();
-    // this.timer = setInterval(() => {
-    this.getUpdateUnitData();
-    // }, 1000);
+    this.timer = setInterval(() => {
+      // this.getUpdateUnitData();
+    }, 1000);
   },
   methods: {
     getUnitData() {
-      // this.axios.get('api/webapi/order/getUnitDetail')
-      //   .then(res => {
-      //     console.log(res,'res');
-      //     const { data } = res.data;
-      //     const list = []
-      //     data.forEach((item, i) => {
-      //       if (item.unitName != "单元7") {
-      //         item.isAct = false;
-      //         this.unitList[i] = item;
-      //       } else {
-      //         list.push(item)
-      //       }
-      //     })
-      //     // console.log(this.unitList);
-      //     // console.log(list);
-      //     const item = list.find((item) => {
-      //       return item.unitName == "单元7"
-      //     });
-      //     item.isAct = false;
-      //     console.log(item);
-      //     // this.unitList.push(item)
-      //     console.log(this.unitList, 111111);
-          // 拿到堆垛区域料盒list
-          // let boxList = []
-          // data.forEach((item, index) => {
-          //   if (item.unitName == "单元7") {
-          //     // this.unitList[index] = item;
-          //     boxList.push({
-          //       boxId: item.orderStuffPack.packRfid,
-          //     });
-          //     // this.unitList[index].boxList = boxList;
-          //   } else {
-          //     item.isAct = false;
-          //     item.index = ++index;
-
-          //     console.log(this.unitList);
-          //   }
-
-          // });
-        // })
-      this.axios.get('http://localhost:3005/proAdminList')
+      this.axios.get('http://localhost:3005/proAdminLists')
         .then(res => {
-          const { data } = res;
-          data.forEach((element, index) => {
+          console.log(res);
+          res.data.forEach((element, index) => {
             element.isAct = false;
             element.index = ++index;
+            if (element.unitState == 0) element.unitStateName = '异常'
+            if (element.unitState == 1) element.unitStateName = '工作中'
+            if (element.unitState == 2) element.unitStateName = '空闲'
           });
-          this.unitList = data;
+          this.unitList = res.data;
         })
+      // this.axios.get('api/webapi/order/getUnitDetail')
+      // .then(res => {
+      //   console.log(res);
+      //   const { data } = res.data;
+      //   data.forEach((element, index) => {
+      //     element.isAct = false;
+      //     element.index = ++index;
+      //     if (element.unitState == 0) element.unitStateName = '异常'
+      //     if (element.unitState == 1) element.unitStateName = '工作中'
+      //     if (element.unitState == 2) element.unitStateName = '空闲'
+      //   });
+      //   this.unitList = data;
+      // })
     },
     getUpdateUnitData() {
       console.log('请求数据');
-      this.axios.get('http://localhost:3005/proAdminList')
+      // this.axios.get('http://localhost:3005/proAdminList')
+      this.axios.get('api/webapi/order/getUnitDetail')
         .then(res => {
-          const data = res.data;
+          const { data } = res.data;
+          // console.log(data);
           this.unitList.forEach((item, index) => {
-            item.boxList = data[index].boxList;
+            item.unitOrderStuffPackDetailRes = data[index].unitOrderStuffPackDetailRes;
           });
         })
     },
     stateColor(state) {
       switch (state) {
 
-        case '空闲':
+        case 2:
           return '#909399'
           break;
 
-        case '工作中':
+        case 1:
           return '#409eff'
           break;
 
-        case '异常':
+        case 0:
           return '#F56C6C'
           break;
 
@@ -169,15 +153,15 @@ export default {
     stateIcon(state) {
       switch (state) {
 
-        case '空闲':
+        case 2:
           return 'icon-loading-v'
           break;
 
-        case '工作中':
+        case 1:
           return 'icon-kaishi'
           break;
 
-        case '异常':
+        case 0:
           return 'icon-yichang'
           break;
 
@@ -191,10 +175,20 @@ export default {
 
 <style lang="scss" scoped>
 .proAdmin {
+  .test {
+    // max-height: 200px;
+    height: 200px;
+    position: relative;
+    p {
+      line-height: 30px;
+    }
+    // overflow-y: scroll !important;
+    // autoscroll: False;
+  }
   padding: 0 20px;
   box-sizing: border-box;
   width: 100%;
-  min-height: 820px;
+  // min-height: 820px;
   border-radius: 4px;
   box-sizing: border-box;
   .icon-kaishi {
@@ -220,6 +214,7 @@ export default {
       box-sizing: border-box;
       // padding-top: 150px;
       .proLeft {
+        // box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.1);
         box-sizing: border-box;
         padding-right: 50px;
         img {
@@ -227,10 +222,11 @@ export default {
           height: 472px;
         }
       }
+
       .proRight {
-        // max-height: 400px;
-        max-height: 352px;
-        overflow: scroll;
+        height: 700px;
+        margin-bottom: 30px;
+        position: relative;
         border: 1px solid #f2f2f2;
         margin-right: 100px;
         flex: 1;
@@ -246,7 +242,7 @@ export default {
         .activeUnitItem {
           height: auto;
           transition: all 0.5s;
-          overflow: scroll !important;
+          // overflow: scroll !important;
         }
         .unitList {
           border-bottom: 1px solid #dcdfe6;
@@ -258,10 +254,12 @@ export default {
             right: 0px;
             font-size: 30px;
             top: -10px;
+            transform: rotateZ(-90deg);
             box-sizing: border-box;
             padding: 20px;
           }
           .iconActive {
+            transform: rotateZ(0deg);
             color: #007fcb;
           }
           i:hover {

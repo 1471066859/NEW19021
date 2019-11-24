@@ -6,7 +6,7 @@
         <span>订单编号:</span>
         <span>{{OrderAdminTable.orderId}}</span>
       </p>
-      <i class="el-icon-more" @click="toOrderDetalFn(OrderAdminTable.orderId)"></i>
+      <i class="el-icon-more" @click="toOrderDetalFn(OrderAdminTable)"></i>
     </div>
     <!-- 内容容器 -->
     <div class="item_body">
@@ -49,11 +49,18 @@ export default {
     }
   },
   methods: {
-    toOrderDetalFn(id) {
+    toOrderDetalFn() {
+      const info = this.OrderAdminTable;
+      console.log(info);
+      sessionStorage.setItem('orderId', info.orderId);
+      sessionStorage.setItem('time', info.startTime);
+      sessionStorage.setItem('userName', info.user.userName);
+      sessionStorage.setItem('orderState', info.orderStateName);
+      sessionStorage.setItem('proId', info.proId);
       this.$router.push({
         path: '/works/OrderDetal',
         query: {
-          id
+          id: info.id,
         }
       })
     }

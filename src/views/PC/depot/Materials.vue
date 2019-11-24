@@ -156,7 +156,7 @@
               </el-select>
             </li>
             <li class="selTimeWrap">
-              <span>出库时间:</span>
+              <span>入库时间:</span>
               <el-date-picker
                 v-model="enterSel.time"
                 type="datetimerange"
@@ -349,6 +349,8 @@ export default {
       const { activeName } = this;
       if (activeName == "leave") {
         // 出库查询
+        this.leaveTable.page = 1;
+        // this.leaveTable.size = 10;
         const page = this.leaveTable.page;
         const size = this.leaveTable.size;
         const sel = this.leaveSel;
@@ -356,6 +358,8 @@ export default {
       }
       if (activeName == "enter") {
         // 入库查询
+        this.enterTable.page = 1;
+        // this.enterTable.size = 10;
         const page = this.enterTable.page;
         const size = this.enterTable.size;
         const sel = this.enterSel;
@@ -390,12 +394,13 @@ export default {
           // let username = getUserName(this.adminList, this.addStuffForm.userid);
           this.addStuffForm.time = getTime();
           // this.addStuffForm.username = username;
+          console.log(this.addStuffForm);
           const data = {
             contentType: 1,
             outInType: 1,
             contentId: this.addStuffForm.stuffid,
             amount: this.addStuffForm.amount,
-            userName: this.addStuffForm.username
+            userName: this.addStuffForm.userid
           }
           console.log(data, '物料信息新增');
           this.axios.post('api/webapi/warehouse/insertWarehouseInfo', qs.stringify(data))
@@ -408,6 +413,11 @@ export default {
                 this.getStuffList();
                 this.addMaterBox = false;
                 this.addMaterBoxLoad = false;
+                // 入库查询
+                const page = this.enterTable.page;
+                const size = this.enterTable.size;
+                const sel = this.enterSel;
+                this.getMaterEnterList(page, size, sel);
               }
             })
         } else {
@@ -481,10 +491,10 @@ export default {
       parms.outInType = 1;
       parms.pageNum = page;
       parms.pageSize = size;
-      console.log(data,'入库信息');
+      console.log(data, '入库信息');
       this.axios.post('api/webapi/warehouse/getOutinWarehouseInfo', qs.stringify(parms))
         .then(res => {
-          console.log(res,'入库数据表格');
+          console.log(res, '入库数据表格');
           const { data } = res.data
           this.enterTable.count = res.data.count;
           this.stuffTabList = data;
@@ -530,7 +540,8 @@ export default {
       this.getMaterLeaveList(page, size, sel);
     },
     leaveHandleCurrentChange(val) {
-      this.userPage = val;
+      // this.userPage = val;
+      this.leaveTable.page = val;
       const page = this.leaveTable.page;
       const size = this.leaveTable.page;
       const sel = this.leaveSel;
@@ -540,7 +551,7 @@ export default {
 
     // 入库分页器相关
     enterHandleSizeChange(val) {
-      this.roleUserSize = val;
+      this.enterTable.size = val;
       console.log(`每页 ${val} 条`);
       const page = this.enterTable.page;
       const size = this.enterTable.size;
@@ -548,7 +559,7 @@ export default {
       this.getMaterEnterList(page, size, sel);
     },
     enterHandleCurrentChange(val) {
-      this.roleUserPage = val;
+      this.enterTable.page = val;
       console.log(`当前页: ${val}`);
       const page = this.enterTable.page;
       const size = this.enterTable.size;
@@ -635,6 +646,7 @@ export default {
     }
     li {
       margin-right: 20px;
+      // box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.1);
       span {
         display: inline-block;
         font-size: 14px;
@@ -678,6 +690,7 @@ export default {
       box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.1);
     }
     .item {
+      box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.1);
       transition: all 0.3s;
       display: flex;
       justify-content: space-between;

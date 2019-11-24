@@ -9,7 +9,7 @@ export default new Vuex.Store({
     // 用户是否登录  ** 废弃**
     is_login: false,
     // 产线状态
-    mobHdMsg: '产线1',
+    mobHdMsg: 'WELCOME',
     // 移动端底部tab状态
     tabState: "/page/AllOrder",
   },

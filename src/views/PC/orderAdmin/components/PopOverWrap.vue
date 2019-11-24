@@ -31,6 +31,10 @@
         <span>{{item.orderStuffUnit.unitName}}</span>
       </li>
     </ul>
+    <h3>异常原因</h3>
+    <ul class="orderDes">
+      <li></li>
+    </ul>
   </div>
 </template>
 
@@ -119,6 +123,7 @@ export default {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    min-height: 50px;
     justify-content: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 

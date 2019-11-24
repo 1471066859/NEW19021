@@ -37,6 +37,9 @@
         <i v-if="loadText == '数据加载中...'" class="el-icon-loading"></i>
         {{loadText}}
       </p>
+      <!-- <p v-else class="loadText">
+        暂无更多数据
+      </p> -->
     </div>
   </div>
 </template>
@@ -62,18 +65,19 @@ export default {
         timeOption: []
       },
       OrderAdminTableList: [
-        {
-          orderId: 'D2043',
-          orderUser: '马麒麟',
-          orderStatus: '未生产',
-          orderTime: "2018-12-30 20:18:30",
-          proId: "001"
-        }
+
       ],
       getNum: 1,
       page: 1,
       size: 6,
       isSel: false
+    }
+  },
+  watch: {
+    OrderAdminTableList(val) {
+      // if (val.length < 6) {
+      //   this.loadText = '暂无更多数据'
+      // }
     }
   },
   created() {
@@ -126,47 +130,51 @@ export default {
                 break;
             }
           });
-          console.log(this.isSel,123131312);
-          if (this.isSel) {
-            console.log(data, 1111);
-            console.log(88888888);
-            this.OrderAdminTableList = data;
-            this.isSel = false
-          } else {
-            console.log(12312312312);
-            data.forEach(item => {
 
-              this.OrderAdminTableList.push(item);
-            })
-          }
+          data.forEach(item => {
+            this.OrderAdminTableList.push(item)
+          })
           this.loading = false;
+          // if (data.length < 6) {
+          //   this.loading = false;
+          //   this.loadText = "暂无更多数据";
+          // }
+
         })
     },
     // 显示弹窗
     showSearchLoadFn() {
       this.showSearchLoad = !this.showSearchLoad;
-      if (this.showSearchLoad == false) {
-        this.closeSearchLoad();
-      }
+      // if (this.showSearchLoad == false) {
+      //   // this.closeSearchLoad();
+      // }
     },
     // 加载更多
     loadMore() {
-      ++this.size;
-      this.getOrderList(this.page, this.size, this.selData)
+      if (this.loadText == "数据加载中...") {
+        ++this.page;
+        this.getOrderList(this.page, this.size, this.selData)
+      } else {
+        return;
+      }
     },
     // 关闭弹窗清空数据
     closeSearchLoad() {
       this.showSearchLoad = false;
-      this.$refs.OrderAdminSerBoxRef.clearSearchData();
+      // this.$refs.OrderAdminSerBoxRef.clearSearchData();
     },
     // 获取筛选数据
     getSelData(data) {
-      this.showSearchLoad = false;
-      this.$refs.OrderAdminSerBoxRef.clearSearchData();
       this.selData = data;
       console.log(this.selData);
       // 初始化瀑布流
       this.isSel = true;
+      this.page = 1;
+      this.size = 6;
+      this.showSearchLoad = false;
+      this.OrderAdminTableList = [];
+      this.loading = true;
+      this.loadText = "数据加载中...";
       this.getOrderList(this.page, this.size, this.selData);
     }
   }
