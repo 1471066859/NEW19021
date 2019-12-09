@@ -123,7 +123,7 @@ export default {
         time: "",
         userName: ""
       },
-      count: 100,
+      count: null,
       page: 1,
       size: 10,
       userList: [],
@@ -169,7 +169,7 @@ export default {
         endTime: sels.time[1]
       });
 
-      this.axios.post('api/webapi/order/getAllOrdersByTypeId', data)
+      this.axios.post('/api/webapi/order/getAllOrdersByTypeId', data)
         .then(res => {
           console.log(res);
           const { code, count, data, msg } = res.data;

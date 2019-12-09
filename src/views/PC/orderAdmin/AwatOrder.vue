@@ -138,7 +138,7 @@ export default {
         time: "",
         userName: ""
       },
-      count: 100,
+      count: null,
       page: 1,
       size: 10,
       userList: [],
@@ -189,7 +189,7 @@ export default {
         endTime: sels.time[1]
       });
 
-      this.axios.post('api/webapi/order/getAllOrdersByTypeId', data)
+      this.axios.post('/api/webapi/order/getAllOrdersByTypeId', data)
         .then(res => {
           // console.log(res);
           const { code, count, data, msg } = res.data;
@@ -222,7 +222,7 @@ export default {
         const data = this.qs.stringify({
           id,
         });
-        this.axios.post('api/webapi/order/deleteOrder', data)
+        this.axios.post('/api/webapi/order/deleteOrder', data)
           .then(res => {
             console.log(res);
             const { code, data, msg } = res.data;
@@ -265,7 +265,7 @@ export default {
         const data = this.qs.stringify({
           id,
         })
-        this.axios.post('api/webapi/order/updateOrderState', data)
+        this.axios.post('/api/webapi/order/updateOrderState', data)
           .then(res => {
             console.log(res, '立即开始生产订单！！！！');
             const { code, msg } = res.data;
@@ -297,47 +297,10 @@ export default {
             }
           })
           .catch(err => console.log(err));
-        // setTimeout(() => {
-        //   const key = false;
-        //   if (key) {
-
-        //   } else {
-        //     this.loading = false;
-        //     // 立即生产部成功
-        //     this.$confirm(`订单<span class="confirmOrderId">${id}</span>操作失败，操作失败描述，是否将当前订单立即加入待生产队列最前`, '提示', {
-        //       dangerouslyUseHTMLString: true,
-        //       confirmButtonText: '确定',
-        //       cancelButtonText: '取消',
-        //       type: 'warning'
-        //     })
-        //       .then(() => {
-        //         this.$message({
-        //           type: 'success',
-        //           message: `${id} 已将该订单添加至待生产队列最前`
-        //         });
-        //       })
-        //       .catch(() => {
-        //         this.$message({
-        //           type: 'info',
-        //           message: '已取消申请'
-        //         });
-        //       });
-        //     // 老版本！！！！！！
-        //     // this.$message({
-        //     //   showClose: true,
-        //     //   duration: 0,
-        //     //   type: 'error',
-        //     //   message: `${id} 操作失败，失败原因描述`
-        //     // });
-        //   }
-        // }, 1500);
-
-
-
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消申请'
+        this.$notify({
+          type: 'success',
+          title: '已取消操作',
         });
       });
     },
@@ -359,6 +322,9 @@ export default {
 
 <style lang="scss" scope>
 @import "./components/common.scss";
+.topMargin {
+  top: 80px !important;
+}
 .confirmOrderId {
   color: #f56c6c;
   display: inline-block;

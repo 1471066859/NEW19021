@@ -2,6 +2,7 @@
   <div class="add_order">
     <!-- <div class="blak" @click="isShow  = false" v-show="isShow"></div> -->
     <div class="blak" @click="closeSelOrder" v-show="show_box"></div>
+    <div class="blak" v-show="loading"></div>
     <!-- 下单 -->
     <div class="post_order">
       <div class="title">创建订单</div>
@@ -81,16 +82,19 @@
 
 <script>
 import { MessageBox } from 'mint-ui';
+import { getSession } from '@/Tools/intScaleNum'
+
 import qs from 'qs';
 export default {
   name: 'add_order',
   watch: {
     value(val) {
-      if (val == this.options[0]) {
-        this.packUuid = this.dataPackList[0].packUuid;
+      if (val == '大料盒') {
+        this.packUuid = 1;
+        console.log(123);
       }
-      if (val == this.options[1]) {
-        this.packUuid = this.dataPackList[1].packUuid;
+      if (val == '小料盒') {
+        this.packUuid = 2;
       }
       this.count_num = 0;
     },
@@ -102,9 +106,10 @@ export default {
     return {
       // 商品规格
       dataPackList: [],
+      loading: false,
       // 商品包装类型
       options: [
-
+        '大料盒', '小料盒'
       ],
       // isShow: false,
       // 选择数量
@@ -112,9 +117,9 @@ export default {
       // 商品名
       shop_name: '',
       // 包装大小盒
-      value: '',
+      value: '大料盒',
       // 商品大小盒唯一标识
-      packUuid: '',
+      packUuid: 1,
       // 商品名唯一标识
       stuffUuid: '',
       show_box: false,
@@ -124,54 +129,39 @@ export default {
       ,
       // 商品信息
       shop_list: [
-        
+        // {
+        //   stuffName: '物料一',
+        //   id: 1
+        // },
+        // {
+        //   stuffName: '物料二',
+        //   id: 2
+
+        // },
+        // {
+        //   stuffName: '物料三',
+        //   id: 3
+        // },
+        // {
+        //   stuffName: '物料四',
+        //   id: 4
+        // },
       ],
-      // slots: [
-      //   {
-      //     flex: 1,
-      //     values: ['A类', 'B类'],
-      //     className: 'slot1',
-      //     textAlign: 'right'
-      //   }, {
-      //     divider: true,
-      //     content: '-',
-      //     className: 'slot2'
-      //   }, {
-      //     flex: 2,
-      //     values: [1, 2],
-      //     className: 'slot3',
-      //     textAlign: 'left'
-      //   }
-      // ],
     }
   },
   created() {
     // 请求商品信息
     this.getShopNameFn();
-    // 请求商品规格信息
-    this.getShopPackFn()
+
   },
   methods: {
-    // 底部下单弹窗监听数据
-    // onValuesChange(picker, values) {
-    //   this.value = values[0];
-    //   this.count_num = values[1];
-    //   // console.log(this.value, this.count_num)
-    //   if (values[0] == 'A类') {
-    //     picker.setSlotValues(1, [1, 2])
-    //   }
-    //   if (values[0] == 'B类') {
-    //     picker.setSlotValues(1, [1, 2, 3, 4])
-
-    //   }
-    // },
     // 请求商品信息
     getShopNameFn() {
-      this.axios.get('api/webapi/orders/getAllStuff')
+      this.axios.get('/api/webapi/warehouse/getAllStuffAmount')
         .then(res => {
-          // console.log(res);
-          const { status, data } = res;
-          if (status == 200) {
+          console.log(res);
+          const { code, data } = res.data;
+          if (code == 200) {
             this.shop_list = data;
           }
         })
@@ -181,9 +171,15 @@ export default {
     },
     // 请求规格信息
     getShopPackFn(key) {
+      this.dataPackList = [
+        {
+
+        }
+      ]
       if (this.dataPackList.length == 0) {
-        this.axios.get('api/webapi/orders/getAllPack')
+        this.axios.get('/api/webapi/warehouse/getAllPackAmount ')
           .then(res => {
+            console.log(res, '规格大小信息');
             const { status, data } = res;
             let dataItem = data.splice(0, 1);
             data.push(dataItem[0]);
@@ -196,26 +192,12 @@ export default {
                   this.value = this.options[0];
                 });
               }
-              // if (key >= 0 && this.dataPackList.length > 0) {
-              //   return this.dataPackList[key].packUuid;
-              // };
             }
           })
           .catch(err => {
             console.log(err)
           })
       }
-      // const data = [
-      //   {
-      //     name: '大盒',
-      //     id: 'AAAAAAAA'
-      //   },
-      //   {
-      //     name: '小盒',
-      //     id: 'BBBBB'
-      //   },
-      // ];
-
     },
     // 删除订单
     removeOrderFn(i) {
@@ -231,18 +213,49 @@ export default {
       let { cart_list } = this;
       cart_list.length > 0 ? ISOK = true : ISOK = false;
       if (ISOK) {
-        console.log(cart_list)
-        this.PostDataFn(cart_list)
+        this.loading = true;
+        const arr = [];
+        cart_list.forEach(item => {
+          const obj = {
+            packId: item.pack.packUuid,
+            stuffId: item.stuffUuid,
+            count: item.packNum
+          };
+          arr.push(obj)
+        });
+        arr.forEach(item => {
+          if (item.count == 2) {
+            item.count = 1;
+            arr.push(item);
+          };
+          if (item.count == 3) {
+            item.count = 1;
+            arr.push(item);
+            arr.push(item);
+          }
+          if (item.count == 4) {
+            item.count = 1;
+            arr.push(item);
+            arr.push(item);
+            arr.push(item);
+          }
+
+        })
+        this.PostDataFn(arr);
       }
     },
     PostDataFn(cart_list) {
-      let data = JSON.stringify(cart_list);
-      let stuffsData = qs.stringify({
-        'stuffs': data
+      console.log(cart_list, 123);
+      const data = this.qs.stringify({
+        stuffPackVos: JSON.stringify(cart_list),
+        userId: getSession("userId")
       });
-      console.log(data, 'data!!!');
-      this.axios.post('api/webapi/orders/addOrder', stuffsData)
+      // let data = "stuffPackVos=" + JSON.stringify(cart_list) + "&" + "userId=" + getSession("userId");
+      console.log(data);
+      this.axios.post('/api/webapi/order/addOrders', data)
         .then(res => {
+          this.loading = false;
+          console.log(res);
           const { success, msg } = res.data;
           if (success) {
             MessageBox('下单成功', '您可以在我的订单中查询订单状态', false);
@@ -263,18 +276,19 @@ export default {
         MessageBox('错误', '请先选择商品规格', false)
         return
       }
-      if (this.value == this.options[0] && this.count_num < 1) {
+      if (this.value == this.options[0] && this.count_num < 2) {
         this.count_num++;
+        console.log(this.count_num);
         return
-      } else if (this.value == this.options[0] && this.count_num == 1) {
+      } else if (this.value == this.options[0] && this.count_num == 2) {
         MessageBox('错误', '超出单个商品规格', false)
         return;
       }
 
-      if (this.value == this.options[1] && this.count_num < 2) {
+      if (this.value == this.options[1] && this.count_num < 4) {
         this.count_num++;
         return
-      } else if (this.value == this.options[1] && this.count_num == 2) {
+      } else if (this.value == this.options[1] && this.count_num == 4) {
         MessageBox('错误', '超出单个商品规格', false);
         return
       }
@@ -304,8 +318,9 @@ export default {
     },
     // 显示弹窗
     showSelBoxFn(item) {
+      console.log(item);
       this.shop_name = item.stuffName;
-      this.stuffUuid = item.stuffUuid
+      this.stuffUuid = item.id
       // console.log(this.stuffUuid)
       // console.log(this.shop_name, this.stuffUuid, 'adadsa');
       // 新版本弹窗 底部touch滑动
@@ -330,7 +345,7 @@ export default {
         }
       });
       // console.log(num)
-      if (num > 2) {
+      if (num > 4) {
         return false
       } else {
         return true;
@@ -361,8 +376,11 @@ export default {
           },
           packNum: count_num
         });
+        // this.cart_list.push({
+        //   packId: packUuid,
+        //   stuffId: stuffUuid
+        // });
         this.closeSelOrder();
-        // console.log('添加成功');
       } else {
         MessageBox('错误', '下单总数不符合下单规则', false);
         // this.closeSelOrder();
@@ -405,6 +423,7 @@ $designWidth: 375;
   position: fixed;
   left: 0;
   top: 0;
+  z-index: 999;
   width: 100vw;
   height: 100vh;
 }
@@ -573,7 +592,7 @@ $designWidth: 375;
         }
       }
       .add_order_box {
-        z-index: 999;
+        z-index: 9999;
         position: absolute;
         position: fixed;
         width: 100%;
@@ -581,7 +600,6 @@ $designWidth: 375;
         left: 0;
         bottom: 0;
         padding: px(20) px(10);
-        z-index: 99;
         background: #fff;
         // padding: px(20) 0;
         box-sizing: border-box;
@@ -632,7 +650,11 @@ $designWidth: 375;
             margin-top: px(20);
           }
           .mint-radiolist {
-            padding: 0 px(40);
+            // padding: 0 px(20);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             margin-bottom: px(10);
           }
           .count {

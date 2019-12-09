@@ -1,73 +1,95 @@
 <template>
-  <el-collapse-transition>
-    <div class="searchLoad" v-show="showSearchLoad">
-      <div class="row1">
-        <p>创建人</p>
-        <!-- <el-cascader v-model="peopleVal" :options="peopleOptions" @change="handleChange"></el-cascader> -->
-        <el-autocomplete
-          class="inline-input"
-          v-model="peopleVal"
-          :fetch-suggestions="querySearch"
-          placeholder="请输入下单人姓名"
-          :trigger-on-focus="false"
-          suffix-icon="el-icon-edit-outline"
-        ></el-autocomplete>
-        <p>订单编号</p>
-        <el-input placeholder="请输入订单编号" suffix-icon="el-icon-edit-outline" v-model="productionVal"></el-input>
-      </div>
-
-      <!-- <div class="row1">
-        <el-input placeholder="请输入订单编号" suffix-icon="el-icon-edit-outline" v-model="productionVal"></el-input>
-      </div>-->
-
-      <div class="searchList">
-        <div class="searchItem searchRow">
-          <p>选择开始时间:</p>
-          <el-date-picker
-            v-model="timeOption"
-            type="datetimerange"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            :default-time="['12:00:00']"
-          ></el-date-picker>
-        </div>
-        <!-- <div class="searchItem"> -->
-        <!-- <p>产线编号:</p>
-          <el-select v-model="productionVal" placeholder="选择产线">
-            <el-option
-              v-for="item in productionOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-        </el-select>-->
-        <!-- </div> -->
-        <div class="searchItem">
-          <p>订单状态:</p>
-          <el-select v-model="orderStat" placeholder="选择订单状态">
-            <el-option
-              v-for="item in orderStateList"
-              :key="item.stateId"
-              :label="item.stateName"
-              :value="item.stateId"
-            ></el-option>
-          </el-select>
-        </div>
-      </div>
-
-      <!-- 查询确定 -->
-      <div class="btnWrap">
-
-      <div class="searchBtnFn" @click="searchBtnFn">查询</div>
-      <div class="searchBtnFn clear" @click="clearSearchData">清空</div>
-      </div>
+  <div>
+    <div
+      class="balck"
+      @click="startTimeKey = false;endTimeKey = false"
+      v-show="startTimeKey | endTimeKey"
+    ></div>
+    <div class="timeWrap">
+      <van-datetime-picker
+        @confirm="timeConfirm(0)"
+        @cancel="timeCancel(0)"
+        :item-height="88"
+        v-model="startTime"
+        type="datetime"
+        v-show="startTimeKey"
+        :formatter="formatter"
+      />
+      <van-datetime-picker
+        @confirm="timeConfirm(1)"
+        @cancel="timeCancel(1)"
+        :item-height="88"
+        v-model="endTime"
+        type="datetime"
+        v-show="endTimeKey"
+        :formatter="formatter"
+      />
     </div>
-  </el-collapse-transition>
+    <el-collapse-transition>
+      <div class="searchLoad" v-show="showSearchLoad">
+        <div class="row1">
+          <p>创建人</p>
+          <!-- <el-cascader v-model="peopleVal" :options="peopleOptions" @change="handleChange"></el-cascader> -->
+          <el-autocomplete
+            class="inline-input"
+            v-model="peopleVal"
+            :fetch-suggestions="querySearch"
+            placeholder="请输入下单人姓名"
+            :trigger-on-focus="false"
+            suffix-icon="el-icon-edit-outline"
+          ></el-autocomplete>
+          <p>订单编号</p>
+          <el-input
+            placeholder="请输入订单编号"
+            suffix-icon="el-icon-edit-outline"
+            v-model="productionVal"
+          ></el-input>
+          <p>开始时间</p>
+          <div
+            @click="startTimeKey = !startTimeKey"
+            class="timeSelWrap"
+            v-show="startTimeText"
+          >{{startTimeText}}</div>
+          <div
+            @click="startTimeKey = !startTimeKey"
+            class="timeSelWrap"
+            v-show="!startTimeText"
+          >请选择开始时间</div>
+
+          <p>结束时间</p>
+          <div
+            @click="endTimeKey = !endTimeKey"
+            class="timeSelWrap"
+            v-show="endTimeText"
+          >{{endTimeText}}</div>
+          <div @click="endTimeKey = !endTimeKey" class="timeSelWrap" v-show="!endTimeText">请选择开始时间</div>
+        </div>
+
+        <div class="searchList">
+          <div class="searchItem">
+            <p>订单状态:</p>
+            <mt-radio v-model="orderStat" :options="orderStateList"></mt-radio>
+          </div>
+        </div>
+
+        <!-- 查询确定 -->
+        <div class="btnWrap">
+          <div class="searchBtnFn" @click="searchBtnFn">查询</div>
+          <div class="searchBtnFn clear" @click="clearSearchData">清空</div>
+        </div>
+      </div>
+    </el-collapse-transition>
+  </div>
 </template>
 
 <script>
+import Vue from 'vue'
+import {
+  DatetimePicker
+} from 'vant';
+
+Vue.use(DatetimePicker);
+import 'vant/lib/index.css';
 import '@/hotcss/hotcss'
 import { querySearch, createFilter, getUserList } from '@/views/PC/orderAdmin/components/common'
 export default {
@@ -79,6 +101,12 @@ export default {
   },
   data() {
     return {
+      startTimeKey: false,
+      startTime: null,
+      startTimeText: null,
+      endTimeKey: false,
+      endTime: null,
+      endTimeText: null,
       // 创建人信息
       peopleVal: "",
       // 用户集合
@@ -181,24 +209,107 @@ export default {
     this.getUserList();
     this.getOrderStateList();
   },
+  computed: {
+
+  },
   methods: {
+    startTimeTextFn(key) {
+      if (key == 0) {
+        let time = this.startTime;
+        console.log(this.startTime);
+        let year = time.getFullYear();
+        let month = time.getMonth() + 1;
+        let day = time.getDate();
+        let hours = time.getHours();
+        let minutes = time.getMinutes();
+        if (month >= 1 && month <= 9) {
+          month = "0" + month;
+        }
+        if (day >= 0 && day <= 9) {
+          day = "0" + day;
+        }
+        if (hours >= 0 && hours <= 9) {
+          hours = "0" + hours;
+        }
+        if (minutes >= 0 && minutes <= 9) {
+          minutes = "0" + minutes;
+        }
+        this.startTimeText = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + '00'
+      } else if (key == 1) {
+        let time = this.endTime;
+        console.log(this.endTime);
+        let year = time.getFullYear();
+        let month = time.getMonth() + 1;
+        let day = time.getDate();
+        let hours = time.getHours();
+        let minutes = time.getMinutes();
+        if (month >= 1 && month <= 9) {
+          month = "0" + month;
+        }
+        if (day >= 0 && day <= 9) {
+          day = "0" + day;
+        }
+        if (hours >= 0 && hours <= 9) {
+          hours = "0" + hours;
+        }
+        if (minutes >= 0 && minutes <= 9) {
+          minutes = "0" + minutes;
+        }
+
+        this.endTimeText = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + '00'
+      }
+    },
+    formatter(type, value) {
+      if (type === 'year') {
+        return `${value}年`;
+      } else if (type === 'month') {
+        return `${value}月`
+      } else if (type === 'day') {
+        return `${value}日`
+      } else if (type === 'hour') {
+        return `${value}时`
+      } else if (type === 'minute') {
+        return `${value}分`
+      }
+      return value;
+    },
+    timeConfirm(key) {
+      this.startTimeKey = false;
+      this.endTimeKey = false;
+      this.startTimeTextFn(key);
+    },
+    timeCancel(key) {
+      this.startTimeKey = false;
+      this.endTimeKey = false;
+    },
     getOrderStateList() {
-      this.axios.get('http://localhost:3005/orderStateList')
-        .then(res => {
-          const { data } = res;
-          this.orderStateList = data;
-        })
-         this.axios.get('http://localhost:3005/orderStateList')
-        .then(res => {
-          const { data } = res;
-          this.orderStateList = data;
-        })
+      this.orderStateList = [{
+        "stateId": 1,
+        "label": "待生产订单",
+        value: "1",
+      },
+      {
+        "stateId": 2,
+        "label": "正在生产订单",
+        value: "2",
+      },
+      {
+        "stateId": 3,
+        value: "3",
+        "label": "已完成订单"
+      },
+      {
+        value: "4",
+        "stateId": 4,
+        "label": "异常订单"
+      }];
     },
     querySearch,
     createFilter,
     getUserList,
     clearSearchData() {
-      this.timeOption = ''
+      this.startTimeText = ''
+      this.endTimeText = ''
       this.peopleVal = ''
       this.orderStat = ''
       this.productionVal = ''
@@ -206,7 +317,7 @@ export default {
     searchBtnFn() {
       const { timeOption, peopleVal, orderStat, productionVal } = this;
       const searchObj = {
-        timeOption,
+        timeOption: [this.startTimeText, this.endTimeText],
         peopleVal,
         orderStat,
         productionVal
@@ -223,10 +334,82 @@ export default {
 <style lang="scss" scope>
 @import "@/hotcss/px2rem";
 $designWidth: 375;
+.balck {
+  background: #000;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  opacity: 0.5;
+  z-index: 999;
+}
+.timeSelWrap {
+  background: #fff;
+  color: #999;
+  font-size: px(12);
+  text-align: center;
+  border-radius: 4px;
+  padding: px(5) 0;
+}
+.timeWrap {
+  position: fixed;
+  width: 100%;
+  // padding: 0 px(20);
+  left: 0;
+  box-sizing: border-box;
+  bottom: px(0);
+  z-index: 999;
+}
+// vat
+.van-picker__columns {
+  height: px(140) !important;
+}
+.van-picker__toolbar {
+  height: px(43);
+  line-height: px(43);
+  button {
+    padding: 0 px(15);
+    font-size: px(13);
+  }
+}
+.van-picker-column {
+  font-size: px(15);
+  ul {
+    // line-height: px(44) !important;
+    li {
+      // height: px(44) !important;
+      padding: 0 px(5);
+    }
+  }
+}
+.van-picker-column__wrapper {
+  // line-height: px(20) !important;
+}
 
 // 覆盖element样式
 .el-autocomplete {
   width: 100%;
+}
+.mint-radio-core::after {
+  width: px(6);
+  height: px(6);
+  top: px(4);
+  left: px(4);
+}
+.mint-cell-wrapper {
+  background: #272727;
+  // background: none;
+  border: none;
+  // padding: px(5) 0;
+  padding-bottom: px(5);
+}
+.mint-radio-core {
+  width: px(15);
+  height: px(15);
+}
+.mint-cell-wrapper {
+  font-size: px(12);
 }
 .el-autocomplete-suggestion li {
   font-size: px(14);
@@ -324,11 +507,11 @@ $designWidth: 375;
 }
 
 .searchLoad {
-  height: px(400);
+  height: px(520);
   background-color: rgba(0, 0, 0, 0.847058);
   .btnWrap {
-    margin-top: px(50);
-    display:flex;
+    margin-top: px(15);
+    display: flex;
     justify-content: space-between;
     padding: 0 px(40);
     .clear {
@@ -343,9 +526,9 @@ $designWidth: 375;
       width: px(80);
       height: px(30);
       line-height: px(30);
-    // margin: 0 auto;
-    // margin-top: px(50);
-    // margin-bottom: px(50);
+      // margin: 0 auto;
+      // margin-top: px(50);
+      // margin-bottom: px(50);
       border-radius: px(4);
     }
   }
@@ -390,7 +573,6 @@ $designWidth: 375;
       font-size: px(12);
       color: #fff;
       font-weight: 700;
-      // width: 50%;
       width: 50%;
       p {
         padding: px(15) 0;

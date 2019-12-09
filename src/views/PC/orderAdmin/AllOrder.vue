@@ -117,6 +117,7 @@
 
 <script>
 import { iconBg, initNavBar } from '@/Tools/intScaleNum'
+// import { iconBg, initNavBar } from '@/Tools/time'
 import { querySearch, createFilter, getUserList, handleCurrentChange, handleSizeChange, postSelFn } from './components/common'
 import qs from "qs"
 import PageTitle from '@/views/PC/components/PageTitle'
@@ -146,8 +147,9 @@ export default {
 
       ],
       orderStateList: [
+
       ],
-      count: 100,
+      count: null,
       page: 1,
       size: 10,
       allOrderList: []
@@ -192,8 +194,7 @@ export default {
         endTime: sels.time[1]
       });
       console.log(data);
-      // this.axios.get('http://localhost:3005/allOrderList?_start=0&_end=10')
-      this.axios.post('api/webapi/order/getAllOrdersByTypeId', data)
+      this.axios.post('/api/webapi/order/getAllOrdersByTypeId', data)
         .then(res => {
           console.log(res);
           const { data, code, count, msg } = res.data;
@@ -228,11 +229,26 @@ export default {
     },
     // 拉取订单状态
     getOrderStateList() {
-      this.axios.get('http://localhost:3005/orderStateList')
-        .then(res => {
-          const { data } = res;
-          this.orderStateList = data;
-        })
+      // this.axios.get('http://localhost:3005/orderStateList')
+      // .then(res => {
+      // const { data } = res;
+      this.orderStateList = [{
+        "stateId": 1,
+        "stateName": "待生产订单"
+      },
+      {
+        "stateId": 2,
+        "stateName": "正在生产订单"
+      },
+      {
+        "stateId": 3,
+        "stateName": "已完成订单"
+      },
+      {
+        "stateId": 4,
+        "stateName": "异常订单"
+      }];
+      // })
     },
     // 拉取下单人
     getUserList,

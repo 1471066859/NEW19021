@@ -19,9 +19,9 @@
       </div>
       <!-- 功能模块区域 -->
       <div class="pageFnWrap">
-        <transition name="el-zoom-in-center">
-          <router-view></router-view>
-        </transition>
+        <!-- <transition name="el-zoom-in-center"> -->
+        <router-view></router-view>
+        <!-- </transition> -->
       </div>
     </div>
   </div>
@@ -53,6 +53,9 @@ export default {
         case '/page/Materials':
           return '仓储管理系统'
           break;
+        case '/page/ProductAdmin':
+          return '仓储管理系统'
+          break;
 
         case '/page/ProAdmin':
           return '产线管理系统'
@@ -82,6 +85,53 @@ export default {
           return '后台管理'
           break;
 
+        case '/page/Chart':
+          return '报表系统'
+          break;
+
+        case '/page/ProReportR':
+          return '生产报表系统'
+          break;
+
+        case '/page/ProReportZ':
+          return '生产报表系统'
+          break;
+
+        case '/page/ProReportY':
+          return '生产报表系统'
+          break;
+
+        case '/page/ProReportJ':
+          return '生产报表系统'
+          break;
+
+        case '/page/ProReportN':
+          return '生产报表系统'
+          break;
+        case '/page/StuffChart':
+          return '原材料报表系统'
+          break;
+        case '/page/StuffReportR':
+          return '原材料报表系统'
+          break;
+        case '/page/StuffReportZ':
+          return '原材料报表系统'
+          break;
+        case '/page/StuffReportY':
+          return '原材料报表系统'
+          break;
+        case '/page/StuffReportJ':
+          return '原材料报表系统'
+          break;
+        case '/page/StuffReportN':
+          return '原材料报表系统'
+          break;
+        case '/page/OrderQuality':
+          return '质量管理系统'
+          break;
+        case '/page/StuffQuality':
+          return '质量管理系统'
+          break;
 
         default:
           break;
@@ -96,6 +146,9 @@ export default {
 
         case '/page/Materials':
           return '物料出入库管理'
+          break;
+        case '/page/ProductAdmin':
+          return '成品出入库管理'
           break;
 
         case '/page/ProAdmin':
@@ -125,6 +178,54 @@ export default {
           return '账号管理'
           break;
 
+        case '/page/Chart':
+          return '生产报表总览'
+
+          break;
+        case '/page/ProReportR':
+          return '日生产报表'
+
+          break;
+        case '/page/ProReportZ':
+          return '周生产报表'
+
+          break;
+        case '/page/ProReportY':
+          return '月生产报表'
+
+          break;
+        case '/page/ProReportJ':
+          return '季生产报表'
+
+          break;
+        case '/page/ProReportN':
+          return '年生产报表'
+
+        case '/page/StuffChart':
+          return '原材料报表总览'
+
+        case '/page/StuffReportR':
+          return '日原材料报表'
+          break;
+        case '/page/StuffReportZ':
+          return '周原材料报表'
+          break;
+        case '/page/StuffReportY':
+          return '月原材料报表'
+          break;
+        case '/page/StuffReportJ':
+          return '季原材料报表'
+          break;
+        case '/page/StuffReportN':
+          return '年原材料报表'
+          break;
+        case '/page/OrderQuality':
+          return '成品质量管理'
+          break;
+        case '/page/StuffQuality':
+          return '原材料质量管理'
+          break;
+
         default:
           break;
       }
@@ -135,8 +236,8 @@ export default {
 
   },
   beforeRouteEnter(to, from, next) {
-    let userInfo = sessionStorage.getItem("userInfo");
-    if (userInfo > 1) {
+    let userInfo = sessionStorage.getItem("userId");
+    if (userInfo) {
       next();
     } else {
       next(vm => {

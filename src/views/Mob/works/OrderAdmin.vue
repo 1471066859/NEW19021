@@ -39,7 +39,7 @@
       </p>
       <!-- <p v-else class="loadText">
         暂无更多数据
-      </p> -->
+      </p>-->
     </div>
   </div>
 </template>
@@ -102,10 +102,13 @@ export default {
         startTime: sel.timeOption[0],
         endTime: sel.timeOption[1]
       });
-      this.axios.post('api/webapi/order/getAllOrdersByTypeId', data)
+      this.axios.post('/api/webapi/order/getAllOrdersByTypeId', data)
         .then(res => {
           console.log(res);
           const { data, code } = res.data;
+          if (data.length < 6) {
+            this.loadText = "暂无更多数据"
+          }
           if (data.length == 0) {
             this.loading = false;
             this.loadText = "暂无更多数据";

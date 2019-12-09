@@ -16,16 +16,16 @@
     <div class="aboutContent">
       <p>我的信息</p>
       <div class="aboutRow">
-        <i>生日</i>
-        <span>1985-11-30</span>
+        <i>权限</i>
+        <span>{{role}}</span>
       </div>
       <div class="aboutRow">
-        <i>身份证</i>
-        <span>65415365987456980</span>
+        <i>用户名</i>
+        <span>{{loginId}}</span>
       </div>
       <div class="aboutRow">
-        <i>手机</i>
-        <span>15636589547</span>
+        <i>创建时间</i>
+        <span>{{time}}</span>
       </div>
       <div class="aboutRow">
         <i>地址</i>
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { getSession } from '@/Tools/intScaleNum'
 import '@/hotcss/hotcss'
 export default {
   name: 'About',
@@ -49,9 +50,23 @@ export default {
     this.$store.dispatch('setMobHdMsg', "WELCOME")
   },
   computed: {
+    loginId() {
+      return getSession('loginId')
+    },
+    time() {
+      return getSession('createTime')
+    },
+    role() {
+      let roleName = "";
+      let role = getSession('role');
+      if (role == 1) roleName = "普通用户";
+      if (role == 0) roleName = "权限用户";
+      return roleName;
+    },
     userId() {
       // let { userId } = sessionStorage.getItem('userInfo');
-      return 'asdad'
+      return getSession('userName')
+
     },
   }
 }

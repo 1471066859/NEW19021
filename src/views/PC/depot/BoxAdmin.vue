@@ -62,7 +62,7 @@ export default {
   methods: {
     // 拉取料盒信息列表
     getPackList() {
-      this.axios.get('api/webapi/warehouse/getAllPackAmount?contentid=1')
+      this.axios.get('/api/webapi/warehouse/getAllPackAmount?contentid=1')
         .then(res => {
           const { data } = res.data;
           this.packList = data;
@@ -73,14 +73,14 @@ export default {
 
     },
     getLogin() {
-      this.axios.post("api/webapi/login?userId=1&userPwd=1")
+      this.axios.post("/api/webapi/login?userId=1&userPwd=1")
         .then(res => {
           console.log(res)
         });
     },
     // 获取管理员信息
     getAdminList() {
-      this.axios.get("api/webapi/getUserNameByAccess?useruuid=7be9a8b1a6784ea590af644fa7fb930d")
+      this.axios.get("/api/webapi/getUserNameByAccess?useruuid=7be9a8b1a6784ea590af644fa7fb930d")
         .then(res => {
           const { data } = res.data;
           this.adminList = data;

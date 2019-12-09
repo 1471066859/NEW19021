@@ -14,7 +14,7 @@ export function createFilter(queryString) {
 
 // 拉取所有订单人姓名
 export function getUserList() {
-  this.axios.get('api/webapi/user/getAllUserName')
+  this.axios.get('/api/webapi/user/getAllUserName')
     .then(res => {
       const {
         success,
@@ -30,6 +30,7 @@ export function getUserList() {
             value: item
           });
         });
+        console.log(this.userList);
       } else {
         alert('拉取下单人信息失败')
       }

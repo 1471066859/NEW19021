@@ -71,6 +71,7 @@ export default {
   data() {
     return {
       // 登录数据
+      userId: null,
       user_number: '',
       user_pwd: '',
       // 修改密码
@@ -84,8 +85,8 @@ export default {
 
   },
   beforeRouteEnter(to, from, next) {
-    sessionStorage.removeItem('userInfo');
-    sessionStorage.removeItem('userUuid');
+    sessionStorage.clear();
+    // sessionStorage.removeItem('userUuid');
     next();
   },
   methods: {
@@ -94,12 +95,12 @@ export default {
 
       // 上线删除！！！！！！！！！
       if (this.user_number == 1 && this.user_pwd == 1) {
-        setSession('userInfo', 1);
+        setSession('userId', 1);
         this.$router.push('/client');
         return;
       };
       if (this.user_number == 2 && this.user_pwd == 2) {
-        setSession('userInfo', 2);
+        setSession('userId', 2);
         this.$router.push('/works');
         return;
       };
@@ -115,26 +116,36 @@ export default {
         return;
       };
       const data = qs.stringify({
-        userId: user_number,
+        loginId: user_number,
         userPwd: user_pwd
       })
-      this.axios.post('api/webapi/login', data)
+      this.axios.post('/api/webapi/user/login', data)
         .then(res => {
+          console.log(res);
           const { success, msg } = res.data;
+          const { createTime, id, loginId, role, userName } = res.data.data;
           if (success) {
-            sessionStorage.setItem('userInfo', res.data.data)
-            const { userUuid } = res.data.data
-            sessionStorage.setItem('userUuid', userUuid)
+            setSession('userId', id);
+            setSession('loginId', loginId);
+            setSession('role', role);
+            setSession('userName', userName);
+            setSession('createTime', createTime);
             this.initFromFn();
-            this.$router.push('/m/home');
+            if (role == 1) {
+              console.log(role);
+              this.$router.push('/client');
+            } else if (role == 0) {
+              console.log(role);
+              this.$router.push('/works');
+            }
           } else {
-            // 登录失败
-            if (msg == '账号密码错误') MessageBox('登录失败', '学号或密码错误', false);
-            if (msg == '学号格式校验错误') MessageBox('登录失败', '请填写正确的登录信息', false);
+
           }
         })
         .catch(err => {
-          console.log(err, '登录页错误信息');
+          MessageBox('登录失败', '学号或密码错误', false);
+          this.initFromFn();
+          // console.log(err, '登录页错误信息');
         })
     },
     // 初始化表单
@@ -169,32 +180,20 @@ export default {
         };
         const data = qs.stringify({
           userName: user_name,
-          userId: user_number
+          loginId: user_number
         });
-        this.axios.post('/api/webapi/ackUser', data)
+        this.axios.post('/api/webapi/user/ackUser', data)
           .then(res => {
-            const { success, msg } = res.data;
-            if (msg == '用户名格式校验错误') {
-              MessageBox('验证失败', '用户名格式不正确', false);
-              return;
-            };
-            if (msg == '学号格式校验错误') {
-              MessageBox('验证失败', '学号格式不正确', false);
-              return;
-            };
-            if (msg == '学号姓名错误') {
-              MessageBox('验证失败', '学号或姓名错误', false);
-              return;
-            };
+            console.log(res);
+            const { success, msg, data } = res.data;
             if (success) {
-              const userUuid = res.data;
-              sessionStorage.setItem('userUuid', userUuid)
+              this.userId = data;
               MessageBox('验证成功', '请设置新密码', false);
               this.initFromFn();
               this.popupVisible = false;
               this.setPwdBox = true;
             } else {
-              MessageBox('验证失败', '请检查网路状况', false);
+              MessageBox('验证失败', '学号姓名不匹配', false);
             }
           })
           .catch(err => {
@@ -223,11 +222,12 @@ export default {
         } else {
           const data = qs.stringify({
             userPwd: user_pwd,
-            userUuid: sessionStorage.getItem('userUuid')
+            id: this.userId
           })
-          this.axios.post('api/webapi/updatePwd', data)
+          this.axios.post('/api/webapi/user/updatePwd', data)
             .then(res => {
               const { success, msg } = res.data;
+              console.log(res);
               if (success) {
                 MessageBox('修改成功', '请您牢记新密码', false);
                 this.initFromFn();

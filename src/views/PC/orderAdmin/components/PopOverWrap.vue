@@ -25,10 +25,11 @@
     <ul class="orderDes" v-if="orderInfo.orderStuffPackRes">
       <li v-for="(item, index) in orderInfo.orderStuffPackRes" :key="index">
         <span>{{item.stuffName}}</span>
-        <span>{{item.amount}}</span>
+        <span>X1</span>
         <span>{{item.packName}}</span>
         <span>{{item.packRfid}}</span>
-        <span>{{item.orderStuffUnit.unitName}}</span>
+        <span v-if="item.orderStuffUnit">{{item.orderStuffUnit.unitName}}</span>
+        <span v-else>上料区</span>
       </li>
     </ul>
     <h3>异常原因</h3>
@@ -53,6 +54,9 @@ export default {
   mounted() {
 
   },
+  destroyed() {
+    this.clearTimer();
+  },
   methods: {
     clearTimer() {
       clearInterval(this.timer);
@@ -69,7 +73,7 @@ export default {
       const data = this.qs.stringify({
         id,
       });
-      this.axios.post('api/webapi/order/getOrdersById', data)
+      this.axios.post('/api/webapi/order/getOrdersById', data)
         .then(res => {
           console.log(res);
           const { code, data, msg } = res.data;
@@ -80,13 +84,15 @@ export default {
             if (item.stuffId == 4) item.stuffName = "物料4"
             if (item.packId == 1) item.packName = "大料盒"
             if (item.packId == 2) item.packName = "小料盒"
-            if (item.orderStuffUnit.unitId == 1) item.orderStuffUnit.unitName = "上料区"
-            if (item.orderStuffUnit.unitId == 2) item.orderStuffUnit.unitName = "投料区"
-            if (item.orderStuffUnit.unitId == 3) item.orderStuffUnit.unitName = "视觉检测"
-            if (item.orderStuffUnit.unitId == 4) item.orderStuffUnit.unitName = "异常区"
-            if (item.orderStuffUnit.unitId == 5) item.orderStuffUnit.unitName = "堆垛区"
-            if (item.orderStuffUnit.unitId == 6) item.orderStuffUnit.unitName = "堆垛区"
-            if (item.orderStuffUnit.unitId == 7) item.orderStuffUnit.unitName = "堆垛区"
+            if (item.orderStuffUnit) {
+              if (item.orderStuffUnit.unitId == 1) item.orderStuffUnit.unitName = "上料区"
+              if (item.orderStuffUnit.unitId == 2) item.orderStuffUnit.unitName = "投料区"
+              if (item.orderStuffUnit.unitId == 3) item.orderStuffUnit.unitName = "视觉检测"
+              if (item.orderStuffUnit.unitId == 4) item.orderStuffUnit.unitName = "异常区"
+              if (item.orderStuffUnit.unitId == 5) item.orderStuffUnit.unitName = "堆垛区"
+              if (item.orderStuffUnit.unitId == 6) item.orderStuffUnit.unitName = "堆垛区"
+              if (item.orderStuffUnit.unitId == 7) item.orderStuffUnit.unitName = "堆垛区"
+            }
           });
           this.orderInfo = data;
         })

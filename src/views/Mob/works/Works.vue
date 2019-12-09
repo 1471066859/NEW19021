@@ -47,8 +47,8 @@ export default {
 
   },
   beforeRouteEnter(to, from, next) {
-    let userInfo = sessionStorage.getItem("userInfo");
-    if (userInfo > 1) {
+    let role = sessionStorage.getItem("role");
+    if (role == 0) {
       next();
     } else {
       next(vm => {

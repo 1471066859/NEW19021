@@ -11,7 +11,11 @@
       </div>
       <!-- 物料列表 -->
       <div class="stuffList">
-        <div class="item" v-if="orderStuffInfo" v-for="(item, index) in orderStuffInfo" :key="index">
+        <div
+          class="item"
+          v-for="(item, index) in orderStuffInfo"
+          :key="index"
+        >
           <div class="left">
             <span>{{item.stuffName}}</span>
             -
@@ -44,9 +48,10 @@
       <i></i>
       <h2>订单进度</h2>
       <!-- <div class="item" v-if="orderStuffInfo" v-for="(item, i) in orderStuffInfo.orderStuffPackRes" :key="i"> -->
-      <div class="item" v-if="orderStuffInfo" v-for="(item, i) in orderStuffInfo" :key="i">
+      <div class="item" v-for="(item, i) in orderStuffInfo" :key="i">
         <div class="itemLeft">{{item.stuffName}}</div>
-        <div class="itemRight" v-if="item.orderStuffUnit" >{{item.orderStuffUnit.unitName}}</div>
+        <div class="itemRight" v-if="item.orderStuffUnit">{{item.orderStuffUnit.unitName}}</div>
+        <div class="itemRight" v-else>上料区</div>
       </div>
     </div>
   </div>
@@ -63,20 +68,24 @@ export default {
         userName: null,
         orderState: null
       },
-      timer:null,
+      timer: null,
       orderStuffInfo: null
     }
   },
   created() {
     // console.log(this.$route.query);
+    let arr = null
+    if (arr) {
+      console.log(123);
+    }
     this.getOrderStuffInfo();
     this.getOrderInfo();
     this.timer = setInterval(() => {
-    this.getOrderStuffInfo();
+      this.getOrderStuffInfo();
     }, 1000);
   },
- destroyed() {
-clearInterval(this.timer) 
+  destroyed() {
+    clearInterval(this.timer)
   },
   methods: {
     getOrderStuffInfo() {
@@ -85,9 +94,9 @@ clearInterval(this.timer)
       const data = this.qs.stringify({
         id,
       });
-      this.axios.post('api/webapi/order/getOrdersById', data)
+      this.axios.post('/api/webapi/order/getOrdersById', data)
         .then(res => {
-          // console.log(res);
+          console.log(res);
           const { code, data, msg } = res.data;
           data.orderStuffPackRes.forEach(item => {
             if (item.stuffId == 1) item.stuffName = "物料1"
@@ -96,13 +105,15 @@ clearInterval(this.timer)
             if (item.stuffId == 4) item.stuffName = "物料4"
             if (item.packId == 1) item.packName = "大料盒"
             if (item.packId == 2) item.packName = "小料盒"
-            if (item.orderStuffUnit.unitId == 1) item.orderStuffUnit.unitName = "上料区"
-            if (item.orderStuffUnit.unitId == 2) item.orderStuffUnit.unitName = "投料区"
-            if (item.orderStuffUnit.unitId == 3) item.orderStuffUnit.unitName = "视觉检测"
-            if (item.orderStuffUnit.unitId == 4) item.orderStuffUnit.unitName = "异常区"
-            if (item.orderStuffUnit.unitId == 5) item.orderStuffUnit.unitName = "堆垛区"
-            if (item.orderStuffUnit.unitId == 6) item.orderStuffUnit.unitName = "堆垛区"
-            if (item.orderStuffUnit.unitId == 7) item.orderStuffUnit.unitName = "堆垛区"
+            if (item.orderStuffUnit) {
+              if (item.orderStuffUnit.unitId == 1) item.orderStuffUnit.unitName = "上料区"
+              if (item.orderStuffUnit.unitId == 2) item.orderStuffUnit.unitName = "投料区"
+              if (item.orderStuffUnit.unitId == 3) item.orderStuffUnit.unitName = "视觉检测"
+              if (item.orderStuffUnit.unitId == 4) item.orderStuffUnit.unitName = "异常区"
+              if (item.orderStuffUnit.unitId == 5) item.orderStuffUnit.unitName = "堆垛区"
+              if (item.orderStuffUnit.unitId == 6) item.orderStuffUnit.unitName = "堆垛区"
+              if (item.orderStuffUnit.unitId == 7) item.orderStuffUnit.unitName = "堆垛区"
+            }
           });
           this.orderStuffInfo = data.orderStuffPackRes;
           // console.log(this.orderStuffInfo, '11111');

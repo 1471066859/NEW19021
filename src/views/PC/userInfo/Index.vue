@@ -53,7 +53,6 @@
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column prop="roleName" label="权限">
           <template slot-scope="scope">
-            <!-- <el-button @click="orderDesFn(scope.row.id)" type="text" size="small">详情</el-button> -->
             <el-select
               @change="setRoleFn"
               @click.native="userId = scope.row.id"
@@ -67,6 +66,16 @@
                 :value="item.id"
               ></el-option>
             </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column prop="des" label="操作" width="80">
+          <template slot-scope="scope">
+            <el-button
+              style="color: #f56c6c;"
+              @click="removeUser(scope.row)"
+              type="text"
+              size="small"
+            >删除用户</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -116,7 +125,7 @@ export default {
       ],
       // 用户名集合
       userList: [],
-      count: 100,
+      count: null,
       page: 1,
       size: 10,
       loading: false,
@@ -130,28 +139,70 @@ export default {
     // 拉取列表数据
     this.getUserData(this.page, this.size, this.selForm);
     // 拉取用户名集合
-    // this.getUserList();
+    this.getUserList();
   },
   methods: {
+    removeUser(row) {
+      this.$confirm(`您确定要删除用户<span class="confirmOrderId">${row.userName}</span>吗?`, '提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(res => {
+          const userId = [{ id: row.id }]
+          const data = this.qs.stringify({
+            user: JSON.stringify(userId)
+          })
+          this.axios.post('/api/webapi/user/deleteUser', data)
+            .then(res => {
+              console.log(res);
+              if (res.data.code == 200) {
+                this.$notify({
+                  type: 'success',
+                  title: `操作成功`,
+                  message: `用户${row.userName}删除成功`,
+                });
+                this.getUserData(this.page, this.size, this.selForm);
+              } else {
+                this.$notify({
+                  type: 'error',
+                  title: `操作失败`,
+                  message: `用户${row.userName}删除失败`,
+                });
+              }
+            })
+            .catch(err => {
+              this.$notify({
+                type: 'error',
+                title: `操作失败`,
+                message: `网络异常请稍后再试`,
+              });
+            })
+        })
+        .catch(err => {
+          this.$notify({
+            type: 'success',
+            title: '已取消删除操作',
+          });
+        })
+
+    },
     getUserList() {
-      this.axios.get('api/user/getAllUsers')
+      this.axios.get('/api/webapi/user/getAllUserName')
         .then(res => {
           console.log(res);
           const { data } = res.data;
           data.forEach((item) => {
             this.userList.push({
-              value: item.userName,
+              value: item,
             });
           });
         }).catch(err => console.log(err));
     },
-    // getUserId(id) {
-    //   this.userId = id;
-    // },
     // 修改权限
     setRoleFn(role) {
-      console.log(this.userId, '用户标识');
-      console.log(role, '修改后的权限');
+      this.loading = true;
       const id = this.userId;
       // 发送修改权限请求
       const data = this.qs.stringify({
@@ -160,15 +211,29 @@ export default {
         // 修改后的权限
         role,
       });
-      // 接口开启关闭注释return！！！！！！！！！！！！！！！！！！！！！！！！！！！
-      return;
-      this.axios.post('api/webapi/user/updateRoleToAdmin', data)
-        .then(res => {
-          console.log(res);
-          this.getUserData(this.page, this.size, this.selForm);
+      const userInfo = this.userData.find(item => {
+        return item.id == id
+      });
+      this.axios.post('/api/webapi/user/updateRole', data)
+        .then(res => {          `           `
+          if (res.data.code == 200) {
+            this.$notify({
+              type: 'success',
+              title: `操作成功`,
+              message: `用户${userInfo.userName}修改权限成功`,
+            });
+            this.getUserData(this.page, this.size, this.selForm);
+          } else {
+            this.$notify({
+              type: 'error',
+              title: `操作失败`,
+              message: `请刷新后重试`,
+            });
+          }
         })
     },
     getUserData(page, size, sel) {
+      this.loading = true;
       const data = {
         pageNum: page,
         pageSize: size,
@@ -178,18 +243,28 @@ export default {
         role: sel.role,
       }
       console.log(data);
-      this.axios.get('http://localhost:3005/getAllUsers')
+      this.axios.post('/api/webapi/user/getAllUsers', this.qs.stringify(data))
         .then(res => {
-          const { data, count } = res.data;
-          this.count = count;
-          data.forEach(i => {
-            if (i.role == 0) {
-              i.roleName = '权限用户'
-            } else if (i.role == 1) {
-              i.roleName = '普通用户'
-            }
-          })
-          this.userData = data;
+          const { data, count, code } = res.data;
+          if (code == 200) {
+
+            this.count = count;
+            data.forEach(i => {
+              if (i.role == 0) {
+                i.roleName = '权限用户'
+              } else if (i.role == 1) {
+                i.roleName = '普通用户'
+              }
+            })
+            this.userData = data;
+            this.loading = false;
+          } else {
+            this.$notify({
+              type: 'error',
+              title: `获取数据失败`,
+              message: `请刷新后重试`,
+            });
+          }
         })
     },
     querySearch,

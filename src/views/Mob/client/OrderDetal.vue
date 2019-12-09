@@ -5,17 +5,17 @@
       <div class="title">
         <div class="left">
           订单号:
-          <span>#1234</span>
+          <span>{{$route.query.orderId}}</span>
         </div>
-        <div class="right">生产中</div>
+        <div class="right">{{orderState}}</div>
       </div>
       <!-- 物料列表 -->
       <div class="stuffList">
-        <div class="item" v-for="i in 4" :key="i">
+        <div class="item" v-for="(item, index) in orderInfo" :key="index">
           <div class="left">
-            <span>商品1</span>
+            <span>{{item.stuffName}}</span>
             -
-            <span>小料盒</span>
+            <span>{{item.packName}}</span>
           </div>
           <div class="right">X1</div>
         </div>
@@ -26,7 +26,7 @@
         <h2>订单信息</h2>
         <div class="item">
           创建人:
-          <span>张三</span>
+          <span>{{userName}}</span>
         </div>
         <div class="item itemFlex">
           <div class="infoLeft">
@@ -35,7 +35,7 @@
           </div>
           <div class="infoRgiht">
             创建时间:
-            <span>2019-12-20 12:30:22</span>
+            <span>{{$route.query.startTime}}</span>
           </div>
         </div>
       </div>
@@ -43,22 +43,94 @@
     <div class="orderState">
       <i></i>
       <h2>订单进度</h2>
-      <div class="item" v-for="(item, i) in 4" :key="i">
-        <div class="itemLeft">商品1</div>
-        <div class="itemRight">投料中</div>
+      <div class="item" v-for="(item, i) in orderInfo" :key="i">
+        <div class="itemLeft">{{item.stuffName}}</div>
+        <div class="itemRight" v-if="item.orderStuffUnit">{{item.orderStuffUnit.unitName}}</div>
+        <div class="itemRight" v-else>上料区</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getSession } from '@/Tools/intScaleNum'
 export default {
   name: 'order_detal',
   data() {
     return {
-
+      orderInfo: [],
+      timer: null
     }
   },
+  computed: {
+    userName() {
+      return getSession('userName')
+    },
+    orderState() {
+      // return getSession('orderState')
+      const state = this.$route.query.orderState;
+      console.log(state);
+      let stateName = "";
+      switch (state) {
+        case "1":
+          stateName = '下单成功'
+          break;
+        case "2":
+          stateName = '生产中'
+          break;
+        case "3":
+          stateName = '生产完成'
+          break;
+        case "4":
+          stateName = '物流配送'
+          break;
+
+        default:
+          break;
+      }
+      return stateName;
+    }
+  },
+  destroyed() {
+    clearInterval(this.timer);
+  },
+  created() {
+    this.getOrderInfo();
+    this.timer = setInterval(() => {
+      this.getOrderInfo();
+    }, 1000);
+  },
+  methods: {
+    getOrderInfo() {
+      const data = this.qs.stringify({
+        id: this.$route.query.id
+      });
+      this.axios.post('/api/webapi/order/getOrdersById', data)
+        .then(res => {
+          console.log(res);
+          const { code, data, msg } = res.data;
+          data.orderStuffPackRes.forEach(item => {
+            if (item.stuffId == 1) item.stuffName = "物料1"
+            if (item.stuffId == 2) item.stuffName = "物料2"
+            if (item.stuffId == 3) item.stuffName = "物料3"
+            if (item.stuffId == 4) item.stuffName = "物料4"
+            if (item.packId == 1) item.packName = "大料盒"
+            if (item.packId == 2) item.packName = "小料盒"
+            if (item.orderStuffUnit) {
+              if (item.orderStuffUnit.unitId == 1) item.orderStuffUnit.unitName = "上料区"
+              if (item.orderStuffUnit.unitId == 2) item.orderStuffUnit.unitName = "投料区"
+              if (item.orderStuffUnit.unitId == 3) item.orderStuffUnit.unitName = "视觉检测"
+              if (item.orderStuffUnit.unitId == 4) item.orderStuffUnit.unitName = "异常区"
+              if (item.orderStuffUnit.unitId == 5) item.orderStuffUnit.unitName = "堆垛区"
+              if (item.orderStuffUnit.unitId == 6) item.orderStuffUnit.unitName = "堆垛区"
+              if (item.orderStuffUnit.unitId == 7) item.orderStuffUnit.unitName = "堆垛区"
+            }
+          });
+          this.orderInfo = data.orderStuffPackRes;
+          console.log(this.orderInfo);
+        })
+    }
+  }
 
 }
 </script>

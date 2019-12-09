@@ -25,10 +25,13 @@
     {
       "title": "仓储管理系统",
       "icon": "icon-cangku iconfont",
-      "childen": [
-        {
+      "childen": [{
           "title": "物料出入库管理",
           "path": "/page/Materials"
+        },
+        {
+          "title": "成品出入库管理",
+          "path": "/page/ProductAdmin"
         }
       ]
     },
@@ -41,18 +44,84 @@
       }]
     },
     {
+      "title": "质量管理系统",
+      "icon": "el-icon-document-copy",
+      "childen": [{
+        "title": "原材料质量管理",
+        "path": "/page/StuffQuality"
+      }, {
+        "title": "成品质量管理",
+        "path": "/page/OrderQuality"
+      }]
+    },
+    {
       "title": "后台管理",
       "icon": "iconfont icon-icon-user",
       "childen": [{
-          "title": "账号管理",
-          "path": "/page/UserInfo"
+        "title": "账号管理",
+        "path": "/page/UserInfo"
+      }]
+    },
+    {
+      "title": "成品报表系统",
+      "icon": "el-icon-document-copy",
+      "childen": [{
+          "title": "生产报表总览",
+          "path": "/page/Chart"
+        },
+        {
+          "title": "日生产报表",
+          "path": "/page/ProReportR"
+        },
+        {
+          "title": "周生产报表",
+          "path": "/page/ProReportZ"
+        },
+        {
+          "title": "月生产报表",
+          "path": "/page/ProReportY"
+        },
+        {
+          "title": "季生产报表",
+          "path": "/page/ProReportJ"
+        },
+        {
+          "title": "年生产报表",
+          "path": "/page/ProReportN"
+        }
+      ]
+    },
+    {
+      "title": "原材料报表系统",
+      "icon": "el-icon-document-copy",
+      "childen": [{
+          "title": "原材料报表总览",
+          "path": "/page/StuffChart"
+        },
+        {
+          "title": "日原材料报表",
+          "path": "/page/StuffReportR"
+        },
+        {
+          "title": "周原材料报表",
+          "path": "/page/StuffReportZ"
+        },
+        {
+          "title": "月原材料报表",
+          "path": "/page/StuffReportY"
+        },
+        {
+          "title": "季原材料报表",
+          "path": "/page/StuffReportJ"
+        },
+        {
+          "title": "年原材料报表",
+          "path": "/page/StuffReportN"
         }
       ]
     }
   ],
-  "feiqi":{
-    "title": "料盒出入库管理",
-    "path": "/page/BoxAdmin"
+  "feiqi": {
+    "title": "料盒出入库管理"
   }
 }
-

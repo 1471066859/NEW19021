@@ -126,11 +126,11 @@ export default {
         return;
       };
       const data = qs.stringify({
-        userId: user_number,
+        loginId: user_number,
         userName: user_name,
         userPwd: user_pwd
       })
-      this.axios.post('api/webapi/register', data)
+      this.axios.post('/api/webapi/user/register', data)
         .then(res => {
           const { success, msg } = res.data;
           if (success) {

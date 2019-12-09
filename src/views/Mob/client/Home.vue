@@ -42,7 +42,7 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    let userInfo = sessionStorage.getItem("userInfo");
+    let userInfo = sessionStorage.getItem("userId");
     if (userInfo) {
       next();
     } else {

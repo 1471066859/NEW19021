@@ -8,9 +8,8 @@
           <img src="@/assets/img/u78.png" alt />
         </div>
 
-        <div class="proRight">
+        <!-- <div class="proRight">
           <el-scrollbar style="height:100%">
-            <!-- 表头 -->
             <ul style="border: 1px solid #DCDFE6">
               <Li>序号</Li>
               <Li>单元</Li>
@@ -35,7 +34,6 @@
                 <i class="iconfont" :class="stateIcon(item.unitState)"></i>
                 {{item.unitStateName}}
               </li>
-              <!-- <li style="overflow:scroll" v-if="item.boxList"> -->
               <li
                 class="boxList"
                 :class="{'isScroll': item.isAct}"
@@ -54,6 +52,36 @@
               </li>
             </ul>
           </el-scrollbar>
+        </div>-->
+        <div class="proRight"> 
+          <el-scrollbar style="height:100%">
+            <el-collapse v-model="activeNames" @change="handleChange">
+              <el-collapse-item v-for="item in unitList" :key="item.index" :name="item.index">
+                <template slot="title">
+                  <div style="display:flex; width:100%">
+                    <p style="margin-left:50px">{{item.index}}</p>
+                    <p style="margin-left:150px">{{item.unitName}}</p>
+                    <p
+                      :style="{'color':stateColor(item.unitState)}"
+                      style="margin-left:150px"
+                    >{{item.unitStateName}}</p>
+                  </div>
+                </template>
+                <div>
+                  <el-table
+                    :data="item.unitOrderStuffPackDetailRes"
+                    :header-cell-style="{'background-color': '#fafafa'}"
+                    style="width: 100%"
+                  >
+                    <el-table-column prop="startTime" label="开始时间"></el-table-column>
+                    <el-table-column prop="orderStuffPack.packRfid" label="料盒RFID"></el-table-column>
+                    <el-table-column prop="pack.packName" label="规格"></el-table-column>
+                    <el-table-column prop="stuff.stuffName" label="物料"></el-table-column>
+                  </el-table>
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+          </el-scrollbar>
         </div>
       </div>
     </div>
@@ -67,7 +95,8 @@ export default {
     return {
       activeName: 'pro001',
       unitList: [],
-      timer: null
+      timer: null,
+      activeNames: []
     };
   },
   destroyed() {
@@ -77,41 +106,33 @@ export default {
     initNavBar(this);
     this.getUnitData();
     this.timer = setInterval(() => {
-      // this.getUpdateUnitData();
+      // this.getUnitData();
+      this.getUpdateUnitData();
     }, 1000);
   },
   methods: {
+    handleChange(val) {
+      console.log(val);
+    },
     getUnitData() {
-      this.axios.get('http://localhost:3005/proAdminLists')
+      this.axios.get('/api/webapi/order/getUnitDetail')
         .then(res => {
           console.log(res);
-          res.data.forEach((element, index) => {
+          const { data } = res.data;
+          data.forEach((element, index) => {
             element.isAct = false;
             element.index = ++index;
             if (element.unitState == 0) element.unitStateName = '异常'
             if (element.unitState == 1) element.unitStateName = '工作中'
             if (element.unitState == 2) element.unitStateName = '空闲'
           });
-          this.unitList = res.data;
+          this.unitList = data;
         })
-      // this.axios.get('api/webapi/order/getUnitDetail')
-      // .then(res => {
-      //   console.log(res);
-      //   const { data } = res.data;
-      //   data.forEach((element, index) => {
-      //     element.isAct = false;
-      //     element.index = ++index;
-      //     if (element.unitState == 0) element.unitStateName = '异常'
-      //     if (element.unitState == 1) element.unitStateName = '工作中'
-      //     if (element.unitState == 2) element.unitStateName = '空闲'
-      //   });
-      //   this.unitList = data;
-      // })
     },
     getUpdateUnitData() {
       console.log('请求数据');
       // this.axios.get('http://localhost:3005/proAdminList')
-      this.axios.get('api/webapi/order/getUnitDetail')
+      this.axios.get('/api/webapi/order/getUnitDetail')
         .then(res => {
           const { data } = res.data;
           // console.log(data);
@@ -144,11 +165,6 @@ export default {
     },
     moreBoxId(index) {
       this.unitList[index].isAct = !this.unitList[index].isAct;
-      // if (this.activeUnitItem == index) {
-      //   this.activeUnitItem = null;
-      //   return;
-      // }
-      // this.activeUnitItem = index;
     },
     stateIcon(state) {
       switch (state) {

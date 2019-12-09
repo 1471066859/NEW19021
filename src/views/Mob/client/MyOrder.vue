@@ -9,13 +9,18 @@
           </div>
           <div class="user_des">
             <span>用户:</span>
-            {{userId}}
+            {{userName}}
           </div>
         </div>
       </div>
 
       <!-- my_order -->
-      <div class="my_order">
+      <div
+        class="my_order"
+        v-infinite-scroll="loadMore"
+        infinite-scroll-disabled="loading"
+        infinite-scroll-distance="1"
+      >
         <div class="title">我的订单</div>
         <!-- 遍历我的订单列表 -->
         <p class="no_order" v-if="my_order_list.length == 0">暂无订单信息</p>
@@ -25,11 +30,11 @@
               <span>订单编号:</span>
               {{item.orderId}}
             </div>
-            <i class="el-icon-more" @click="orderDetal(item.orderUuid)"></i>
+            <i class="el-icon-more" @click="orderDetal(item.id)"></i>
           </div>
           <div class="order_time">
             创建时间:
-            <span>{{item.orderTime}}</span>
+            <span>{{item.startTime}}</span>
           </div>
           <!-- 进度图 -->
           <div class="rate_wrap">
@@ -56,6 +61,10 @@
             </div>
           </div>
         </div>
+        <p v-show="my_order_list.length >= 3" class="loadingText">
+          <i v-if="loadText == '加载更多数据...'" class="el-icon-loading"></i>
+          {{loadText}}
+        </p>
       </div>
     </div>
   </mt-loadmore>
@@ -63,7 +72,7 @@
 
 <script>
 import qs from 'qs'
-import { scaleNum } from '@/Tools/intScaleNum'
+import { scaleNum, getSession } from '@/Tools/intScaleNum'
 import { MessageBox } from 'mint-ui';
 export default {
   name: "me",
@@ -72,9 +81,9 @@ export default {
     this.getUserOrder()
   },
   computed: {
-    userId() {
-      let { userId } = sessionStorage.getItem('userInfo');
-      return userId
+    userName() {
+      const userName = getSession('userName');
+      return userName
     },
     // 进度调比例
     scaleNum() {
@@ -83,6 +92,10 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      loadTopKey: false,
+      page: 1,
+      loadText: "加载更多数据...",
       // 状态列表
       stateList: [
         "下单成功",
@@ -93,48 +106,71 @@ export default {
       // 订单列表
       my_order_list: [
         // {
-        //   orderId: 'D03120',
-        //   orderTime: '2018-10-22 12:20:30',
-        //   productionState: 0
+        //   "id": 273,
+        //   "orderId": "D19110043",
+        //   "userId": 7,
+        //   "startTime": "2019-11-25 16:54:25",
+        //   "endTime": null,
+        //   "orderState": 1,
+        //   "isDel": 1
         // },
         // {
-        //   orderId: 'D033120',
-        //   orderTime: '2018-10-22 12:20:30',
-        //   productionState: 33
+        //   "id": 273,
+        //   "orderId": "D19110043",
+        //   "userId": 7,
+        //   "startTime": "2019-11-25 16:54:25",
+        //   "endTime": null,
+        //   "orderState": 1,
+        //   "isDel": 1
         // },
         // {
-        //   orderId: 'D03510',
-        //   orderTime: '2018-10-22 12:20:30',
-        //   productionState: 66
-        // },
-        // {
-        //   orderId: 'D50510',
-        //   orderTime: '2018-10-22 12:20:30',
-        //   productionState: 99
+        //   "id": 273,
+        //   "orderId": "D19110043",
+        //   "userId": 7,
+        //   "startTime": "2019-11-25 16:54:25",
+        //   "endTime": null,
+        //   "orderState": 1,
+        //   "isDel": 1
         // },
       ]
     }
   },
   mounted() {
+
   },
   methods: {
     // 获取用户订单列表
     getUserOrder() {
+      // console.log(getSession('userId'));
       const data = qs.stringify({
-        userUuid: sessionStorage.getItem('userUuid')
+        userId: sessionStorage.getItem('userId'),
+        pageNum: this.page,
+        pageSize: 3
       })
-      this.axios.post('api/webapi/orders/getOrdersByUserUuid', data)
+      this.axios.post('/api/webapi/order/getOrdersByUserId', data)
         .then(res => {
-          console.log(res);
-          const { success, msg, data } = res.data;
-          if (success) {
+          console.log(res, 12312312);
+          const { code, msg, data } = res.data;
+          if (data.length == 0) {
+            console.log('没有更多数据');
+            this.loadText = '没有更多数据'
+          }
+          if (code == 200) {
             data.forEach(item => {
-              item.productionState = 1 * this.scaleNum;
+              --item.orderState;
+              item.productionState = item.orderState * this.scaleNum;
+              if (this.loadTopKey) {
+                this.my_order_list = data;
+              }
+              if (!this.loadTopKey) {
+                this.my_order_list.push(item)
+              }
             });
-            this.my_order_list = data;
+            // this.my_order_list = data;
+            // console.log(data);
             this.$refs.loadmore.onTopLoaded();
+            this.loading = false;
           } else {
-            console.log(res)
             this.$refs.loadmore.onTopLoaded();
             MessageBox('获取数据失败', '请检查你的网络状态', false);
           }
@@ -147,16 +183,37 @@ export default {
     },
     orderDetal(id) {
       console.log(id)
+      const obj = this.my_order_list.find(item => {
+        return item.id == id;
+      });
+      console.log(obj);
       this.$router.push({
         path: '/client/order_detal',
         query: {
-          id
+          id,
+          startTime: obj.startTime,
+          orderId: obj.orderId,
+          orderState: ++obj.orderState,
         }
       })
     },
     loadTop() {
       //  进度条比例33
+      this.page = 1;
+      this.loadTopKey = true;
+      this.loadText = "加载更多数据..."
       this.getUserOrder()
+    },
+    // 下拉加载更多
+    loadMore() {
+      this.loadTopKey = false;
+      if (this.my_order_list.length < 3 || this.loadText == "没有更多数据") {
+        return;
+      }
+      this.loading = true;
+      // 数据到底改变loadtext为没有更多数据
+      ++this.page;
+      this.getUserOrder();
     }
   },
 
@@ -165,6 +222,10 @@ export default {
 <style lang="scss" scope>
 @import "@/hotcss/px2rem";
 $designWidth: 375;
+.loadingText {
+  font-size: px(14);
+  text-align: center;
+}
 .mint-loadmore-spinner {
   width: px(20) !important;
   height: px(20) !important;

@@ -27,7 +27,7 @@ export default {
     };
   },
   created() {
-    sessionStorage.removeItem('userInfo')
+    sessionStorage.clear()
   },
   // 判断设备信息跳转不同设备登录页
   beforeRouteEnter(to, from, next) {
@@ -38,26 +38,52 @@ export default {
   methods: {
     loginFuc() {
       let { user_name, password } = this.formLabelAlign;
-      user_name == 'mql' && password == 'mql' ? this.trueLogin() : this.falseLogin();
+      if (user_name == "admin" && password == "admin") {
+        setSession('userId', 1);
+        setSession('role', 1);
+        setSession('userName', 'admin');
+        setSession('loginId', 'admin');
+        this.$router.push({
+          path: '/page',
+        });
+        return;
+      }
+      // user_name == 'mql' && password == 'mql' ? this.trueLogin() : this.falseLogin();
+      const data = {
+        loginId: user_name,
+        userPwd: password,
+      }
+      this.axios.post('/api/webapi/user/login', this.qs.stringify(data))
+        .then(res => {
+          console.log(res);
+          const { code, data, msg } = res.data;
+          if (code == 200) {
+            this.trueLogin(data)
+          } else {
+            this.falseLogin(msg);
+          }
+        })
     },
-    trueLogin() {
+    trueLogin(data) {
       this.$notify({
         title: '登录成功',
-        message: '欢迎您',
+        message: `欢迎您 ${data.userName}`,
         type: 'success'
       });
-      setSession('userInfo', 2);
+      setSession('userId', data.id);
+      setSession('role', data.role);
+      setSession('userName', data.userName);
+      setSession('loginId', data.loginId);
       this.$router.push({
         path: '/page',
       });
     },
-    falseLogin() {
-      // alert('用户名密码错误')
+    falseLogin(msg) {
       this.formLabelAlign.user_name = '';
       this.formLabelAlign.password = '';
       this.$notify({
         title: '登录失败',
-        message: '用户名或密码错误',
+        message: `${msg}`,
         type: 'error'
       });
 

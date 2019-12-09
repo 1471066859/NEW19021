@@ -126,7 +126,7 @@ export default {
       },
       page: 1,
       size: 10,
-      count: 100,
+      count: null,
       userList: [],
       allOrderList: []
     }
@@ -163,7 +163,7 @@ export default {
         endTime: sels.time[1]
       });
 
-      this.axios.post('api/webapi/order/getAllOrdersByTypeId', data)
+      this.axios.post('/api/webapi/order/getAllOrdersByTypeId', data)
         .then(res => {
           console.log(res);
           const { code, count, data, msg } = res.data;

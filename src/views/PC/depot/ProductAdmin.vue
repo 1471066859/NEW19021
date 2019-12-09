@@ -1,76 +1,18 @@
 <template>
   <div class="materials">
-    <div class="backBg" @click="closeAddStuff('addStuffForm')" v-show="addMaterBox"></div>
-    <h1>物料出入库管理</h1>
+    <h1>成品出入库管理</h1>
     <!--物料数量 -->
     <div class="materWrap">
       <div class="item" v-for="(item,index) in stuffList" :key="index">
         <i class="iconfont" :class="item.icon"></i>
         <div class="msgWrap">
-          <p>{{item.stuffName}}</p>
-          <h2 v-if="item.warehouse">
-            {{item.warehouse.amount}}
-            <span>kg</span>
+          <p>{{item.name}}</p>
+          <h2 v-if="item">
+            {{item.amount}}
+            <span>个</span>
           </h2>
         </div>
       </div>
-    </div>
-
-    <div class="addMaterBox" v-show="addMaterBox" v-loading="addMaterBoxLoad">
-      <i class="el-icon-close closeIcon" @click="closeAddStuff('addStuffForm')"></i>
-      <div class="hd">
-        <h2>新增物料入库</h2>
-        <p>
-          时间:
-          <span>{{addStuffForm.time}}</span>
-        </p>
-      </div>
-      <el-form
-        :model="addStuffForm"
-        :rules="stuffrules"
-        ref="addStuffForm"
-        label-width="100px"
-        class="demo-ruleForm"
-      >
-        <div class="item">
-          <el-form-item label="物料名称" prop="stuffid">
-            <el-select v-model="addStuffForm.stuffid" placeholder="请选择物料名称">
-              <el-option
-                v-for="item in stuffList"
-                :key="item.id"
-                :label="item.stuffName"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </div>
-        <div class="item">
-          <el-form-item label="操作人" prop="userid">
-            <el-select v-model="addStuffForm.userid" placeholder="操作人">
-              <el-option
-                v-for="item in adminList"
-                :key="item.userId"
-                :label="item.userName"
-                :value="item.userName"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </div>
-        <div class="item">
-          <el-form-item label="入库数量" prop="amount">
-            <el-input v-model.number="addStuffForm.amount">
-              <span slot="suffix" class="kgDes">kg</span>
-            </el-input>
-          </el-form-item>
-        </div>
-        <!-- butn -->
-        <div class="item btns">
-          <el-form-item>
-            <el-button type="primary" @click="postAddStuff('addStuffForm')">确定</el-button>
-            <el-button @click="closeAddStuff('addStuffForm')">取消</el-button>
-          </el-form-item>
-        </div>
-      </el-form>
     </div>
 
     <!-- 表格区域 -->
@@ -79,16 +21,44 @@
         <el-tab-pane label="出库" name="leave">
           <!-- 筛选 -->
           <ul class="selWrap">
-            <li class="selNameWrap">
-              <span>物料名称:</span>
-              <el-select v-model="leaveSel.stuffid" placeholder="请选择">
-                <el-option
-                  v-for="item in stuffList"
-                  :key="item.stuffId"
-                  :label="item.stuffName"
-                  :value="item.stuffName"
-                ></el-option>
-              </el-select>
+            <!-- <li class="btnsWrap leaveEnterBtns">
+              <el-button type="success">
+                <i class="el-icon-circle-plus"></i>
+                批量出库
+              </el-button>
+            </li>-->
+            <li class="selNameWrap" style="display:flex; align-items:center">
+              <span>下单人:</span>
+              <div style="width:170px">
+                <el-autocomplete
+                  class="inline-input"
+                  v-model="leaveSel.userName"
+                  :fetch-suggestions="querySearch"
+                  placeholder="请输入下单人姓名"
+                  suffix-icon="el-icon-user"
+                  :trigger-on-focus="false"
+                ></el-autocomplete>
+              </div>
+            </li>
+            <li class="selNameWrap" style="display:flex; align-items:center">
+              <span>订单编号:</span>
+              <div style="width:170px">
+                <el-input
+                  placeholder="请输入订单编号"
+                  suffix-icon="el-icon-edit-outline"
+                  v-model="leaveSel.orderId"
+                ></el-input>
+              </div>
+            </li>
+            <li class="selNameWrap" style="display:flex; align-items:center">
+              <span>成品编号:</span>
+              <div style="width:170px">
+                <el-input
+                  placeholder="请输入成品编号"
+                  suffix-icon="el-icon-edit-outline"
+                  v-model="leaveSel.batchId"
+                ></el-input>
+              </div>
             </li>
             <li class="selTimeWrap">
               <span>出库时间:</span>
@@ -112,15 +82,39 @@
             :data="stuffTabList"
             height="480"
             style="width: 100%"
+            ref="multipleTable"
             v-loading="tableLoad"
             :header-cell-style="{'background-color': '#fafafa'}"
+            @selection-change="handleSelectionChange"
           >
             <el-table-column type="index" label="序号" width="50"></el-table-column>
             <el-table-column prop="batchId" label="批次"></el-table-column>
-            <el-table-column prop="stuff.stuffName" label="物料名称"></el-table-column>
+            <el-table-column prop="orderId" label="订单编号"></el-table-column>
             <el-table-column prop="time" label="出库时间"></el-table-column>
-            <!-- <el-table-column prop="orderid" label="订单编号"></el-table-column> -->
-            <el-table-column prop="amount" label="数量(kg)"></el-table-column>
+            <el-table-column prop="admin" label="操作人"></el-table-column>
+            <el-table-column prop="des" label="操作" width="50">
+              <template slot-scope="scope">
+                <el-button
+                  @click="leaveFn(scope.row.id,scope.row.batchId)"
+                  type="text"
+                  size="small"
+                >出库</el-button>
+              </template>
+            </el-table-column>
+
+            <el-table-column v-if="tabSel" type="selection" width="55"></el-table-column>
+            <el-table-column align="right">
+              <template slot="header">
+                <el-button v-show="tabSel" type="success" @click="postLeave">
+                  <i class="el-icon-circle-plus"></i>
+                  批量出库
+                </el-button>
+                <el-button :type="tabSelBtn" @click="tabSelFn">
+                  <i class="el-icon-circle-plus"></i>
+                  {{tabSelText}}
+                </el-button>
+              </template>
+            </el-table-column>
           </el-table>
 
           <div class="pageSizeBtn">
@@ -138,16 +132,38 @@
         </el-tab-pane>
         <el-tab-pane label="入库" name="enter">
           <ul class="selWrap">
-            <li class="selNameWrap">
-              <span>物料名称:</span>
-              <el-select v-model="enterSel.stuffid" placeholder="请选择">
-                <el-option
-                  v-for="item in stuffList"
-                  :key="item.stuffId"
-                  :label="item.stuffName"
-                  :value="item.stuffName"
-                ></el-option>
-              </el-select>
+            <li class="selNameWrap" style="display:flex; align-items:center">
+              <span>下单人:</span>
+              <div style="width:170px">
+                <el-autocomplete
+                  class="inline-input"
+                  v-model="enterSel.userName"
+                  :fetch-suggestions="querySearch"
+                  placeholder="请输入下单人姓名"
+                  suffix-icon="el-icon-user"
+                  :trigger-on-focus="false"
+                ></el-autocomplete>
+              </div>
+            </li>
+            <li class="selNameWrap" style="display:flex; align-items:center">
+              <span>订单编号:</span>
+              <div style="width:170px">
+                <el-input
+                  placeholder="请输入订单编号"
+                  suffix-icon="el-icon-edit-outline"
+                  v-model="enterSel.orderId"
+                ></el-input>
+              </div>
+            </li>
+            <li class="selNameWrap" style="display:flex; align-items:center">
+              <span>成品编号:</span>
+              <div style="width:170px">
+                <el-input
+                  placeholder="请输入成品编号"
+                  suffix-icon="el-icon-edit-outline"
+                  v-model="enterSel.batchId"
+                ></el-input>
+              </div>
             </li>
             <li class="selTimeWrap">
               <span>入库时间:</span>
@@ -175,15 +191,9 @@
           >
             <el-table-column type="index" label="序号" width="50"></el-table-column>
             <el-table-column prop="batchId" label="批次"></el-table-column>
-            <el-table-column prop="stuff.stuffName" label="物料名称"></el-table-column>
+            <el-table-column prop="orderId" label="物料名称"></el-table-column>
             <el-table-column prop="time" label="入库时间"></el-table-column>
-            <el-table-column prop="amount" label="数量(kg)"></el-table-column>
-            <el-table-column prop="userName" label="操作人员"></el-table-column>
-            <el-table-column align="right">
-              <template slot="header">
-                <el-button icon="el-icon-circle-plus" type="success" @click="addPackFn">物料入库</el-button>
-              </template>
-            </el-table-column>
+            <el-table-column prop="userName" label="下单人"></el-table-column>
           </el-table>
           <!-- 分页器 -->
           <div class="pageSizeBtn">
@@ -206,32 +216,32 @@
 
 <script>
 import qs from "qs"
-import { getUserName, getBoxId, getTime, initNavBar } from '@/Tools/intScaleNum'
+import { initNavBar } from '@/Tools/intScaleNum'
+import { querySearch, createFilter, getUserList } from '@/views/PC/orderAdmin/components/common'
 
 export default {
   name: "Materials",
   components: {
 
   },
+  computed: {
+    tabSelBtn() {
+      let type = ""
+      this.tabSel ? type = "" : type = "success";
+      return type;
+    },
+    tabDes() {
+      let key = false;
+      this.tabSel ? key = false : key = true;
+      return key;
+    },
+  },
   data() {
-    var amount = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('请输入入库数量'));
-      }
-      if (!Number.isInteger(value)) {
-        callback(new Error('请输入数字值'));
-      } else {
-        if (value > 1000) {
-          callback(new Error('单次入库不可大于1000kg'));
-        } else {
-          callback();
-        }
-      }
-    };
     return {
-      // 料盒入库表单
-      addMaterBox: false,
-      addMaterBoxLoad: false,
+      leaveList: [],
+      tabSelText: "批量出库",
+      // 多选key
+      tabSel: false,
       // 表格数据
       stuffTabList: [],
       // 出库分页
@@ -248,82 +258,27 @@ export default {
       },
       // 表格loading
       tableLoad: false,
-      // 添加物料表单
-      addStuffForm: {
-        stuffname: '',
-        username: '',
-        userid: "",
-        time: "",
-      },
-      // 新增物料验证
-      stuffrules: {
-        stuffid: [
-          { required: true, message: '请输入物料名称', trigger: 'blur' },
-        ],
-        userid: [
-          { required: true, message: '请选择操作人员', trigger: 'blur' },
-        ],
-        amount: [
-          { validator: amount, trigger: 'blur' }
-        ],
-      },
       // 出库筛选
       leaveSel: {
-        stuffid: '',
+        userName: '',
+        orderId: "",
+        batchId: "",
         time: ''
       },
       // 入库筛选
       enterSel: {
-        stuffid: '',
+        userName: '',
+        orderId: "",
+        batchId: "",
         time: ''
       },
       // 标签页内容
       activeName: 'leave',
       // 物料列表
       stuffList: [
-        // {
-        //   stuffName: '瓜子',
-        //   icon: "icon-guazi",
-        //   stuffId: 1,
-        //   warehouse: {
-        //     amount: 253
-        //   }
-        // },
-        // {
-        //   stuffName: '花生',
-        //   stuffId: 2,
-        //   icon: "icon-guazi",
-        //   warehouse: {
-        //     amount: 253
-        //   }
-        // },
-        // {
-        //   stuffName: '玉米',
-        //   stuffId: 3,
-        //   icon: "icon-guazi",
-        //   warehouse: {
-        //     amount: 253
-        //   }
-        // },
-        // {
-        //   stuffName: '大豆',
-        //   stuffId: 4,
-        //   icon: "icon-guazi",
-        //   warehouse: {
-        //     amount: 253
-        //   }
-        // }
       ],
       // 管理员信息
-      adminList: [
-        // {
-        //   userName: "mql",
-        //   userId: 1,
-        // },
-        // {
-        //   userName: "mql1",
-        //   userId: 2,
-        // }
+      userList: [
       ]
     }
   },
@@ -332,10 +287,16 @@ export default {
     this.getStuffList();
     this.getMaterLeaveList(this.leaveTable.page, this.leaveTable.size, this.leaveSel);
     initNavBar(this)
-    // 获取操作人员列表
-    this.getAdminList();
+    this.getUserList();
   },
   watch: {
+    tabSel(val) {
+      if (val) {
+        this.tabSelText = "取消多选";
+      } else {
+        this.tabSelText = "批量出库"
+      }
+    },
     activeName(val) {
       // 初始化分页条件
       this.leaveTable.page = 1;
@@ -358,6 +319,84 @@ export default {
     }
   },
   methods: {
+    postLeave() {
+      console.log(this.leaveList);
+      if (this.leaveList.length <= 0) {
+        this.$notify({
+          type: 'warning',
+          title: `操作失败`,
+          message: `请选择需出库成品`,
+          // duration: 0
+        });
+      } else {
+        this.tabSel = false;
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
+    tabSelFn() {
+      this.tabSel = !this.tabSel;
+      if (!this.tabSel) {
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
+    handleSelectionChange(val) {
+      console.log(val);
+      this.leaveList = val;
+    },
+    leaveFn(id, orderId) {
+      if (this.tabSel) {
+        const item = this.stuffTabList.find(item => {
+          return item.id == id;
+        });
+        this.$refs.multipleTable.toggleRowSelection(item)
+      } else {
+        console.log(id);
+        this.$confirm(`您确定要为成品<span class="confirmOrderId">${orderId}</span>提交出库申请吗?`, '提示', {
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.loading = true;
+          const data = this.qs.stringify({
+            id: JSON.stringify([id])
+          })
+          this.axios.post('/api/webapi/order/updateOrderState', data)
+            .then(res => {
+              console.log(res, '立即开始生产订单！！！！');
+              const { code, msg } = res.data;
+              if (code == 200) {
+                this.loading = false;
+                this.$notify({
+                  type: 'success',
+                  title: `${orderId} 操作成功`,
+                  message: `${orderId}已出库`
+                });
+                this.getMaterLeaveList(this.page, this.size, this.leaveSel);
+              } else {
+                this.loading = false;
+                this.$notify({
+                  type: 'error',
+                  title: `${orderId} 操作失败`,
+                  message: `删除失败原因`,
+                  duration: 0
+                });
+                this.getMaterLeaveList(this.page, this.size, this.leaveSel);
+              }
+            })
+            .catch(err => console.log(err));
+        }).catch(() => {
+          this.$notify({
+            type: 'success',
+            title: '已取消操作',
+          });
+        });
+      }
+    },
+    querySearch,
+    createFilter,
+    getUserList,
+
     PostSerBtnFn() {
       const { activeName } = this;
       if (activeName == "leave") {
@@ -384,70 +423,24 @@ export default {
       if (activeName == "leave") {
         // 出库清空
         this.leaveSel = {
-          stuffid: "",
+          userName: '',
+          orderId: "",
+          batchId: "",
           time: ""
         }
       } else if (activeName == "enter") {
         // 入库清空
         this.enterSel = {
-          stuffid: "",
-          time: ""
+          userName: '',
+          orderId: "",
+          batchId: "",
+          time: '',
         }
       }
     },
     // tab切换
     handleClick(tab, event) {
       // console.log(tab, event);
-    },
-    // 提交新增物料表单
-    postAddStuff(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.addMaterBoxLoad = true;
-          // let username = getUserName(this.adminList, this.addStuffForm.userid);
-          this.addStuffForm.time = getTime();
-          // this.addStuffForm.username = username;
-          console.log(this.addStuffForm);
-          const data = {
-            contentType: 1,
-            outInType: 1,
-            contentId: this.addStuffForm.stuffid,
-            amount: this.addStuffForm.amount,
-            userName: this.addStuffForm.userid
-          }
-          console.log(data, '物料信息新增');
-          this.axios.post('/api/webapi/warehouse/insertWarehouseInfo', qs.stringify(data))
-            .then(res => {
-              console.log(res);
-              if (res.data.code == 200) {
-                this.$notify.success({
-                  title: '新增物料成功',
-                });
-                this.getStuffList();
-                this.addMaterBox = false;
-                this.addMaterBoxLoad = false;
-                // 入库查询
-                const page = this.enterTable.page;
-                const size = this.enterTable.size;
-                const sel = this.enterSel;
-                this.getMaterEnterList(page, size, sel);
-              }
-            })
-        } else {
-          return false;
-        }
-      });
-    },
-    // 关闭并清空新增物料表单
-    closeAddStuff(formName) {
-      this.addMaterBox = false;
-      this.$refs[formName].resetFields();
-    },
-    // 计时器
-    getTime() {
-      const time = getTime();
-      this.addStuffForm.time = time.slice(0, 10);
-      console.log(this.addStuffForm.time, 1111);
     },
     // 获取物料列表
     getStuffList() {
@@ -459,6 +452,20 @@ export default {
             "icon-yumi",
             "icon-dadou"
           ]
+          const testData = [
+            // {
+            //   icon: "icon-guazi",
+            //   name: "出库",
+            //   amount: 11
+            // },
+            {
+              icon: "icon-guazi",
+              name: "库存成品数量",
+              amount: 332
+            }
+          ];
+          this.stuffList = testData;
+          return;
           const { data } = res.data;
           this.stuffList = data.splice(0, 4);
           this.stuffList.forEach((item, index) => {
@@ -467,25 +474,38 @@ export default {
         })
         .catch(err => console.log(err))
     },
-    // 获取操作人列表
-    getAdminList() {
-      this.axios.get("/api/webapi/user/getAdministrator")
-        .then(res => {
-          console.log(res, '操作人');
-          const { data } = res.data;
-          this.adminList = data;
-        });
 
-    },
-    // 新增物料
-    addPackFn() {
-      console.log(123);
-      this.addMaterBox = true;
-      this.addStuffForm = {};
-      this.getTime();
-    },
     // 拉取物料入库信息
     getMaterEnterList(page, size, sel) {
+      const testData = [
+        {
+          id: 1,
+          "batchId": 123,
+          "orderId": 321,
+          "userName": "mql",
+          "time": "2012-12-30 12:30:20",
+          "admin": "mql"
+        },
+        {
+          id: 2,
+          "batchId": 123,
+          "orderId": 321,
+          "userName": "mql",
+          "time": "2012-12-30 12:30:20",
+          "admin": "mql"
+        },
+        {
+          id: 3,
+          "batchId": 123,
+          "orderId": 321,
+          "userName": "mql",
+          "time": "2012-12-30 12:30:20",
+          "admin": "mql"
+        },
+      ];
+      this.stuffTabList = testData;
+      this.tableLoad = false;
+      return;
       this.tableLoad = true;
       const data = {
         contentType: 1,
@@ -516,6 +536,35 @@ export default {
     },
     // 拉取物料出库列表
     getMaterLeaveList(page, size, sel) {
+      const testData = [
+        {
+          id: 1,
+          "batchId": 123,
+          "orderId": 321,
+          "userName": "mql",
+          "time": "2012-12-30 12:30:20",
+          "admin": "mql"
+        },
+        {
+          id: 2,
+          "batchId": 123,
+          "orderId": 321,
+          "userName": "mql",
+          "time": "2012-12-30 12:30:20",
+          "admin": "mql"
+        },
+        {
+          id: 3,
+          "batchId": 123,
+          "orderId": 321,
+          "userName": "mql",
+          "time": "2012-12-30 12:30:20",
+          "admin": "mql"
+        },
+      ];
+      this.stuffTabList = testData;
+      this.tableLoad = false;
+      return;
       this.tableLoad = true;
       const data = {
         contentType: 1,
@@ -585,5 +634,13 @@ export default {
 </script>
 
 <style lang="scss" scope>
+.confirmOrderId {
+  color: #f56c6c;
+  display: inline-block;
+  padding: 0 5px;
+  font-weight: 700;
+}
+.btnsWrap {
+}
 @import "@/views/PC/depot/components/common.scss";
 </style>

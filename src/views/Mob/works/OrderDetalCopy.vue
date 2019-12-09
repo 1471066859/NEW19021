@@ -164,6 +164,7 @@ export default {
     },
 
   },
+  
   methods: {
     getOrderDetal() {
       console.log(this.orderId)
@@ -171,7 +172,7 @@ export default {
       const data = qs.stringify({
         orderUud,
       })
-      this.axios.post('api/webapi/orders/getOrdersByUserUuid', data)
+      this.axios.post('/api/webapi/orders/getOrdersByUserUuid', data)
         .then(res => {
           const { success, msg } = res;
           if (success) {
