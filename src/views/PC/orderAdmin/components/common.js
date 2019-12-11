@@ -30,7 +30,7 @@ export function getUserList() {
             value: item
           });
         });
-        console.log(this.userList);
+        // console.log(this.userList);
       } else {
         alert('拉取下单人信息失败')
       }

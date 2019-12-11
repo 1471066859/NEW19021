@@ -197,11 +197,19 @@ export default {
               name: '质量正常',
               value: data.QulityRes.sectionNormalAmount
             };
-            data.Qulity.forEach((item, i) => {
-              this.rightList.YSuccess[i] = item.normalAmount;
-              this.rightList.YError[i] = item.errorAmount;
-              this.rightList.X[i] = item.time.slice(0, 10);
-            });
+            if (data.Qulity.length > 0) {
+              data.Qulity.forEach((item, i) => {
+                this.rightList.YSuccess[i] = item.normalAmount;
+                this.rightList.YError[i] = item.errorAmount;
+                this.rightList.X[i] = item.time.slice(0, 10);
+              });
+            } else {
+              this.rightList = {
+                X: [],
+                YSuccess: [],
+                YError: []
+              };
+            }
             this.$nextTick(() => {
               this.initChartLeft();
               this.initChartRight();

@@ -143,13 +143,13 @@ export default {
     }
   },
   methods: {
-       closeSelForm() {
+    closeSelForm() {
       this.selForm = {
         orderId: "",
         time: "",
         userName: ""
       }
-     },
+    },
     querySearch,
     createFilter,
     getOrderList(page, size, sels) {

@@ -183,7 +183,7 @@ export default {
       console.log(parms);
       this.axios.post('/api/webapi/qulity/getAmountByTime', this.qs.stringify(parms))
         .then(res => {
-          console.log(res);
+          console.log(res, '图表数据 webapi/qulity/getAmountByTime');
           const { data, code } = res.data;
           if (code == 200) {
             console.log(data);
@@ -196,11 +196,20 @@ export default {
               name: '质量正常',
               value: data.QulityRes.sectionNormalAmount
             };
-            data.Qulity.forEach((item, i) => {
-              this.rightList.YSuccess[i] = item.normalAmount;
-              this.rightList.YError[i] = item.errorAmount;
-              this.rightList.X[i] = item.time.slice(0, 10);
-            });
+            if (data.Qulity.length > 0) {
+              data.Qulity.forEach((item, i) => {
+                this.rightList.YSuccess[i] = item.normalAmount;
+                this.rightList.YError[i] = item.errorAmount;
+                this.rightList.X[i] = item.time.slice(0, 10);
+              });
+            } else {
+              this.rightList = {
+                X: [],
+                YSuccess: [],
+                YError: []
+              };
+            }
+            console.log(this.rightList, 123);
             this.$nextTick(() => {
               this.initChartLeft();
               this.initChartRight();
@@ -220,6 +229,7 @@ export default {
       }
       this.axios.post('/api/webapi//order/getAllOrdersByCondition', this.qs.stringify(parms))
         .then(res => {
+          console.log(res, '表格数据 /webapi//order/getAllOrdersByCondition');
           const { code, data, count } = res.data;
           console.log(data);
           if (code == 200) {

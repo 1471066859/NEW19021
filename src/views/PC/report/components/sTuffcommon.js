@@ -52,7 +52,7 @@ export function getCharR() {
   })
   this.axios.post('/api/webapi/outInWarehouse/getAmountOutInWarehouseByState', data)
     .then(res => {
-      console.log(res);
+      console.log(res, '图表数据');
       const {
         code,
         data
@@ -75,6 +75,7 @@ export function getCharR() {
           }
         });
         this.chartList = list;
+        console.log(this.chartList, 111);
         this.initChartLeft();
         this.initChartRight();
       }
@@ -89,6 +90,23 @@ export function initChartLeft() {
       // subtext: '纯属虚构',
       subtext: `${this.enterSel.time[0].slice(0, 10)}-${this.enterSel.time[1].slice(0,10)}`,
       x: 'center'
+    },
+    title: {
+      show: this.chartList[0].value === null,
+
+      extStyle: {
+
+        color: "grey",
+
+        fontSize: 20
+
+      },
+
+      text: "暂无数据",
+
+      left: "center",
+
+      top: "center"
     },
     tooltip: {
       trigger: 'item',
@@ -124,6 +142,23 @@ export function initChartRight() {
       // subtext: '纯属虚构',
       subtext: `${this.enterSel.time[0].slice(0, 10)}-${this.enterSel.time[1].slice(0,10)}`,
       x: 'center'
+    },
+    title: {
+      show: this.chartList[0].value === null,
+
+      extStyle: {
+
+        color: "grey",
+
+        fontSize: 20
+
+      },
+
+      text: "暂无数据",
+
+      left: "center",
+
+      top: "center"
     },
     color: ['#3398DB'],
     tooltip: {
@@ -216,7 +251,7 @@ export function getMaterEnterList(page, size, sel) {
   console.log(data, '入库信息');
   this.axios.post('/api/webapi/outInWarehouse/getOutinWarehouseInfo', this.qs.stringify(parms))
     .then(res => {
-      console.log(res, '入库数据表格');
+      console.log(res, '入库数据表格 outInWarehouse/getOutinWarehouseInfo');
       const {
         data
       } = res.data

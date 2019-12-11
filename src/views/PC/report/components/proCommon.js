@@ -33,6 +33,7 @@ export function getCharR() {
   })
   this.axios.post('/api/webapi/order/getAmountOrdersByState', data)
     .then(res => {
+      console.log(res, '图表数据 webapi/order/getAmountOrdersByState');
       const {
         code,
         data
@@ -86,7 +87,7 @@ export function getOrderList(page, size, sels) {
   });
   this.axios.post('/api/webapi/order/getAllOrdersByCondition', data)
     .then(res => {
-      console.log(res);
+      console.log(res, '表格数据 /webapi/order/getAllOrdersByCondition');
       const {
         data,
         code,
@@ -142,6 +143,23 @@ export function initChartLeft() {
       subtext: `${this.selForm.time[0].slice(0, 10)}-${this.selForm.time[1].slice(0, 10)}`,
       x: 'center'
     },
+    title: {
+      show: this.list[0].value === null,
+
+      extStyle: {
+
+        color: "grey",
+
+        fontSize: 20
+
+      },
+
+      text: "暂无数据",
+
+      left: "center",
+
+      top: "center"
+    },
     tooltip: {
       trigger: 'item',
       formatter: "{a} <br/>{b} : {c} ({d}%)"
@@ -174,6 +192,23 @@ export function initChartRight() {
       text: `${this.titleTime}报表扇形图`,
       subtext: `${this.selForm.time[0].slice(0, 10)}-${this.selForm.time[1].slice(0, 10)}`,
       x: 'center'
+    },
+    title: {
+      show: this.list[0].value === null,
+
+      extStyle: {
+
+        color: "grey",
+
+        fontSize: 20
+
+      },
+
+      text: "暂无数据",
+
+      left: "center",
+
+      top: "center"
     },
     color: ['#3398DB'],
     tooltip: {

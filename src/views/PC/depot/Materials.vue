@@ -44,7 +44,7 @@
             </el-select>
           </el-form-item>
         </div>
-        <div class="item">
+        <!-- <div class="item">
           <el-form-item label="操作人" prop="userid">
             <el-select v-model="addStuffForm.userid" placeholder="操作人">
               <el-option
@@ -55,7 +55,7 @@
               ></el-option>
             </el-select>
           </el-form-item>
-        </div>
+        </div>-->
         <div class="item">
           <el-form-item label="入库数量" prop="amount">
             <el-input v-model.number="addStuffForm.amount">
@@ -206,7 +206,7 @@
 
 <script>
 import qs from "qs"
-import { getUserName, getBoxId, getTime, initNavBar } from '@/Tools/intScaleNum'
+import { getUserName, getBoxId, getTime, initNavBar, getSession } from '@/Tools/intScaleNum'
 
 export default {
   name: "Materials",
@@ -251,7 +251,7 @@ export default {
       // 添加物料表单
       addStuffForm: {
         stuffname: '',
-        username: '',
+        // username: '',
         userid: "",
         time: "",
       },
@@ -260,9 +260,9 @@ export default {
         stuffid: [
           { required: true, message: '请输入物料名称', trigger: 'blur' },
         ],
-        userid: [
-          { required: true, message: '请选择操作人员', trigger: 'blur' },
-        ],
+        // userid: [
+        //   { required: true, message: '请选择操作人员', trigger: 'blur' },
+        // ],
         amount: [
           { validator: amount, trigger: 'blur' }
         ],
@@ -366,7 +366,7 @@ export default {
           this.addMaterBoxLoad = true;
           // let username = getUserName(this.adminList, this.addStuffForm.userid);
           this.addStuffForm.time = getTime();
-          // this.addStuffForm.username = username;
+          this.addStuffForm.userid = getSession('userName');
           console.log(this.addStuffForm);
           const data = {
             contentType: 1,
