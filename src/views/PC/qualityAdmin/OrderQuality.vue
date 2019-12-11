@@ -1,19 +1,15 @@
 <template>
   <div class="allOrder">
-    <div class="back" @click="desPopOver = false" v-show="desPopOver"></div>
-    <div class="drawer" :class="{'desPopOverAct': desPopOver==true}">
-      <PopOverWrap ref="PopOverWrap" @closeOrderDes="desPopOver = false" :orderId="orderId"></PopOverWrap>
-    </div>
     <PageTitle pageTitle="成品质量管理"></PageTitle>
     <div class="wrap">
       <div class="materWrap" ref="myEchartLeft"></div>
       <div class="item">
         <i class="el-icon-pie-chart"></i>
         <div class="msgWrap">
-          <p>年生产总量</p>
+          <p>成品总量</p>
           <h2>
             {{amount}}
-            <span>个</span>
+            <span>kg</span>
           </h2>
         </div>
       </div>
@@ -22,44 +18,20 @@
     <!-- 筛选区域 -->
     <div class="selContent">
       <ul>
-        <!-- 下单人筛选 -->
-        <li class="selUser">
-          <el-autocomplete
-            class="inline-input"
-            v-model="selForm.userName"
-            :fetch-suggestions="querySearch"
-            placeholder="请输入下单人姓名"
-            :trigger-on-focus="false"
-            suffix-icon="el-icon-edit-outline"
-          ></el-autocomplete>
-        </li>
-        <!-- 订单编号 -->
-        <li class="selOrderId">
-          <el-input
-            placeholder="请输入订单编号"
-            suffix-icon="el-icon-edit-outline"
-            v-model="selForm.orderId"
-          ></el-input>
-        </li>
-        <!-- 订单状态 -->
-        <li class="orderState">
-          <el-select v-model="selForm.orderState" placeholder="请选择订单状态">
-            <el-option
-              v-for="item in orderStateList"
-              :key="item.stateId"
-              :label="item.stateName"
-              :value="item.stateId"
-            >
-              <!-- <span style="float: left; color: #8492a6; font-size: 13px">{{ item.stateId }}</span> -->
-              <i style="float: left" class="stateIcon iconfont" :class="iconBg(item.stateId)"></i>
-              <span>{{ item.stateName }}</span>
-            </el-option>
-          </el-select>
+        <li class="selTime">
+          <el-date-picker
+            v-model="time"
+            type="datetimerange"
+            range-separator="至"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          ></el-date-picker>
         </li>
       </ul>
 
       <!-- btn区域 -->
-      <div class="btns">
+      <div class="btns" style>
         <el-button type="primary" @click="postSelFn">查询</el-button>
         <el-button @click="closeSelForm">清空</el-button>
       </div>
@@ -78,22 +50,17 @@
       >
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="orderId" label="订单编号"></el-table-column>
-        <el-table-column prop="startTime" label="下单时间"></el-table-column>
-        <el-table-column prop="user.userName" label="下单人"></el-table-column>
-        <el-table-column prop="orderState" label="订单状态">
+        <el-table-column prop="msg" label="质量问题描述"></el-table-column>
+        <el-table-column prop="user.userName" label="操作人"></el-table-column>
+        <el-table-column prop="startTime" label="时间"></el-table-column>
+        <el-table-column prop="note" label="备注"></el-table-column>
+        <el-table-column prop="des" label="操作" width="80">
           <template slot-scope="scope">
-            <i class="stateIcon iconfont" :class="iconBg(scope.row.orderState)"></i>
-            {{scope.row.orderStateName}}
-          </template>
-        </el-table-column>
-        <el-table-column prop="des" label="详情" width="50">
-          <template slot-scope="scope">
-            <el-button @click="orderDesFn(scope.row.id)" type="text" size="small">详情</el-button>
-          </template>
-        </el-table-column>
-        <el-table-column align="right">
-          <template slot="header">
-            <el-button icon="el-icon-download" type="success" @click="exportExcel('#enter')">导出</el-button>
+            <el-button
+              @click="editNote(scope.row.id,scope.row.orderId)"
+              type="text"
+              size="small"
+            >修改备注</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -115,84 +82,294 @@
 </template>
 
 <script>
-import { nowYear } from '@/Tools/time'
-import { iconBg, initNavBar } from '@/Tools/intScaleNum'
-import { querySearch, createFilter, getUserList, } from '@/views/PC/orderAdmin/components/common'
+import echarts from 'echarts'
+import { initNavBar, getSession } from '@/Tools/intScaleNum'
 import PageTitle from '@/views/PC/components/PageTitle'
-import PopOverWrap from "@/views/PC/orderAdmin/components/PopOverWrap"
-import {  orderStateList, desPopOver, getCharR,
-  getOrderList, orderDesFn, initChartLeft, initChartRight,
-  postSelFn, closeSelForm, handleSizeChange, handleCurrentChange, exportExcel
-} from '@/views/PC/report/components/proCommon'
+
 export default {
-  name: 'OrderQuality',
+  name: 'StuffQuality',
   data() {
     return {
       amount: null,
-      titleTime: "年",
       eChart: null,
-      desPopOver: false,
       eChart1: null,
-      orderId: null,
-      list: [],
-      // 筛选
-      selForm: {
-        userName: "",
-        orderId: "",
-        orderState: "",
-        time: [],
+      leftList: [],
+      rightList: {
+        X: [],
+        YSuccess: [],
+        YError: []
       },
-      userList: [],
       count: null,
       page: 1,
-      loading: false,
       size: 10,
+      loading: false,
       allOrderList: [],
-      orderStateList,
+      time: [
+      ],
     }
   },
   components: {
     PageTitle,
-    PopOverWrap
   },
-  watch: {
-    desPopOver,
-  },
+
   created() {
     initNavBar(this)
-    this.getTime();
-    this.getUserList();
-    this.getOrderList(this.page, this.size, this.selForm);
-    this.getCharR();
+    this.getOrderList(this.page, this.size, this.time);
+    this.getChartData();
   },
   methods: {
-    exportExcel,
-    getCharR,
-    getOrderList,
-    orderDesFn,
-    initChartLeft,
-    initChartRight,
-    postSelFn,
-    closeSelForm,
-    handleSizeChange,
-    handleCurrentChange,
-    iconBg(key) {
-      return iconBg(key)
+    editNote(id, orderId) {
+      // console.log(id);
+      this.$prompt('请输入备注信息', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      }).then(({ value }) => {
+        const parms = {
+          id,
+          note: value,
+        }
+        this.axios.post('api/webapi/order/updateOrderNote', this.qs.stringify(parms))
+          .then(res => {
+            this.getOrderList();
+            this.$notify({
+              title: "操作成功",
+              type: 'success',
+              message: `成品${orderId}修改备注成功`
+            });
+          })
+      }).catch(() => {
+        this.$notify({
+          type: 'info',
+          message: '操作取消'
+        });
+      });
     },
-    querySearch,
-    createFilter,
-    getUserList,
     getTime() {
-      this.selForm.time[0] = nowYear + "-01-01 00:00:00";
-      this.selForm.time[1] = nowYear + "-12-31 23:59:59";
-      console.log('年');
-    }
+      const date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth();
+      let day = date.getDate();
+      let hour = date.getHours();
+      let minute = date.getMinutes();
+      let second = date.getSeconds();
+      if (hour < 10) {
+        hour = '0' + hour;
+      }
+      if (minute < 10) {
+        minute = '0' + minute;
+      }
+      if (second < 10) {
+        second = '0' + second;
+      }
+      let x = date.getDay(); //获取星期
+      return year + '-' + ++month + '-' + day + ' ' + "23" + ':' + "59" + ':' + "59";
+    },
+    getChartData() {
+      let startTime = "";
+      let endTime = "";
+      if (this.time.length <= 0) {
+
+        startTime = "1111-11-11 11:11:11"
+        endTime = this.getTime()
+      } else {
+        startTime = this.time[0]
+        endTime = this.time[1]
+      }
+      const parms = {
+        startTime,
+        endTime,
+        contentType: 3,
+      };
+      console.log(parms);
+      this.axios.post('/api/webapi/qulity/getAmountByTime', this.qs.stringify(parms))
+        .then(res => {
+          console.log(res);
+          const { data, code } = res.data;
+          if (code == 200) {
+            console.log(data);
+            this.amount = data.QulityRes.sectionTotalAmount;
+            this.leftList[0] = {
+              name: '质量异常',
+              value: data.QulityRes.sectionErrorAmount
+            };
+            this.leftList[1] = {
+              name: '质量正常',
+              value: data.QulityRes.sectionNormalAmount
+            };
+            data.Qulity.forEach((item, i) => {
+              this.rightList.YSuccess[i] = item.normalAmount;
+              this.rightList.YError[i] = item.errorAmount;
+              this.rightList.X[i] = item.time.slice(0, 10);
+            });
+            this.$nextTick(() => {
+              this.initChartLeft();
+              this.initChartRight();
+            })
+          }
+        })
+
+
+    },
+    getOrderList() {
+      this.loading = true
+      const parms = {
+        pageNum: this.page,
+        pageSize: this.size,
+        startTime: this.time[0],
+        endTime: this.time[1]
+      }
+      this.axios.post('/api/webapi//order/getAllOrdersByCondition', this.qs.stringify(parms))
+        .then(res => {
+          const { code, data, count } = res.data;
+          console.log(data);
+          if (code == 200) {
+            this.count = count;
+            this.allOrderList = data;
+            this.loading = false;
+          }
+        })
+
+
+    },
+    initChartLeft() {
+      let subtext = ""
+      if (this.time.length > 0) {
+        subtext = `${this.time[0].slice(0, 10)} - ${this.time[1].slice(0, 10)}`
+      } else {
+        subtext = ""
+      }
+      this.eChart = echarts.init(this.$refs.myEchartLeft);
+      this.eChart.setOption({
+        title: {
+          text: `成品质量比例分布`,
+          subtext,
+          x: 'center'
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'right',
+          data: ['质量异常', '质量正常'],
+        },
+        series: [{
+          name: `质量数量, 单位kg`,
+          type: 'pie',
+          radius: '55%',
+          center: ['47%', '50%'],
+          data: this.leftList,
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }]
+      })
+    },
+    initChartRight() {
+      let subtext = ""
+      if (this.time.length > 0) {
+        subtext = `${this.time[0].slice(0, 10)} - ${this.time[1].slice(0, 10)}`
+      } else {
+        subtext = ""
+      }
+      this.eChart = echarts.init(this.$refs.myEchartRight);
+      this.eChart.setOption({
+        title: {
+          text: '成品质量变化趋势',
+          x: 'center',
+          subtext,
+        },
+        dataZoom: [{
+          type: 'slider',
+          show: true,
+          xAxisIndex: [0],
+          left: '9%',
+          bottom: -5,
+          start: 0,
+          end: 50 //初始化滚动条
+        }],
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'right',
+          data: ['质量异常', '质量正常']
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: this.rightList.X
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            formatter: '{value} kg'
+          }
+        },
+        series: [
+          {
+            name: '质量异常',
+            type: 'line',
+            data: this.rightList.YError,
+            markPoint: {
+              data: [
+                { type: 'max', name: '最大值' },
+                { type: 'min', name: '最小值' }
+              ]
+            },
+            markLine: {
+              data: [
+                { type: 'average', name: '平均值' }
+              ]
+            }
+          },
+          {
+            name: '质量正常',
+            type: 'line',
+            data: this.rightList.YSuccess,
+            markPoint: {
+              data: [
+                { type: 'max', name: '最大值' },
+                { type: 'min', name: '最小值' }
+              ]
+            },
+            markLine: {
+              data: [
+                { type: 'average', name: '平均值' }
+              ]
+            }
+          },
+
+        ]
+      })
+    },
+    postSelFn() {
+      this.getOrderList();
+      this.getChartData();
+    },
+    closeSelForm() {
+      this.time = []
+    },
+    handleSizeChange(size) {
+      this.size = size;
+      this.getOrderList();
+    },
+    handleCurrentChange(page) {
+      this.page = page;
+      this.getOrderList();
+    },
+
   }
 }
 </script>
 
 <style lang="scss" scoped>
-// @import "/components/common.scss";
 @import "@/views/PC/orderAdmin/components/common.scss";
 .allOrder {
   padding: 0 20px;
@@ -277,29 +454,6 @@ export default {
         color: #fff;
       }
     }
-
-    // .item {
-    //   display: flex;
-    //   flex-direction: column;
-    //   justify-content: center;
-    //   width: 180px;
-    //   box-sizing: border-box;
-    //   border: 1px solid red;
-    //   margin-right: 30px;
-    //   align-items: center;
-    //   h2 {
-    //     font-size: 14px;
-    //     padding: 3px 0;
-    //     width: 90%;
-    //     margin: 0 auto;
-    //     border-bottom: 1px solid red;
-    //     text-align: center;
-    //   }
-    //   p {
-    //     font-size: 30px;
-    //     padding: 10px 0;
-    //   }
-    // }
   }
 }
 </style>

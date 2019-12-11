@@ -180,7 +180,7 @@ export default {
       console.log(data1, data2);
       this.loading = true;
       const data = this.qs.stringify({
-        typeId: 1,
+        orderState: 1,
         pageNum: page,
         pageSize: size,
         userName: sels.userName,
@@ -189,7 +189,7 @@ export default {
         endTime: sels.time[1]
       });
 
-      this.axios.post('/api/webapi/order/getAllOrdersByTypeId', data)
+      this.axios.post('/api/webapi/order/getAllOrdersByCondition', data)
         .then(res => {
           // console.log(res);
           const { code, count, data, msg } = res.data;

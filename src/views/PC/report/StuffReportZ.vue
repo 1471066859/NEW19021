@@ -27,7 +27,7 @@
                   v-for="item in stuffList"
                   :key="item.stuffId"
                   :label="item.stuffName"
-                  :value="item.stuffName"
+                  :value="item.stuffId"
                 ></el-option>
               </el-select>
             </li>
@@ -79,7 +79,7 @@
                   v-for="item in stuffList"
                   :key="item.stuffId"
                   :label="item.stuffName"
-                  :value="item.stuffName"
+                  :value="item.stuffId"
                 ></el-option>
               </el-select>
             </li>
@@ -135,7 +135,7 @@ import echarts from 'echarts'
 import {  activeName, getStuffList, getCharR, initChartRight,
   initChartLeft, PostSerBtnFn, clearSerFn, getMaterEnterList,
   getMaterLeaveList, leaveHandleSizeChange, leaveHandleCurrentChange,
-  enterHandleSizeChange, enterHandleCurrentChange, exportExcel} from '@/views/PC/report/components/common'
+  enterHandleSizeChange, enterHandleCurrentChange, exportExcel} from '@/views/PC/report/components/sTuffcommon'
 export default {
   name: 'StuffReportZ',
   data() {

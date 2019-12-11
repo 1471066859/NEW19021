@@ -6,6 +6,7 @@
 
 <script>
 
+import { getSession } from '@/Tools/intScaleNum'
 export default {
   name: 'app',
   data() {
@@ -14,6 +15,14 @@ export default {
   },
   components: {
 
+  },
+  mounted() {
+    window.addEventListener('beforeunload', e => {
+      const data = {
+        loginId: getSession('loginId')
+      };
+      this.axios.post('/api/webapi/user/logout', this.qs.stringify(data))
+    });
   },
   created() {
   },

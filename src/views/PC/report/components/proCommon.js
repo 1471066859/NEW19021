@@ -1,7 +1,7 @@
 import echarts from 'echarts'
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
-
+// 订单状态列表
 export const orderStateList = [{
     "stateId": 1,
     "stateName": "待生产订单"
@@ -19,7 +19,7 @@ export const orderStateList = [{
     "stateName": "异常订单"
   }
 ];
-// 监听数据详情弹窗清楚计时器
+// 监听数据详情弹窗清除计时器
 export function desPopOver(val) {
   if (!val) {
     this.$refs.PopOverWrap.clearTimer();
@@ -76,7 +76,7 @@ export function getOrderList(page, size, sels) {
   console.log(sels.time[1]);
   this.loading = true;
   const data = this.qs.stringify({
-    typeId: sels.orderState,
+    orderState: sels.orderState,
     pageNum: page,
     pageSize: size,
     userName: sels.userName,
@@ -84,7 +84,7 @@ export function getOrderList(page, size, sels) {
     startTime: sels.time[0],
     endTime: sels.time[1]
   });
-  this.axios.post('/api/webapi/order/getAllOrdersByTypeId', data)
+  this.axios.post('/api/webapi/order/getAllOrdersByCondition', data)
     .then(res => {
       console.log(res);
       const {

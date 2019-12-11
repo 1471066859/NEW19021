@@ -94,7 +94,7 @@ export default {
     getOrderList(page, size, sel) {
       this.loading = true;
       const data = this.qs.stringify({
-        typeId: sel.orderStat,
+        orderState: sel.orderStat,
         pageNum: page,
         pageSize: size,
         userName: sel.peopleVal,
@@ -102,7 +102,7 @@ export default {
         startTime: sel.timeOption[0],
         endTime: sel.timeOption[1]
       });
-      this.axios.post('/api/webapi/order/getAllOrdersByTypeId', data)
+      this.axios.post('/api/webapi/order/getAllOrdersByCondition', data)
         .then(res => {
           console.log(res);
           const { data, code } = res.data;

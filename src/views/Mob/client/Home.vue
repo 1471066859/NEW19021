@@ -18,17 +18,13 @@ export default {
     }
   },
   computed: {
-    // right_btn() {
-    //   const path = this.$route.path;
-    //   const is_show = null;
-    //   path == 'm/home/add'
-    // },
     hd_msg() {
       const { path } = this.$route;
       let msg = null
       path == '/client/order_detal' ? msg = '订单详情' : msg = 'WELCOME'
       return msg;
     },
+    // 控制返回按钮可见性
     left_btn() {
       const { path } = this.$route;
       let is_show = null;
@@ -37,10 +33,8 @@ export default {
     }
   },
   methods: {
-    handleClose() {
-
-    }
   },
+  // 判断是否登录
   beforeRouteEnter(to, from, next) {
     let userInfo = sessionStorage.getItem("userId");
     if (userInfo) {

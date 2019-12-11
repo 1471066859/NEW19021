@@ -25,9 +25,9 @@
               <el-select v-model="leaveSel.stuffid" placeholder="请选择">
                 <el-option
                   v-for="item in stuffList"
-                  :key="item.stuffId"
+                  :key="item.id"
                   :label="item.stuffName"
-                  :value="item.stuffName"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </li>
@@ -77,9 +77,9 @@
               <el-select v-model="enterSel.stuffid" placeholder="请选择">
                 <el-option
                   v-for="item in stuffList"
-                  :key="item.stuffId"
+                  :key="item.id"
                   :label="item.stuffName"
-                  :value="item.stuffName"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </li>
@@ -135,7 +135,7 @@ import PageTitle from '@/views/PC/components/PageTitle'
 import {  activeName, getStuffList, getCharR, initChartRight,
   initChartLeft, PostSerBtnFn, clearSerFn, getMaterEnterList,
   getMaterLeaveList, leaveHandleSizeChange, leaveHandleCurrentChange,
-  enterHandleSizeChange, enterHandleCurrentChange, exportExcel} from '@/views/PC/report/components/common'
+  enterHandleSizeChange, enterHandleCurrentChange, exportExcel} from '@/views/PC/report/components/sTuffcommon'
 export default {
   name: 'StuffReportJ',
   data() {

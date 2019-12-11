@@ -1,12 +1,7 @@
 import echarts from 'echarts'
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
-// 生产报表common函数
-
-
-
-
-// 原材料报表common函数
+// 切换出入库
 export function activeName(val) {
   console.log(1);
   // 初始化分页条件
@@ -28,7 +23,7 @@ export function activeName(val) {
     this.getMaterEnterList(page, size, sel);
   };
 };
-
+// 拉取剩余物料信息
 export function getStuffList() {
   this.axios.get("/api/webapi/warehouse/getAllStuffAmount?contentid=1")
     .then(res => {
@@ -49,29 +44,31 @@ export function getStuffList() {
     .catch(err => console.log(err))
 };
 
+//拉取chart数据
 export function getCharR() {
   const data = this.qs.stringify({
     startTime: this.leaveSel.time[0],
     endTime: this.leaveSel.time[1]
   })
-  this.axios.post('/api/webapi/order/getAmountOrdersByState', data)
+  this.axios.post('/api/webapi/outInWarehouse/getAmountOutInWarehouseByState', data)
     .then(res => {
+      console.log(res);
       const {
         code,
         data
       } = res.data;
       if (code == 200) {
-        this.amount = data.allOrders
+        this.amount = data.outInAmount
         const list = [];
         list.push({
-          value: data.pendingOrders + data.productionOrders,
+          value: data.outAmount,
           name: "原材料出库",
           itemStyle: {
             color: "#409EFF"
           }
         });
         list.push({
-          value: data.completedOrders,
+          value: data.inAmount,
           name: "原材料入库",
           itemStyle: {
             color: "#67C23A"
@@ -83,7 +80,7 @@ export function getCharR() {
       }
     })
 };
-
+// 绘制图表
 export function initChartLeft() {
   this.eChart = echarts.init(this.$refs.myEchartLeft);
   this.eChart.setOption({
@@ -160,6 +157,7 @@ export function initChartRight() {
   })
 };
 
+// 提交筛选项
 export function PostSerBtnFn() {
   const {
     activeName
@@ -181,6 +179,7 @@ export function PostSerBtnFn() {
     this.getMaterEnterList(page, size, sel);
   }
 };
+// 清除筛选项
 export function clearSerFn() {
   const {
     activeName
@@ -202,20 +201,20 @@ export function getMaterEnterList(page, size, sel) {
     outInType: 1,
     pageNum: page,
     pageSize: size,
-    contentName: sel.stuffid,
-    outInTimeStart: sel.time[0],
-    outInTimeEnd: sel.time[1]
+    contentId: sel.stuffid,
+    startTime: sel.time[0],
+    endTime: sel.time[1]
   };
   const parms = {}
-  if (data.contentName != "") parms.contentName = data.contentName;
-  if (data.outInTimeStart != "") parms.outInTimeStart = data.outInTimeStart;
-  if (data.outInTimeEnd != "") parms.outInTimeEnd = data.outInTimeEnd;
+  if (data.contentId != "") parms.contentId = data.contentId;
+  if (data.startTime != "") parms.startTime = data.startTime;
+  if (data.endTime != "") parms.endTime = data.endTime;
   parms.contentType = 1;
   parms.outInType = 1;
   parms.pageNum = page;
   parms.pageSize = size;
   console.log(data, '入库信息');
-  this.axios.post('/api/webapi/warehouse/getOutinWarehouseInfo', this.qs.stringify(parms))
+  this.axios.post('/api/webapi/outInWarehouse/getOutinWarehouseInfo', this.qs.stringify(parms))
     .then(res => {
       console.log(res, '入库数据表格');
       const {
@@ -234,20 +233,21 @@ export function getMaterLeaveList(page, size, sel) {
     outInType: 2,
     pageNum: page,
     pageSize: size,
-    contentName: sel.stuffid,
-    outInTimeStart: sel.time[0],
-    outInTimeEnd: sel.time[1]
+    contentId: sel.stuffid,
+    startTime: sel.time[0],
+    endTime: sel.time[1]
   };
+  console.log(data, 111);
   const parms = {}
-  if (data.contentName != "") parms.contentName = data.contentName;
-  if (data.outInTimeStart != "") parms.outInTimeStart = data.outInTimeStart;
-  if (data.outInTimeEnd != "") parms.outInTimeEnd = data.outInTimeEnd;
+  if (data.contentId != "") parms.contentId = data.contentId;
+  if (data.startTime != "") parms.startTime = data.startTime;
+  if (data.endTime != "") parms.endTime = data.endTime;
   parms.contentType = 1;
   parms.outInType = 2;
   parms.pageNum = page;
   parms.pageSize = size;
   console.log(data);
-  this.axios.post('/api/webapi/warehouse/getOutinWarehouseInfo', this.qs.stringify(parms))
+  this.axios.post('/api/webapi/outInWarehouse/getOutinWarehouseInfo', this.qs.stringify(parms))
     .then(res => {
       console.log(res, '出库信息');
       this.leaveTable.count = res.data.count;
@@ -294,6 +294,7 @@ export function enterHandleCurrentChange(val) {
   this.getMaterEnterList(page, size, sel);
 };
 
+// 数据导出
 export function exportExcel(id) {
   let fileName = "";
   id == "#leave" ? fileName = "出库" : fileName = "入库";

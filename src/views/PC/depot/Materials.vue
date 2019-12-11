@@ -37,7 +37,7 @@
             <el-select v-model="addStuffForm.stuffid" placeholder="请选择物料名称">
               <el-option
                 v-for="item in stuffList"
-                :key="item.id"
+                :key="item.stuffName"
                 :label="item.stuffName"
                 :value="item.id"
               ></el-option>
@@ -84,9 +84,9 @@
               <el-select v-model="leaveSel.stuffid" placeholder="请选择">
                 <el-option
                   v-for="item in stuffList"
-                  :key="item.stuffId"
+                  :key="item.id"
                   :label="item.stuffName"
-                  :value="item.stuffName"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </li>
@@ -143,9 +143,9 @@
               <el-select v-model="enterSel.stuffid" placeholder="请选择">
                 <el-option
                   v-for="item in stuffList"
-                  :key="item.stuffId"
+                  :key="item.id"
                   :label="item.stuffName"
-                  :value="item.stuffName"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </li>
@@ -281,49 +281,9 @@ export default {
       activeName: 'leave',
       // 物料列表
       stuffList: [
-        // {
-        //   stuffName: '瓜子',
-        //   icon: "icon-guazi",
-        //   stuffId: 1,
-        //   warehouse: {
-        //     amount: 253
-        //   }
-        // },
-        // {
-        //   stuffName: '花生',
-        //   stuffId: 2,
-        //   icon: "icon-guazi",
-        //   warehouse: {
-        //     amount: 253
-        //   }
-        // },
-        // {
-        //   stuffName: '玉米',
-        //   stuffId: 3,
-        //   icon: "icon-guazi",
-        //   warehouse: {
-        //     amount: 253
-        //   }
-        // },
-        // {
-        //   stuffName: '大豆',
-        //   stuffId: 4,
-        //   icon: "icon-guazi",
-        //   warehouse: {
-        //     amount: 253
-        //   }
-        // }
       ],
       // 管理员信息
       adminList: [
-        // {
-        //   userName: "mql",
-        //   userId: 1,
-        // },
-        // {
-        //   userName: "mql1",
-        //   userId: 2,
-        // }
       ]
     }
   },
@@ -453,6 +413,7 @@ export default {
     getStuffList() {
       this.axios.get("/api/webapi/warehouse/getAllStuffAmount?contentid=1")
         .then(res => {
+          console.log(res, 11);
           const iconList = [
             "icon-guazi",
             "icon-huasheng",
@@ -460,10 +421,11 @@ export default {
             "icon-dadou"
           ]
           const { data } = res.data;
-          this.stuffList = data.splice(0, 4);
+          this.stuffList = data.slice(0, 4);
           this.stuffList.forEach((item, index) => {
             item.icon = iconList[index];
           });
+          console.log(this.stuffList, 11111);
         })
         .catch(err => console.log(err))
     },
@@ -486,26 +448,27 @@ export default {
     },
     // 拉取物料入库信息
     getMaterEnterList(page, size, sel) {
+      console.log(sel);
       this.tableLoad = true;
       const data = {
         contentType: 1,
         outInType: 1,
         pageNum: page,
         pageSize: size,
-        contentName: sel.stuffid,
-        outInTimeStart: sel.time[0],
-        outInTimeEnd: sel.time[1]
+        contentId: sel.stuffid,
+        startTime: sel.time[0],
+        endTime: sel.time[1]
       };
-      const parms = {}
-      if (data.contentName != "") parms.contentName = data.contentName;
-      if (data.outInTimeStart != "") parms.outInTimeStart = data.outInTimeStart;
-      if (data.outInTimeEnd != "") parms.outInTimeEnd = data.outInTimeEnd;
-      parms.contentType = 1;
-      parms.outInType = 1;
-      parms.pageNum = page;
-      parms.pageSize = size;
+      // const parms = {}
+      // if (data.contentId != "") parms.contentId = data.contentId;
+      // if (data.startTime != "") parms.startTime = data.startTime;
+      // if (data.endTime != "") parms.endTime = data.endTime;
+      // parms.contentType = 1;
+      // parms.outInType = 1;
+      // parms.pageNum = page;
+      // parms.pageSize = size;
       console.log(data, '入库信息');
-      this.axios.post('/api/webapi/warehouse/getOutinWarehouseInfo', qs.stringify(parms))
+      this.axios.post('/api/webapi/outInWarehouse/getOutinWarehouseInfo', qs.stringify(data))
         .then(res => {
           console.log(res, '入库数据表格');
           const { data } = res.data
@@ -522,20 +485,20 @@ export default {
         outInType: 2,
         pageNum: page,
         pageSize: size,
-        contentName: sel.stuffid,
-        outInTimeStart: sel.time[0],
-        outInTimeEnd: sel.time[1]
+        contentId: sel.stuffid,
+        startTime: sel.time[0],
+        endTime: sel.time[1]
       };
-      const parms = {}
-      if (data.contentName != "") parms.contentName = data.contentName;
-      if (data.outInTimeStart != "") parms.outInTimeStart = data.outInTimeStart;
-      if (data.outInTimeEnd != "") parms.outInTimeEnd = data.outInTimeEnd;
-      parms.contentType = 1;
-      parms.outInType = 2;
-      parms.pageNum = page;
-      parms.pageSize = size;
+      // const parms = {}
+      // if (data.contentId != "") parms.contentId = data.contentId;
+      // if (data.startTime != "") parms.startTime = data.startTime;
+      // if (data.endTime != "") parms.endTime = data.endTime;
+      // parms.contentType = 1;
+      // parms.outInType = 2;
+      // parms.pageNum = page;
+      // parms.pageSize = size;
       console.log(data);
-      this.axios.post('/api/webapi/warehouse/getOutinWarehouseInfo', qs.stringify(parms))
+      this.axios.post('/api/webapi/outInWarehouse/getOutinWarehouseInfo', qs.stringify(data))
         .then(res => {
           console.log(res, '出库信息');
           this.leaveTable.count = res.data.count;

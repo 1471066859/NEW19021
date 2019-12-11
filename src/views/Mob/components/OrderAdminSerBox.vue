@@ -29,7 +29,6 @@
       <div class="searchLoad" v-show="showSearchLoad">
         <div class="row1">
           <p>创建人</p>
-          <!-- <el-cascader v-model="peopleVal" :options="peopleOptions" @change="handleChange"></el-cascader> -->
           <el-autocomplete
             class="inline-input"
             v-model="peopleVal"
@@ -284,23 +283,23 @@ export default {
     },
     getOrderStateList() {
       this.orderStateList = [{
-        "stateId": 1,
+        "stateId": "1",
         "label": "待生产订单",
-        value: "1",
+        "value": "1",
       },
       {
-        "stateId": 2,
+        "stateId": "2",
         "label": "正在生产订单",
-        value: "2",
+        "value": "2",
       },
       {
-        "stateId": 3,
-        value: "3",
+        "stateId": "3",
+        "value": "3",
         "label": "已完成订单"
       },
       {
-        value: "4",
-        "stateId": 4,
+        "value": "4",
+        "stateId": "4",
         "label": "异常订单"
       }];
     },
@@ -323,10 +322,7 @@ export default {
         productionVal
       };
       this.$emit('getSelData', searchObj);
-    },
-    handleChange() {
-
-    },
+    }
   },
 }
 </script>

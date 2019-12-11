@@ -127,25 +127,8 @@ export default {
       cart_list: [
       ]
       ,
-      // 商品信息
+      // 物料信息
       shop_list: [
-        // {
-        //   stuffName: '物料一',
-        //   id: 1
-        // },
-        // {
-        //   stuffName: '物料二',
-        //   id: 2
-
-        // },
-        // {
-        //   stuffName: '物料三',
-        //   id: 3
-        // },
-        // {
-        //   stuffName: '物料四',
-        //   id: 4
-        // },
       ],
     }
   },
@@ -223,6 +206,22 @@ export default {
           };
           arr.push(obj)
         });
+        // 用于分解count值大于1
+        // {
+        //   规格:大,
+        //   物料:物料一,
+        //   count:2
+        // } 分解为以下
+        // {
+        //   规格:大,
+        //   物料:物料一,
+        //   count:1
+        // }
+        // {
+        //   规格:大,
+        //   物料:物料一,
+        //   count:1
+        // }
         arr.forEach(item => {
           if (item.count == 2) {
             item.count = 1;
@@ -245,12 +244,14 @@ export default {
       }
     },
     PostDataFn(cart_list) {
+      /**
+       * 数组需使用JSON.stringify进行序列化
+       */
       console.log(cart_list, 123);
       const data = this.qs.stringify({
         stuffPackVos: JSON.stringify(cart_list),
         userId: getSession("userId")
       });
-      // let data = "stuffPackVos=" + JSON.stringify(cart_list) + "&" + "userId=" + getSession("userId");
       console.log(data);
       this.axios.post('/api/webapi/order/addOrders', data)
         .then(res => {
@@ -328,7 +329,11 @@ export default {
       // 老版本弹窗
       this.show_box = true;
     },
-    // 下单规则验证
+    /**
+     * 下单规则验证，验证规则为2大4小，大小对应关系为1大==2小
+     *  遍历下单数组 将小盒packNum为 将大盒的改为2 将大盒当成2个小盒看待
+     * 最终累加累加packNum 大于4表示不符合
+     */
     verification(obj) {
       let num = 0;
       let arr = [];
@@ -365,6 +370,7 @@ export default {
         packNum: count_num,
         stuffName: shop_name
       }
+      // 判断是否满足下单规则 满足添加 不满足提醒
       const isVerif = this.verification(obj);
       if (isVerif) {
         this.cart_list.push({

@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    // 用户是否登录  ** 废弃**
+    // 用户是否登录  ** 废弃** 改为session
     is_login: false,
     // 产线状态
     mobHdMsg: 'WELCOME',

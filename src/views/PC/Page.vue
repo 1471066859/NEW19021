@@ -9,6 +9,9 @@
     <div class="pageContent">
       <!-- 头部信息 -->
       <header>
+        <i class="logoutBtn">
+          <el-button type="text" :loading="logoutLoad" @click="logoutFn">退出登录</el-button>
+        </i>
         <h1>产线001</h1>
       </header>
       <!-- 页面导航 -->
@@ -29,20 +32,65 @@
 <script>
 
 import { setSession, getSession } from '@/Tools/intScaleNum'
+import { pageHeader, pageRouterBox } from '@/Tools/routerTitle'
 import NavBar from '@/views/PC/components/NavBar'
 
 export default {
   data() {
     return {
+      // 退出登录按钮loading
+      logoutLoad: false,
     }
   },
   created() {
 
   },
   methods: {
+    // 退出登录
+    postLogoutFn() {
+      this.logoutLoad = true;
+      const data = {
+        loginId: getSession('loginId')
+      };
+      this.axios.post('/api/webapi/user/logout', this.qs.stringify(data))
+        .then(res => {
+          console.log(res);
+          const { code, data } = res.data;
+          if (code == 200) {
+            sessionStorage.clear();
+            this.$router.push('/login');
+            this.$notify({
+              type: 'success',
+              message: '退出成功!'
+            });
+          }
+          this.logoutLoad = false;
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    },
+    // 退出登录前提醒
+    logoutFn() {
+      this.$confirm('您确定要退出登录吗', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.postLogoutFn();
+      }).catch(() => {
+        this.$notify({
+          type: 'info',
+          message: '已取消操作'
+        });
+      });
 
+    },
   },
   computed: {
+    pageHeader,
+    pageRouterBox,
+    /**
     pageHeader() {
       const { path } = this.$route;
       switch (path) {
@@ -230,14 +278,16 @@ export default {
           break;
       }
     }
+    */
   },
   components: {
     NavBar,
 
   },
+  // 判断是否权限 0 为管理员 1为普通用户
   beforeRouteEnter(to, from, next) {
-    let userInfo = sessionStorage.getItem("userId");
-    if (userInfo) {
+    let role = sessionStorage.getItem("role");
+    if (role == 0) {
       next();
     } else {
       next(vm => {
@@ -290,6 +340,15 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
+      .logoutBtn {
+        position: absolute;
+        right: 50px;
+        top: calc(50% - 20px);
+        button {
+          font-size: 14px !important;
+        }
+      }
       h1 {
         font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
           "Lucida Sans Unicode", Geneva, Verdana, sans-serif;

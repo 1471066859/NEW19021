@@ -43,22 +43,32 @@
         :data="allOrderList"
         :header-cell-style="{'background-color': '#fafafa'}"
         v-loading="loading"
-        height="400"
+        height="460"
         border
         id="tableData"
         style="width: 100%"
       >
         <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <el-table-column prop="orderId" label="订单编号"></el-table-column>
         <el-table-column prop="stuffName" label="物料名称"></el-table-column>
-        <el-table-column prop="des" label="质量问题描述"></el-table-column>
-        <el-table-column prop="userName" label="操作人"></el-table-column>
-        <el-table-column prop="time" label="时间"></el-table-column>
-        <el-table-column prop="bz" label="备注"></el-table-column>
+        <el-table-column prop="sectionTotalAmount" label="物料总量"></el-table-column>
+        <el-table-column prop="sectionErrorAmount" label="正常数量"></el-table-column>
+        <el-table-column prop="errorPortion" label="正常比例"></el-table-column>
+        <el-table-column prop="sectionNormalAmount" label="异常数量"></el-table-column>
+        <el-table-column prop="normalPortion" label="异常比例"></el-table-column>
+        <!-- <el-table-column prop="bz" label="备注"></el-table-column> -->
+        <!-- <el-table-column prop="bz" label="操作">
+          <template slot-scope="scope">
+            <el-button
+              @click="editNote(scope.row.id,scope.row.orderId)"
+              type="text"
+              size="small"
+            >修改备注</el-button>
+          </template>
+        </el-table-column>-->
       </el-table>
     </div>
     <!-- 分页 -->
-    <div class="selPageWrap">
+    <!-- <div class="selPageWrap">
       <el-pagination
         @size-change="handleSizeChange"
         background
@@ -69,7 +79,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="count"
       ></el-pagination>
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -97,8 +107,6 @@ export default {
       loading: false,
       allOrderList: [],
       time: [
-        "2012-12-30 20:33:45",
-        "2012-12-30 20:33:45",
       ],
     }
   },
@@ -107,119 +115,156 @@ export default {
   },
 
   created() {
-    const data = {
-      loginId: getSession('loginId')
-    };
-    this.axios.post('/api/webapi/user/logout', this.qs.stringify(data))
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      })
     initNavBar(this)
     this.getOrderList(this.page, this.size, this.time);
+    this.getChartData();
   },
   methods: {
-    getOrderList() {
-      const data = {
-        amount: 1123,
-        err: 12,
-        success: 51,
-        list: [
-          {
-            time: "2011-12-20 20:35:48",
-            err: 4,
-            success: 1
-          },
-          {
-            time: "2011-12-21 20:35:48",
-            err: 7,
-            success: 3
-          },
-          {
-            time: "2011-12-22 20:35:48",
-            err: 6,
-            success: 3
-          },
-          {
-            time: "2011-12-23 20:35:48",
-            err: 1,
-            success: 5
-          },
-          {
-            time: "2011-12-24 20:35:48",
-            err: 3,
-            success: 3
-          },
-          {
-            time: "2011-12-25 20:35:48",
-            err: 1,
-            success: 3
-          },
-        ],
-        tableList: [
-          {
-            orderId: 1123,  // 订单编号
-            stuffName: '物料1',  // 物料名（原材料质量管理字段）
-            des: '问题描述', // 质量问题描述
-            userName: '张三', // 操作人
-            time: '2012-12-30 12:30:44', // 时间
-            bz: '备注' // 备注
-          },
-          {
-            orderId: 1123,  // 订单编号
-            stuffName: '物料1',  // 物料名（原材料质量管理字段）
-            des: '问题描述', // 质量问题描述
-            userName: '张三', // 操作人
-            time: '2012-12-30 12:30:44', // 时间
-            bz: '备注' // 备注
-          },
-          {
-            orderId: 1123,  // 订单编号
-            stuffName: '物料1',  // 物料名（原材料质量管理字段）
-            des: '问题描述', // 质量问题描述
-            userName: '张三', // 操作人
-            time: '2012-12-30 12:30:44', // 时间
-            bz: '备注' // 备注
-          },
-          {
-            orderId: 1123,  // 订单编号
-            stuffName: '物料1',  // 物料名（原材料质量管理字段）
-            des: '问题描述', // 质量问题描述
-            userName: '张三', // 操作人
-            time: '2012-12-30 12:30:44', // 时间
-            bz: '备注' // 备注
-          },
-        ]
+    // editNote(id, orderId) {
+    //   // console.log(id);
+    //   this.$prompt('请输入备注信息', '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //   }).then(({ value }) => {
+    //     const parms = {
+    //       id,
+    //       note: value,
+    //     }
+    //     this.axios.post('api/webapi/order/updateOrderNote', this.qs.stringify(parms))
+    //       .then(res => {
+    //         this.getOrderList();
+    //         this.$notify({
+    //           title: "操作成功",
+    //           type: 'success',
+    //           message: `成品${orderId}修改备注成功`
+    //         });
+    //       })
+    //   }).catch(() => {
+    //     this.$notify({
+    //       type: 'info',
+    //       message: '操作取消'
+    //     });
+    //   });
+    // },
+    getTime() {
+      const date = new Date();
+      let year = date.getFullYear();
+      let month = date.getMonth();
+      let day = date.getDate();
+      let hour = date.getHours();
+      let minute = date.getMinutes();
+      let second = date.getSeconds();
+      if (hour < 10) {
+        hour = '0' + hour;
+      }
+      if (minute < 10) {
+        minute = '0' + minute;
+      }
+      if (second < 10) {
+        second = '0' + second;
+      }
+      let x = date.getDay(); //获取星期
+      return year + '-' + ++month + '-' + day + ' ' + "23" + ':' + "59" + ':' + "59";
+    },
+    getChartData() {
+      let startTime = "";
+      let endTime = "";
+      if (this.time.length <= 0) {
+        startTime = "1111-11-11 11:11:11"
+        endTime = this.getTime()
+      } else {
+        startTime = this.time[0]
+        endTime = this.time[1]
+      }
+      const parms = {
+        startTime,
+        endTime,
+        contentType: 1,
       };
-      data.list.forEach(item => {
-        this.rightList.YSuccess.push(item.success);
-        this.rightList.YError.push(item.err);
-        this.rightList.X.push(item.time.slice(0, 10));
-      });
-      this.amount = data.amount;
-      this.leftList.push({
-        name: '质量异常',
-        value: data.err
-      });
-      this.leftList.push({
-        name: '质量正常',
-        value: data.success
-      });
-      this.allOrderList = data.tableList;
-      this.$nextTick(() => {
-        this.initChartLeft();
-        this.initChartRight();
-      })
+      console.log(parms);
+      this.axios.post('/api/webapi/qulity/getAmountByTime', this.qs.stringify(parms))
+        .then(res => {
+          console.log(res);
+          const { data, code } = res.data;
+          if (code == 200) {
+            console.log(data);
+            this.amount = data.QulityRes.sectionTotalAmount;
+            this.leftList[0] = {
+              name: '质量异常',
+              value: data.QulityRes.sectionErrorAmount
+            };
+            this.leftList[1] = {
+              name: '质量正常',
+              value: data.QulityRes.sectionNormalAmount
+            };
+            data.Qulity.forEach((item, i) => {
+              this.rightList.YSuccess[i] = item.normalAmount;
+              this.rightList.YError[i] = item.errorAmount;
+              this.rightList.X[i] = item.time.slice(0, 10);
+            });
+            this.$nextTick(() => {
+              this.initChartLeft();
+              this.initChartRight();
+            })
+          }
+        })
+    },
+    getOrderList() {
+      this.loading = true;
+      let startTime = "";
+      let endTime = "";
+      if (this.time.length <= 0) {
+        startTime = "1111-11-11 11:11:11"
+        endTime = this.getTime()
+      } else {
+        startTime = this.time[0]
+        endTime = this.time[1]
+      }
+      const parms = {
+        startTime,
+        endTime
+      }
+      this.axios.post('/api/webapi/qulity/getAmountAndProportionByTime', this.qs.stringify(parms))
+        .then(res => {
+          const { code, data } = res.data;
+          if (code == 200) {
+            data.forEach(element => {
+              switch (element.contentId) {
+                case 1:
+                  element.stuffName = '物料一'
+                  break;
+                case 2:
+                  element.stuffName = '物料二'
+                  break;
+                case 3:
+                  element.stuffName = '物料三'
+                  break;
+                case 4:
+                  element.stuffName = '物料四'
+                  break;
+                default:
+                  break;
+              }
+            });
+            data.pop();
+            this.allOrderList = data;
+            this.loading = false;
+          }
+        })
 
     },
     initChartLeft() {
+      let subtext = ""
+      if (this.time.length > 0) {
+        subtext = `${this.time[0].slice(0, 10)}-${this.time[1].slice(0, 10)}`
+      } else {
+        subtext = ""
+      }
       this.eChart = echarts.init(this.$refs.myEchartLeft);
       this.eChart.setOption({
         title: {
           text: `原材料质量比例分布`,
-          subtext: `${this.time[0].slice(0, 10)}-${this.time[1].slice(0, 10)}`,
+          subtext,
           x: 'center'
         },
         tooltip: {
@@ -248,14 +293,28 @@ export default {
       })
     },
     initChartRight() {
+      let subtext = ""
+      if (this.time.length > 0) {
+        subtext = `${this.time[0].slice(0, 10)}-${this.time[1].slice(0, 10)}`
+      } else {
+        subtext = ""
+      }
       this.eChart = echarts.init(this.$refs.myEchartRight);
       this.eChart.setOption({
         title: {
           text: '原材料质量变化趋势',
           x: 'center',
-          subtext: `${this.time[0].slice(0, 10)}-${this.time[1].slice(0, 10)}`,
+          subtext,
         },
-
+        dataZoom: [{
+          type: 'slider',
+          show: true,
+          xAxisIndex: [0],
+          left: '9%',
+          bottom: -5,
+          start: 0,
+          end: 50 //初始化滚动条
+        }],
         tooltip: {
           trigger: 'axis'
         },
@@ -313,16 +372,16 @@ export default {
       })
     },
     postSelFn() {
-
+      this.getChartData();
     },
     closeSelForm() {
-
+      this.time = [];
     },
-    handleSizeChange() {
-
+    handleSizeChange(size) {
+      this.size = size;
     },
-    handleCurrentChange() {
-
+    handleCurrentChange(page) {
+      this.page = page;
     },
 
   }

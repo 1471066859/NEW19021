@@ -117,13 +117,13 @@ export default {
             if (item.packId == 1) item.packName = "大料盒"
             if (item.packId == 2) item.packName = "小料盒"
             if (item.orderStuffUnit) {
-              if (item.orderStuffUnit.unitId == 1) item.orderStuffUnit.unitName = "上料区"
-              if (item.orderStuffUnit.unitId == 2) item.orderStuffUnit.unitName = "投料区"
-              if (item.orderStuffUnit.unitId == 3) item.orderStuffUnit.unitName = "视觉检测"
-              if (item.orderStuffUnit.unitId == 4) item.orderStuffUnit.unitName = "异常区"
-              if (item.orderStuffUnit.unitId == 5) item.orderStuffUnit.unitName = "堆垛区"
-              if (item.orderStuffUnit.unitId == 6) item.orderStuffUnit.unitName = "堆垛区"
-              if (item.orderStuffUnit.unitId == 7) item.orderStuffUnit.unitName = "堆垛区"
+              if (item.orderStuffUnit.unitId == 1) item.orderStuffUnit.unitName = "单元1"
+              if (item.orderStuffUnit.unitId == 2) item.orderStuffUnit.unitName = "单元2"
+              if (item.orderStuffUnit.unitId == 3) item.orderStuffUnit.unitName = "单元3"
+              if (item.orderStuffUnit.unitId == 4) item.orderStuffUnit.unitName = "单元4"
+              if (item.orderStuffUnit.unitId == 5) item.orderStuffUnit.unitName = "单元5"
+              if (item.orderStuffUnit.unitId == 6) item.orderStuffUnit.unitName = "单元6"
+              if (item.orderStuffUnit.unitId == 7) item.orderStuffUnit.unitName = "单元7"
             }
           });
           this.orderInfo = data.orderStuffPackRes;

@@ -108,11 +108,13 @@ export default {
   },
   data() {
     return {
+      // 筛选内容
       selForm: {
         userName: "",
         time: "",
         role: "",
       },
+      // 筛选权限下拉列表
       roleList: [
         {
           label: "普通用户",
@@ -125,11 +127,16 @@ export default {
       ],
       // 用户名集合
       userList: [],
+      // 数据总条数
       count: null,
+      // 页数
       page: 1,
+      // 条数
       size: 10,
       loading: false,
+      // 表格数据
       userData: [],
+      // 点击修改权限的用户标识
       userId: null,
     }
   },
@@ -142,6 +149,7 @@ export default {
     this.getUserList();
   },
   methods: {
+    // 删除用户
     removeUser(row) {
       this.$confirm(`您确定要删除用户<span class="confirmOrderId">${row.userName}</span>吗?`, '提示', {
         dangerouslyUseHTMLString: true,
@@ -188,6 +196,7 @@ export default {
         })
 
     },
+    // 拉取用名集合 用于搜索
     getUserList() {
       this.axios.get('/api/webapi/user/getAllUserName')
         .then(res => {
@@ -232,6 +241,7 @@ export default {
           }
         })
     },
+    // 拉取表格数据
     getUserData(page, size, sel) {
       this.loading = true;
       const data = {
@@ -267,8 +277,10 @@ export default {
           }
         })
     },
+    // 用户匹配用户输入的姓名
     querySearch,
     createFilter,
+    // 提交筛选
     postSelFn() {
       this.page = 1;
       this.getUserData(this.page, this.size, this.selForm);
@@ -281,6 +293,7 @@ export default {
         time: "",
       }
     },
+    // 分页分条相关
     handleSizeChange(size) {
       this.size = size;
       this.getUserData(this.page, this.size, this.selForm);

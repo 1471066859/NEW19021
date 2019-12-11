@@ -1,5 +1,15 @@
 <template>
   <div class="mob_login">
+    <div class="balk" v-if="selTem"></div>
+    <div class="loginTem" v-if="selTem">
+      <div class="wrap">
+        <p>请选择您要登录的平台</p>
+        <div class="list">
+          <i @click="loginTem(1)">客户端</i>
+          <i @click="loginTem(0)">工厂端</i>
+        </div>
+      </div>
+    </div>
     <div class="login_pic">
       <img src="@/assets/img/user_pic.png" alt />
     </div>
@@ -72,6 +82,7 @@ export default {
     return {
       // 登录数据
       userId: null,
+      selTem: false,
       user_number: '',
       user_pwd: '',
       // 修改密码
@@ -84,28 +95,37 @@ export default {
   computed: {
 
   },
-  beforeRouteEnter(to, from, next) {
-    sessionStorage.clear();
-    // sessionStorage.removeItem('userUuid');
-    next();
+  mounted() {
+    const data = {
+      loginId: getSession('loginId')
+    }
+    this.axios.post('/api/webapi/user/logout', this.qs.stringify(data))
+      .then(res => {
+        console.log(res);
+        sessionStorage.clear();
+        const { code, data } = res.data;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   methods: {
+    loginTem(tem) {
+      switch (tem) {
+        case 0:
+          this.$router.push('/works');
+          this.selTem = false;
+          break;
+        case 1:
+          this.$router.push('/client')
+          this.selTem = false;
+          break;
+        default:
+          break;
+      }
+    },
     // 登录
     loginFn() {
-
-      // 上线删除！！！！！！！！！
-      if (this.user_number == 1 && this.user_pwd == 1) {
-        setSession('userId', 1);
-        this.$router.push('/client');
-        return;
-      };
-      if (this.user_number == 2 && this.user_pwd == 2) {
-        setSession('userId', 2);
-        this.$router.push('/works');
-        return;
-      };
-
-
       const { user_number, user_pwd } = this;
       if (user_number == '') {
         MessageBox('登录失败', '请填写登录学号', false);
@@ -123,8 +143,8 @@ export default {
         .then(res => {
           console.log(res);
           const { success, msg } = res.data;
-          const { createTime, id, loginId, role, userName } = res.data.data;
           if (success) {
+            const { createTime, id, loginId, role, userName } = res.data.data;
             setSession('userId', id);
             setSession('loginId', loginId);
             setSession('role', role);
@@ -136,17 +156,19 @@ export default {
               this.$router.push('/client');
             } else if (role == 0) {
               console.log(role);
-              this.$router.push('/works');
+              this.selTem = true;
             }
           } else {
-
+            MessageBox('登录失败', msg, false);
+            this.initFromFn();
           }
         })
-        .catch(err => {
-          MessageBox('登录失败', '学号或密码错误', false);
-          this.initFromFn();
-          // console.log(err, '登录页错误信息');
-        })
+      // .catch(err => {
+      //   console.log(err);
+      //   MessageBox('登录失败', err.data.msg, false);
+      //   this.initFromFn();
+      //   // console.log(err, '登录页错误信息');
+      // })
     },
     // 初始化表单
     initFromFn() {
@@ -255,6 +277,49 @@ $designWidth: 375;
   // height: 100vh;
   height: 100%;
   background: #fff;
+  .balk {
+    z-index: 888;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.5;
+  }
+  .loginTem {
+    width: 100%;
+    top: px(300);
+    height: px(100);
+    z-index: 999;
+    position: absolute;
+    .wrap {
+      width: px(300);
+      border-radius: px(4);
+      margin: 0 auto;
+      background: #fff;
+      height: 100%;
+      p {
+        font-size: px(16);
+        text-align: center;
+        padding: px(10) 0;
+      }
+      .list {
+        margin-top: px(10);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        // padding: 0 px(50);
+        i {
+          color: #1890ff;
+          flex: 1;
+          text-align: center;
+          display: block;
+          font-size: px(14);
+        }
+      }
+    }
+  }
 }
 .mint-msgbox-content {
   padding: px(10) px(20) px(15);

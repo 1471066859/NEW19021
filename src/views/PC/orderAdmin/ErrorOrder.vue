@@ -144,13 +144,13 @@ export default {
     }
   },
   methods: {
-       closeSelForm() {
+    closeSelForm() {
       this.selForm = {
         orderId: "",
         time: "",
         userName: ""
       }
-     },
+    },
     querySearch,
     createFilter,
     getOrderList(page, size, sels) {
@@ -161,7 +161,7 @@ export default {
       //   })
       this.loading = true;
       const data = this.qs.stringify({
-        typeId: 4,
+        orderState: 4,
         pageNum: page,
         pageSize: size,
         userName: sels.userName,
@@ -170,7 +170,7 @@ export default {
         endTime: sels.time[1]
       });
 
-      this.axios.post('/api/webapi/order/getAllOrdersByTypeId', data)
+      this.axios.post('/api/webapi/order/getAllOrdersByCondition', data)
         .then(res => {
           console.log(res);
           const { code, count, data, msg } = res.data;

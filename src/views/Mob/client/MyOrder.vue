@@ -105,33 +105,6 @@ export default {
       ],
       // 订单列表
       my_order_list: [
-        // {
-        //   "id": 273,
-        //   "orderId": "D19110043",
-        //   "userId": 7,
-        //   "startTime": "2019-11-25 16:54:25",
-        //   "endTime": null,
-        //   "orderState": 1,
-        //   "isDel": 1
-        // },
-        // {
-        //   "id": 273,
-        //   "orderId": "D19110043",
-        //   "userId": 7,
-        //   "startTime": "2019-11-25 16:54:25",
-        //   "endTime": null,
-        //   "orderState": 1,
-        //   "isDel": 1
-        // },
-        // {
-        //   "id": 273,
-        //   "orderId": "D19110043",
-        //   "userId": 7,
-        //   "startTime": "2019-11-25 16:54:25",
-        //   "endTime": null,
-        //   "orderState": 1,
-        //   "isDel": 1
-        // },
       ]
     }
   },

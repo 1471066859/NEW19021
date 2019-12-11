@@ -3,12 +3,12 @@
     <h1>成品出入库管理</h1>
     <!--物料数量 -->
     <div class="materWrap">
-      <div class="item" v-for="(item,index) in stuffList" :key="index">
-        <i class="iconfont" :class="item.icon"></i>
+      <div class="item">
+        <i class="iconfont icon-guazi"></i>
         <div class="msgWrap">
-          <p>{{item.name}}</p>
-          <h2 v-if="item">
-            {{item.amount}}
+          <p>库存成品数量</p>
+          <h2>
+            {{enterTable.count}}
             <span>个</span>
           </h2>
         </div>
@@ -40,7 +40,7 @@
                 ></el-autocomplete>
               </div>
             </li>
-            <li class="selNameWrap" style="display:flex; align-items:center">
+            <!-- <li class="selNameWrap" style="display:flex; align-items:center">
               <span>订单编号:</span>
               <div style="width:170px">
                 <el-input
@@ -49,7 +49,7 @@
                   v-model="leaveSel.orderId"
                 ></el-input>
               </div>
-            </li>
+            </li>-->
             <li class="selNameWrap" style="display:flex; align-items:center">
               <span>成品编号:</span>
               <div style="width:170px">
@@ -89,9 +89,9 @@
           >
             <el-table-column type="index" label="序号" width="50"></el-table-column>
             <el-table-column prop="batchId" label="批次"></el-table-column>
-            <el-table-column prop="orderId" label="订单编号"></el-table-column>
+            <!-- <el-table-column prop="orderId" label="订单编号"></el-table-column> -->
             <el-table-column prop="time" label="出库时间"></el-table-column>
-            <el-table-column prop="admin" label="操作人"></el-table-column>
+            <el-table-column prop="userName" label="下单人"></el-table-column>
             <el-table-column prop="des" label="操作" width="50">
               <template slot-scope="scope">
                 <el-button
@@ -145,7 +145,7 @@
                 ></el-autocomplete>
               </div>
             </li>
-            <li class="selNameWrap" style="display:flex; align-items:center">
+            <!-- <li class="selNameWrap" style="display:flex; align-items:center">
               <span>订单编号:</span>
               <div style="width:170px">
                 <el-input
@@ -154,7 +154,7 @@
                   v-model="enterSel.orderId"
                 ></el-input>
               </div>
-            </li>
+            </li>-->
             <li class="selNameWrap" style="display:flex; align-items:center">
               <span>成品编号:</span>
               <div style="width:170px">
@@ -191,7 +191,6 @@
           >
             <el-table-column type="index" label="序号" width="50"></el-table-column>
             <el-table-column prop="batchId" label="批次"></el-table-column>
-            <el-table-column prop="orderId" label="物料名称"></el-table-column>
             <el-table-column prop="time" label="入库时间"></el-table-column>
             <el-table-column prop="userName" label="下单人"></el-table-column>
           </el-table>
@@ -261,19 +260,17 @@ export default {
       // 出库筛选
       leaveSel: {
         userName: '',
-        orderId: "",
         batchId: "",
         time: ''
       },
       // 入库筛选
       enterSel: {
         userName: '',
-        orderId: "",
         batchId: "",
         time: ''
       },
       // 标签页内容
-      activeName: 'leave',
+      activeName: 'enter',
       // 物料列表
       stuffList: [
       ],
@@ -285,7 +282,7 @@ export default {
   created() {
     // 获取物料列表
     this.getStuffList();
-    this.getMaterLeaveList(this.leaveTable.page, this.leaveTable.size, this.leaveSel);
+    this.getMaterEnterList(this.leaveTable.page, this.leaveTable.size, this.leaveSel);
     initNavBar(this)
     this.getUserList();
   },
@@ -424,7 +421,6 @@ export default {
         // 出库清空
         this.leaveSel = {
           userName: '',
-          orderId: "",
           batchId: "",
           time: ""
         }
@@ -432,7 +428,6 @@ export default {
         // 入库清空
         this.enterSel = {
           userName: '',
-          orderId: "",
           batchId: "",
           time: '',
         }
@@ -477,55 +472,28 @@ export default {
 
     // 拉取物料入库信息
     getMaterEnterList(page, size, sel) {
-      const testData = [
-        {
-          id: 1,
-          "batchId": 123,
-          "orderId": 321,
-          "userName": "mql",
-          "time": "2012-12-30 12:30:20",
-          "admin": "mql"
-        },
-        {
-          id: 2,
-          "batchId": 123,
-          "orderId": 321,
-          "userName": "mql",
-          "time": "2012-12-30 12:30:20",
-          "admin": "mql"
-        },
-        {
-          id: 3,
-          "batchId": 123,
-          "orderId": 321,
-          "userName": "mql",
-          "time": "2012-12-30 12:30:20",
-          "admin": "mql"
-        },
-      ];
-      this.stuffTabList = testData;
-      this.tableLoad = false;
-      return;
       this.tableLoad = true;
       const data = {
-        contentType: 1,
+        contentType: 3,
         outInType: 1,
         pageNum: page,
         pageSize: size,
-        contentName: sel.stuffid,
-        outInTimeStart: sel.time[0],
-        outInTimeEnd: sel.time[1]
+        userName: sel.userName,
+        batchId: sel.batchId,
+        startTime: sel.time[0],
+        endTime: sel.time[1]
       };
       const parms = {}
-      if (data.contentName != "") parms.contentName = data.contentName;
-      if (data.outInTimeStart != "") parms.outInTimeStart = data.outInTimeStart;
-      if (data.outInTimeEnd != "") parms.outInTimeEnd = data.outInTimeEnd;
-      parms.contentType = 1;
+      if (data.userName != "") parms.userName = data.userName;
+      if (data.startTime != "") parms.startTime = data.startTime;
+      if (data.endTime != "") parms.endTime = data.endTime;
+      if (data.batchId != "") parms.batchId = data.batchId;
+      parms.contentType = 3;
       parms.outInType = 1;
       parms.pageNum = page;
       parms.pageSize = size;
       console.log(data, '入库信息');
-      this.axios.post('/api/webapi/warehouse/getOutinWarehouseInfo', qs.stringify(parms))
+      this.axios.post('/api/webapi/outInWarehouse/getOutinWarehouseInfo', qs.stringify(parms))
         .then(res => {
           console.log(res, '入库数据表格');
           const { data } = res.data
@@ -536,55 +504,29 @@ export default {
     },
     // 拉取物料出库列表
     getMaterLeaveList(page, size, sel) {
-      const testData = [
-        {
-          id: 1,
-          "batchId": 123,
-          "orderId": 321,
-          "userName": "mql",
-          "time": "2012-12-30 12:30:20",
-          "admin": "mql"
-        },
-        {
-          id: 2,
-          "batchId": 123,
-          "orderId": 321,
-          "userName": "mql",
-          "time": "2012-12-30 12:30:20",
-          "admin": "mql"
-        },
-        {
-          id: 3,
-          "batchId": 123,
-          "orderId": 321,
-          "userName": "mql",
-          "time": "2012-12-30 12:30:20",
-          "admin": "mql"
-        },
-      ];
-      this.stuffTabList = testData;
-      this.tableLoad = false;
-      return;
+
       this.tableLoad = true;
       const data = {
-        contentType: 1,
+        contentType: 3,
         outInType: 2,
         pageNum: page,
         pageSize: size,
-        contentName: sel.stuffid,
-        outInTimeStart: sel.time[0],
-        outInTimeEnd: sel.time[1]
+        startTime: sel.time[0],
+        endTime: sel.time[1],
+        batchId: sel.batchId,
+        userName: sel.userName
       };
       const parms = {}
-      if (data.contentName != "") parms.contentName = data.contentName;
-      if (data.outInTimeStart != "") parms.outInTimeStart = data.outInTimeStart;
-      if (data.outInTimeEnd != "") parms.outInTimeEnd = data.outInTimeEnd;
-      parms.contentType = 1;
+      if (data.userName != "") parms.userName = data.userName;
+      if (data.startTime != "") parms.startTime = data.startTime;
+      if (data.endTime != "") parms.endTime = data.endTime;
+      if (data.batchId != "") parms.batchId = data.batchId;
+      parms.contentType = 3;
       parms.outInType = 2;
       parms.pageNum = page;
       parms.pageSize = size;
       console.log(data);
-      this.axios.post('/api/webapi/warehouse/getOutinWarehouseInfo', qs.stringify(parms))
+      this.axios.post('/api/webapi/outInWarehouse/getOutinWarehouseInfo', qs.stringify(parms))
         .then(res => {
           console.log(res, '出库信息');
           this.leaveTable.count = res.data.count;

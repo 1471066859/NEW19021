@@ -6,13 +6,9 @@ import './plugins/element.js'
 import '../src/assets/base.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-
-
-
 import qs from 'qs'
 import "@/assets/fonts/iconfont.css"
 
-axios.defaults.timeout = 5000;
 Vue.prototype.qs = qs;
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
@@ -21,6 +17,8 @@ Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(MintUI)
 
+// 请求、响应拦截 用于捕获5s请求超时
+axios.defaults.timeout = 5000;
 axios.interceptors.request.use(function (config) {
   // Do something before request is sent
   return config;

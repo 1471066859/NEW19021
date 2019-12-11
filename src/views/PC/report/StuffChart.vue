@@ -54,25 +54,24 @@ export default {
         startTime: formatDate(new Date) + " 00:00:00",
         endTime: formatDate(new Date) + " 23:59:59"
       })
-      this.axios.post('/api/webapi/order/getAmountOrdersByState', data)
+      this.axios.post('/api/webapi/outInWarehouse/getAmountOutInWarehouseByState', data)
         .then(res => {
           console.log(res);
           const { code, data } = res.data;
           if (code == 200) {
             this.listR.push({
-              value: data.pendingOrders + data.productionOrders,
-              name: "未完成订单",
-              itemStyle: { color: "#909399" }
+              value: data.outAmount,
+              name: "原材料出库",
+              itemStyle: {
+                color: "#409EFF"
+              }
             });
             this.listR.push({
-              value: data.completedOrders,
-              name: "已完成订单",
-              itemStyle: { color: "#409EFF" }
-            });
-            this.listR.push({
-              value: data.wrongOrders,
-              name: "异常订单",
-              itemStyle: { color: "#F56C6C" }
+              value: data.outInAmount,
+              name: "原材料入库",
+              itemStyle: {
+                color: "#67C23A"
+              }
             });
             this.chartR = echarts.init(this.$refs.R);
             this.chartR.setOption({
@@ -88,7 +87,7 @@ export default {
               legend: {
                 orient: 'vertical',
                 left: 'right',
-                data: ['未完成订单', '已完成订单', '异常订单']
+                data: ['原材料出库', '原材料入库']
               },
               series: [
                 {
@@ -116,25 +115,24 @@ export default {
         startTime: ghGetWeekStartDate() + " 00:00:00",
         endTime: ghGetWeekEndDate() + " 23:59:59"
       })
-      this.axios.post('/api/webapi/order/getAmountOrdersByState', data)
+      this.axios.post('/api/webapi/outInWarehouse/getAmountOutInWarehouseByState', data)
         .then(res => {
           console.log(res);
           const { code, data } = res.data;
           if (code == 200) {
             this.listZ.push({
-              value: data.pendingOrders + data.productionOrders,
-              name: "未完成订单",
-              itemStyle: { color: "#909399" }
+              value: data.outAmount,
+              name: "原材料出库",
+              itemStyle: {
+                color: "#409EFF"
+              }
             });
             this.listZ.push({
-              value: data.completedOrders,
-              name: "已完成订单",
-              itemStyle: { color: "#409EFF" }
-            });
-            this.listZ.push({
-              value: data.wrongOrders,
-              name: "异常订单",
-              itemStyle: { color: "#F56C6C" }
+              value: data.outInAmount,
+              name: "原材料入库",
+              itemStyle: {
+                color: "#67C23A"
+              }
             });
             this.chartZ = echarts.init(this.$refs.Z);
             this.chartZ.setOption({
@@ -150,7 +148,7 @@ export default {
               legend: {
                 orient: 'vertical',
                 left: 'right',
-                data: ['未完成订单', '已完成订单', '异常订单']
+                data: ['原材料出库', '原材料入库']
               },
               series: [
                 {
@@ -178,25 +176,24 @@ export default {
         startTime: ghGetMonthStartDate() + " 00:00:00",
         endTime: ghGetMonthEndDate() + " 23:59:59"
       })
-      this.axios.post('/api/webapi/order/getAmountOrdersByState', data)
+      this.axios.post('/api/webapi/outInWarehouse/getAmountOutInWarehouseByState', data)
         .then(res => {
           console.log(res);
           const { code, data } = res.data;
           if (code == 200) {
             this.listY.push({
-              value: data.pendingOrders + data.productionOrders,
-              name: "未完成订单",
-              itemStyle: { color: "#909399" }
+              value: data.outAmount,
+              name: "原材料出库",
+              itemStyle: {
+                color: "#409EFF"
+              }
             });
             this.listY.push({
-              value: data.completedOrders,
-              name: "已完成订单",
-              itemStyle: { color: "#409EFF" }
-            });
-            this.listY.push({
-              value: data.wrongOrders,
-              name: "异常订单",
-              itemStyle: { color: "#F56C6C" }
+              value: data.outInAmount,
+              name: "原材料入库",
+              itemStyle: {
+                color: "#67C23A"
+              }
             });
             this.chartY = echarts.init(this.$refs.Y);
             this.chartY.setOption({
@@ -212,7 +209,7 @@ export default {
               legend: {
                 orient: 'vertical',
                 left: 'right',
-                data: ['未完成订单', '已完成订单', '异常订单']
+                data: ['原材料出库', '原材料入库']
               },
               series: [
                 {
@@ -240,25 +237,24 @@ export default {
         startTime: ghGetQuarterStartDate() + " 00:00:00",
         endTime: ghGetQuarterEndDate() + " 23:59:59"
       })
-      this.axios.post('/api/webapi/order/getAmountOrdersByState', data)
+      this.axios.post('/api/webapi/outInWarehouse/getAmountOutInWarehouseByState', data)
         .then(res => {
           console.log(res);
           const { code, data } = res.data;
           if (code == 200) {
             this.listJ.push({
-              value: data.pendingOrders + data.productionOrders,
-              name: "未完成订单",
-              itemStyle: { color: "#909399" }
+              value: data.outAmount,
+              name: "原材料出库",
+              itemStyle: {
+                color: "#409EFF"
+              }
             });
             this.listJ.push({
-              value: data.completedOrders,
-              name: "已完成订单",
-              itemStyle: { color: "#409EFF" }
-            });
-            this.listJ.push({
-              value: data.wrongOrders,
-              name: "异常订单",
-              itemStyle: { color: "#F56C6C" }
+              value: data.outInAmount,
+              name: "原材料入库",
+              itemStyle: {
+                color: "#67C23A"
+              }
             });
             this.chartJ = echarts.init(this.$refs.J);
             this.chartJ.setOption({
@@ -274,7 +270,7 @@ export default {
               legend: {
                 orient: 'vertical',
                 left: 'right',
-                data: ['未完成订单', '已完成订单', '异常订单']
+                data: ['原材料出库', '原材料入库']
               },
               series: [
                 {
@@ -302,25 +298,24 @@ export default {
         startTime: nowYear + "-01-01 00:00:00",
         endTime: nowYear + "-12-31 23:59:59"
       })
-      this.axios.post('/api/webapi/order/getAmountOrdersByState', data)
+      this.axios.post('/api/webapi/outInWarehouse/getAmountOutInWarehouseByState', data)
         .then(res => {
           console.log(res);
           const { code, data } = res.data;
           if (code == 200) {
             this.listN.push({
-              value: data.pendingOrders + data.productionOrders,
-              name: "未完成订单",
-              itemStyle: { color: "#909399" }
+              value: data.outAmount,
+              name: "原材料出库",
+              itemStyle: {
+                color: "#409EFF"
+              }
             });
             this.listN.push({
-              value: data.completedOrders,
-              name: "已完成订单",
-              itemStyle: { color: "#409EFF" }
-            });
-            this.listN.push({
-              value: data.wrongOrders,
-              name: "异常订单",
-              itemStyle: { color: "#F56C6C" }
+              value: data.outInAmount,
+              name: "原材料入库",
+              itemStyle: {
+                color: "#67C23A"
+              }
             });
             this.chartN = echarts.init(this.$refs.N);
             this.chartN.setOption({
@@ -336,7 +331,7 @@ export default {
               legend: {
                 orient: 'vertical',
                 left: 'right',
-                data: ['未完成订单', '已完成订单', '异常订单']
+                data: ['原材料出库', '原材料入库']
               },
               series: [
                 {
